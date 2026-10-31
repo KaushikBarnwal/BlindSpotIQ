@@ -338,12 +338,12 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       authorityVerdict: {
         preferredClaim: "claimA",
         rationale:
-          "Claim A holds 95% Authority Weight (Primary Issuing Body) vs 75% for the Aggregator. Follow the official portal's 2-letter requirement, but clarify with admissions whether income is an optional tie-breaker.",
+          "The official foundation portal takes precedence over the secondary registry. Follow the official 2-letter requirement, but clarify with admissions whether financial need is considered.",
       },
       whyItMatters:
         "Submitting an unnecessary third letter or revealing confidential tax records risks bureaucratic processing delays.",
       recommendation:
-        "Prioritize the official portal (95% trust weight), but email admissions to verify whether financial need is a tie-breaker.",
+        "Follow the official portal guidelines (2 letters); email admissions if you need clarification on financial need.",
     },
     {
       id: "conflict-award",
@@ -370,12 +370,12 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       authorityVerdict: {
         preferredClaim: "claimA",
         rationale:
-          "Claim A holds 95% Authority Weight vs 35% for the informal blog. The $7,500 figure stems from a stale 2024 blog post and must be discarded.",
+          "The official foundation portal takes precedence over the informal blog. The $7,500 figure stems from an outdated 2024 blog post and should be disregarded.",
       },
       whyItMatters:
         "A $2,500 funding shortfall will distort student budgeting and financial aid packaging.",
       recommendation:
-        "The blog figure originates from a stale 2024 article (35% trust weight); disregard the $7,500 claim.",
+        "The $7,500 claim comes from a stale 2024 article; rely on the official $10,000 annual award figure.",
     },
   ],
   temporalAlerts: [
@@ -398,7 +398,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       priority: "high",
       reason: "Protects against phishing scams and obsolete postal mailing instructions from blogs.",
       recommendedOfficialSource: "https://globalstem-foundation.org/scholarships/undergrad-2026",
-      searchQueryShortcut: "site:globalstem-foundation.org undergraduate application portal login 2026",
+      searchQueryShortcut: "Global STEM Scholarship undergraduate application portal 2026",
       completed: false,
       isAiSuggestedSignal: true,
       isOfficialLinkCheck: true,
@@ -410,7 +410,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       priority: "high",
       reason: "Potential blind spot: Missing across all evaluated documents.",
       recommendedOfficialSource: "Global STEM Foundation Financial Aid Office",
-      searchQueryShortcut: "site:globalstem-foundation.org scholarship renewal requirements 2026",
+      searchQueryShortcut: "Global STEM Scholarship renewal requirements 2026",
       completed: false,
       isAiSuggestedSignal: true,
     },
@@ -421,7 +421,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       priority: "high",
       reason: "Direct contradiction between Official Portal (95% trust) and National Grants Registry (75% trust).",
       recommendedOfficialSource: "https://globalstem-foundation.org/scholarships/undergrad-2026",
-      searchQueryShortcut: "site:globalstem-foundation.org required application documents undergraduate",
+      searchQueryShortcut: "Global STEM Scholarship required application documents recommendation letters",
       completed: false,
       isAiSuggestedSignal: true,
     },
@@ -432,7 +432,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       priority: "medium",
       reason: "Third-party blog cites obsolete 2024 postal cut-off.",
       recommendedOfficialSource: "Official foundation portal",
-      searchQueryShortcut: "site:globalstem-foundation.org application deadline 2026 timezone",
+      searchQueryShortcut: "Global STEM Scholarship application deadline 2026",
       completed: false,
       isAiSuggestedSignal: true,
     },
@@ -443,7 +443,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       priority: "low",
       reason: "Potential blind spot: Omitted dimension across all sources.",
       recommendedOfficialSource: "University Student Affairs",
-      searchQueryShortcut: "site:globalstem-foundation.org academic probation appeals policy",
+      searchQueryShortcut: "academic scholarship emergency leave probation appeals policy",
       completed: false,
       isAiSuggestedSignal: true,
     },
@@ -656,7 +656,7 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       },
       authorityVerdict: {
         preferredClaim: "claimA",
-        rationale: "Claim A carries 98% Authority Weight (Official State Law) vs 35% for an unverified 2023 forum post. Submitting €2,800 guarantees consular rejection.",
+        rationale: "The official consular portal reflects statutory law over the 2023 community guide. Submitting with €2,800 risks rejection under 2026 wage requirements.",
       },
       whyItMatters: "Applying with €2,800 will trigger an automatic consular rejection under 2026 statutory rates.",
       recommendation: "Ensure 3 consecutive months of bank slips meet the official €3,280 baseline.",
@@ -681,7 +681,7 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       priority: "high",
       reason: "Avoid intermediary third-party booking agencies charging fraudulent scheduling fees.",
       recommendedOfficialSource: "https://vistos.mne.gov.pt/en/national-visas/general-information/residence-visa",
-      searchQueryShortcut: "site:vistos.mne.gov.pt residence visa appointment schedule portal",
+      searchQueryShortcut: "Portugal Digital Nomad D8 residence visa appointment schedule portal",
       completed: false,
       isAiSuggestedSignal: true,
       isOfficialLinkCheck: true,
@@ -693,7 +693,7 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       priority: "high",
       reason: "Potential blind spot: Critical dimension completely unmentioned in consular leaflets.",
       recommendedOfficialSource: "Autoridade Tributária e Aduaneira (Tax Authority)",
-      searchQueryShortcut: "site:portaldasfinancas.gov.pt non habitual resident remote work double tax treaty",
+      searchQueryShortcut: "Portugal digital nomad visa non habitual resident double tax treaty",
       completed: false,
       isAiSuggestedSignal: true,
     },

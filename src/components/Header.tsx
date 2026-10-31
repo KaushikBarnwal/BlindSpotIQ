@@ -204,11 +204,7 @@ export function Header({
 
         {/* Right: Live Status & External Actions */}
         <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[11px] font-medium text-emerald-700">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Engine Ready</span>
-          </div>
-
+          
           <a
             href="https://github.com"
             target="_blank"

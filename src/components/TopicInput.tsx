@@ -8,6 +8,7 @@ import {
   Globe,
   Loader2,
   ArrowRight,
+  ArrowLeft,
   FileText,
   Sparkles,
   SlidersHorizontal,
@@ -75,7 +76,7 @@ export function TopicInput({
   // URL mode state: clean and blank by default with helpful placeholders
   const [urls, setUrls] = useState<string[]>(["", ""]);
 
-  // Direct Text mode state: 4 blank document slots in 2x2 grid by default
+  // Direct Text mode state: 2 clean document slots by default (expandable with + Add Document)
   const [directTexts, setDirectTexts] = useState<DirectTextInput[]>([
     {
       title: "",
@@ -87,18 +88,6 @@ export function TopicInput({
       title: "",
       sourceLabel: "Document #2",
       authorityTier: "secondary_aggregator",
-      content: "",
-    },
-    {
-      title: "",
-      sourceLabel: "Document #3",
-      authorityTier: "third_party_unverified",
-      content: "",
-    },
-    {
-      title: "",
-      sourceLabel: "Document #4",
-      authorityTier: "third_party_unverified",
       content: "",
     },
   ]);
@@ -230,8 +219,8 @@ export function TopicInput({
               onClick={onNewSession}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 text-xs sm:text-sm font-semibold border border-zinc-200 transition cursor-pointer"
             >
-              <RotateCcw className="w-4 h-4 text-zinc-600" />
-              <span>← New Search</span>
+              <ArrowLeft className="w-4 h-4 text-zinc-600" />
+              <span>New Search</span>
             </button>
           )}
 

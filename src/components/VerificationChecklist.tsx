@@ -89,6 +89,16 @@ export function VerificationChecklist({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const getSearchUrl = (item: VerificationChecklistItem) => {
+    let raw = item.searchQueryShortcut || `${topic} ${item.task}`;
+    // Strip site:... domain restrictions that might point to mock or non-indexed domains
+    let cleaned = raw.replace(/site:[^\s]+/gi, "").trim();
+    if (!cleaned) {
+      cleaned = `${topic} ${item.task}`;
+    }
+    return `https://www.google.com/search?q=${encodeURIComponent(cleaned)}`;
+  };
+
   const generateEmailDraft = (item: VerificationChecklistItem) => {
     return {
       subject: `Urgent Inquiry Regarding ${topic}: Clarification on ${item.task.slice(0, 45)}...`,
@@ -344,9 +354,7 @@ Prospective Applicant`,
               </button>
 
               <a
-                href={`https://www.google.com/search?q=${encodeURIComponent(
-                  item.searchQueryShortcut || item.task
-                )}`}
+                href={getSearchUrl(item)}
                 target="_blank"
                 rel="noreferrer"
                 onClick={(e) => e.stopPropagation()}

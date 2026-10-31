@@ -3,7 +3,6 @@
 import React from "react";
 import { Contradiction, AuthorityTier, ConflictType } from "@/types";
 import {
-  ArrowRightLeft,
   ShieldAlert,
   CheckCircle,
   Scale,
@@ -23,7 +22,7 @@ export function ContradictionViewer({
     return (
       <div className="bg-white border border-zinc-200 rounded-2xl p-8 text-center text-zinc-500 shadow-xs">
         <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-        <h4 className="font-bold text-zinc-900 text-base">No Direct Fact Clashes Found</h4>
+        <h4 className="font-bold text-zinc-900 text-base">No Direct Contradictions Found</h4>
         <p className="text-sm text-zinc-500 mt-1">
           The analyzed sources are aligned on reported facts, or differences are minor.
         </p>
@@ -31,26 +30,26 @@ export function ContradictionViewer({
     );
   }
 
-  const renderAuthorityBadge = (tier: AuthorityTier, weight: number) => {
+  const renderAuthorityBadge = (tier: AuthorityTier) => {
     switch (tier) {
       case "primary_official":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
             <Award className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Primary Authority ({weight}%)</span>
+            <span>Official Portal</span>
           </span>
         );
       case "secondary_aggregator":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-50 text-sky-800 border border-sky-200">
-            <span>Secondary Registry ({weight}%)</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-50 text-sky-800 border border-sky-200">
+            <span>Secondary Registry</span>
           </span>
         );
       case "third_party_unverified":
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-zinc-100 text-zinc-600 border border-zinc-200">
-            <span>Third-Party Guide ({weight}%)</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-zinc-100 text-zinc-700 border border-zinc-200">
+            <span>Community Guide</span>
           </span>
         );
     }
@@ -60,25 +59,25 @@ export function ContradictionViewer({
     switch (type) {
       case "document_list_conflict":
         return (
-          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200">
-            Document List Conflict
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200">
+            Document Mismatch
           </span>
         );
       case "numerical_clash":
         return (
-          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-rose-50 text-rose-800 border border-rose-200">
-            Numerical Clash
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-rose-50 text-rose-800 border border-rose-200">
+            Conflicting Numbers
           </span>
         );
       case "cycle_mismatch":
         return (
-          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-orange-50 text-orange-800 border border-orange-200">
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-orange-50 text-orange-800 border border-orange-200">
             Cycle Mismatch
           </span>
         );
       case "scope_difference":
         return (
-          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-800 border border-indigo-200">
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-800 border border-indigo-200">
             Scope Difference
           </span>
         );
@@ -120,7 +119,7 @@ export function ContradictionViewer({
             <div className="flex items-center justify-between border-b border-zinc-100 pb-3 flex-wrap gap-2">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs uppercase font-bold text-amber-700 tracking-wide">
-                  Contested Dimension:
+                  Disputed Requirement:
                 </span>
                 <span className="text-base sm:text-lg font-black text-zinc-950">
                   {conflict.dimensionName}
@@ -134,7 +133,11 @@ export function ContradictionViewer({
                     : "bg-amber-100 text-amber-800 border border-amber-200"
                 }`}
               >
-                {conflict.severity} Severity Clash
+                {conflict.severity === "high"
+                  ? "High Impact"
+                  : conflict.severity === "medium"
+                  ? "Medium Impact"
+                  : "Low Impact"}
               </span>
             </div>
 
@@ -143,13 +146,10 @@ export function ContradictionViewer({
               {/* Claim A */}
               <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 sm:p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs uppercase text-rose-700 tracking-wider">
+                  <span className="font-bold text-xs uppercase text-zinc-600 tracking-wider">
                     Source A
                   </span>
-                  {renderAuthorityBadge(
-                    conflict.claimA.authorityTier,
-                    conflict.claimA.authorityWeight
-                  )}
+                  {renderAuthorityBadge(conflict.claimA.authorityTier)}
                 </div>
                 <div className="text-sm font-bold text-zinc-950">
                   {conflict.claimA.sourceTitle}
@@ -170,13 +170,10 @@ export function ContradictionViewer({
               {/* Claim B */}
               <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 sm:p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs uppercase text-amber-700 tracking-wider">
+                  <span className="font-bold text-xs uppercase text-zinc-600 tracking-wider">
                     Source B
                   </span>
-                  {renderAuthorityBadge(
-                    conflict.claimB.authorityTier,
-                    conflict.claimB.authorityWeight
-                  )}
+                  {renderAuthorityBadge(conflict.claimB.authorityTier)}
                 </div>
                 <div className="text-sm font-bold text-zinc-950">
                   {conflict.claimB.sourceTitle}
@@ -195,12 +192,12 @@ export function ContradictionViewer({
               </div>
             </div>
 
-            {/* AI Source Authority Resolution Verdict */}
+            {/* Recommended Verdict */}
             <div className="bg-indigo-50/60 border border-indigo-200/80 rounded-xl p-4 space-y-2">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-indigo-600" />
                 <span className="text-xs font-bold uppercase tracking-wider text-indigo-900">
-                  Authority Resolution Signal:
+                  Recommended Verdict:
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
@@ -219,7 +216,7 @@ export function ContradictionViewer({
               </div>
               <div className="flex items-start gap-2.5 pt-2 border-t border-amber-200/60">
                 <span className="font-bold text-emerald-800 shrink-0">
-                  Safe Resolution:
+                  What you should do:
                 </span>
                 <span className="text-zinc-800 font-medium">{conflict.recommendation}</span>
               </div>
