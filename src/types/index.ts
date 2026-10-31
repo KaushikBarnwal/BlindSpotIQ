@@ -175,4 +175,6 @@ export interface AnalysisResult {
   officialApplicationTitle?: string;
   overallCompletenessScore: number;
   highRiskCount: number;
+  providerUsed?: "gemini" | "groq";
+  modelUsed?: string;
 }

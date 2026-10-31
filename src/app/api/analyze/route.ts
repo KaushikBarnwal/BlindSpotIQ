@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { extractSourceFromUrl } from "@/lib/extractor";
 import { analyzeInformationGaps } from "@/lib/gemini";
+import { searchWithTavily } from "@/lib/tavily";
 import { SourceDocument, DirectTextInput } from "@/types";
 
 export const maxDuration = 60;
@@ -8,7 +9,7 @@ export const maxDuration = 60;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { topic, urls, directTexts, scope } = body;
+    const { topic, urls, directTexts, scope, useTavilySearch, provider } = body;
 
     if (!topic || typeof topic !== "string") {
       return NextResponse.json(
@@ -72,8 +73,16 @@ export async function POST(request: Request) {
       sources.push(...urlSources);
     }
 
-    // Call Gap & Contradiction Detection Engine with user scope
-    const result = await analyzeInformationGaps(topic, sources, scope);
+    // 3. Automated Web Discovery via Tavily (if requested or if no sources supplied)
+    if (useTavilySearch || sources.length === 0) {
+      const tavilySources = await searchWithTavily(topic, 4);
+      if (tavilySources.length > 0) {
+        sources.push(...tavilySources);
+      }
+    }
+
+    // Call Gap & Contradiction Detection Engine with user scope & dual-provider selection
+    const result = await analyzeInformationGaps(topic, sources, scope, provider);
 
     return NextResponse.json(result);
   } catch (error: any) {

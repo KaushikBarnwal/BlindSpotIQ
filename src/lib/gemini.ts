@@ -1,28 +1,13 @@
-import { GoogleGenAI } from "@google/genai";
 import { AnalysisResult, SourceDocument, UserScopeContext } from "@/types";
 import { SAMPLE_SCHOLARSHIP_SCENARIO } from "./sampleData";
+import { callDualProviderLLM, LLMProviderType } from "./llmProvider";
 
 export async function analyzeInformationGaps(
   topic: string,
   sources: SourceDocument[],
-  scope?: UserScopeContext
+  scope?: UserScopeContext,
+  preferredProvider?: LLMProviderType
 ): Promise<AnalysisResult> {
-  const apiKey = process.env.GEMINI_API_KEY;
-
-  if (!apiKey) {
-    console.warn(
-      "GEMINI_API_KEY not found in environment. Falling back to robust curated synthesis."
-    );
-    return {
-      ...SAMPLE_SCHOLARSHIP_SCENARIO,
-      topic: topic || SAMPLE_SCHOLARSHIP_SCENARIO.topic,
-      userScope: scope || SAMPLE_SCHOLARSHIP_SCENARIO.userScope,
-      timestamp: new Date().toISOString(),
-      sources: sources.length > 0 ? sources : SAMPLE_SCHOLARSHIP_SCENARIO.sources,
-    };
-  }
-
-  const ai = new GoogleGenAI({ apiKey });
 
   const prompt = `
 You are the core intelligence of "BlindspotIQ", an AI-assisted Information Gap & Contradiction Detection platform.
@@ -174,22 +159,28 @@ OUTPUT REQUIREMENT (Valid JSON matching this exact structure):
 `;
 
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-      },
-    });
+    const llmResult = await callDualProviderLLM(prompt, preferredProvider);
 
-    const text = response.text?.trim() || "";
-    const parsed = JSON.parse(text);
+    if (!llmResult) {
+      console.warn("[BlindspotIQ] No AI provider available. Falling back to benchmark synthesis.");
+      return {
+        ...SAMPLE_SCHOLARSHIP_SCENARIO,
+        topic: topic || SAMPLE_SCHOLARSHIP_SCENARIO.topic,
+        userScope: scope || SAMPLE_SCHOLARSHIP_SCENARIO.userScope,
+        timestamp: new Date().toISOString(),
+        sources: sources.length > 0 ? sources : SAMPLE_SCHOLARSHIP_SCENARIO.sources,
+      };
+    }
+
+    const parsed = JSON.parse(llmResult.rawJsonText);
 
     return {
       id: `analysis-${Date.now()}`,
       timestamp: new Date().toISOString(),
       topic,
       userScope: scope,
+      providerUsed: llmResult.providerUsed,
+      modelUsed: llmResult.modelUsed,
       detectedCategory: parsed.detectedCategory || "General Decision Research",
       executiveSummary: parsed.executiveSummary || "Analysis completed.",
       sources,
@@ -210,7 +201,7 @@ OUTPUT REQUIREMENT (Valid JSON matching this exact structure):
       highRiskCount: parsed.highRiskCount ?? (parsed.gaps?.length || 0),
     };
   } catch (err: any) {
-    console.error("Gemini Gap Analysis error, falling back to curated synthesis:", err);
+    console.error("AI Provider Gap Analysis error, falling back to curated synthesis:", err);
     return {
       ...SAMPLE_SCHOLARSHIP_SCENARIO,
       topic: topic || SAMPLE_SCHOLARSHIP_SCENARIO.topic,

@@ -70,11 +70,11 @@ export function Header({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-base tracking-tight text-zinc-950">
+                <span className="font-black text-lg tracking-tight text-zinc-950">
                   Blindspot<span className="text-indigo-600">IQ</span>
                 </span>
-                <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80 rounded-full uppercase tracking-wider">
-                  <Sparkles className="w-2.5 h-2.5" />
+                <span className="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/80 rounded-full uppercase tracking-wider">
+                  <Sparkles className="w-3 h-3" />
                   <span>Platform</span>
                 </span>
               </div>
@@ -84,31 +84,31 @@ export function Header({
 
         {/* Center: Scenario Switcher & History Popover */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-zinc-100/80 border border-zinc-200/90 rounded-xl p-1 text-xs">
-            <span className="text-[11px] font-medium text-zinc-400 px-2 hidden lg:inline">
+          <div className="flex items-center bg-zinc-100/80 border border-zinc-200/90 rounded-xl p-1 text-xs sm:text-sm">
+            <span className="text-xs font-medium text-zinc-400 px-2.5 hidden lg:inline">
               Pre-curated:
             </span>
             <button
               onClick={onLoadScholarshipSample}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer text-xs ${
+              className={`px-3.5 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm ${
                 activeScenarioId === "scenario-scholarship-2026"
                   ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
-                  : "text-zinc-500 hover:text-zinc-800"
+                  : "text-zinc-600 hover:text-zinc-950"
               }`}
             >
-              <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+              <BookOpen className="w-4 h-4 text-indigo-600" />
               <span>Scholarship</span>
             </button>
 
             <button
               onClick={onLoadVisaSample}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer text-xs ${
+              className={`px-3.5 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm ${
                 activeScenarioId === "scenario-visa-2026"
                   ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
-                  : "text-zinc-500 hover:text-zinc-800"
+                  : "text-zinc-600 hover:text-zinc-950"
               }`}
             >
-              <Compass className="w-3.5 h-3.5 text-violet-600" />
+              <Compass className="w-4 h-4 text-violet-600" />
               <span>Nomad Visa</span>
             </button>
           </div>
@@ -117,17 +117,17 @@ export function Header({
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowHistoryDropdown((prev) => !prev)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-zinc-100/80 hover:bg-zinc-200/70 border border-zinc-200/90 text-xs font-semibold text-zinc-700 transition cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100/80 hover:bg-zinc-200/70 border border-zinc-200/90 text-xs sm:text-sm font-bold text-zinc-700 transition cursor-pointer"
               title="View recent research sessions"
             >
-              <History className="w-3.5 h-3.5 text-zinc-500" />
+              <History className="w-4 h-4 text-zinc-500" />
               <span className="hidden sm:inline">Recent</span>
               {recentSessions.length > 0 && (
-                <span className="w-4 h-4 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">
                   {recentSessions.length}
                 </span>
               )}
-              <ChevronDown className="w-3 h-3 text-zinc-400" />
+              <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
             </button>
 
             {showHistoryDropdown && (

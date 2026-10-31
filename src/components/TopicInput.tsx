@@ -18,6 +18,9 @@ import {
   MapPin,
   Calendar,
   UserCheck,
+  Cpu,
+  Compass,
+  RotateCcw,
 } from "lucide-react";
 import { DirectTextInput, UserScopeContext } from "@/types";
 
@@ -26,11 +29,16 @@ interface TopicInputProps {
     topic: string,
     urls: string[],
     directTexts?: DirectTextInput[],
-    scope?: UserScopeContext
+    scope?: UserScopeContext,
+    useTavilySearch?: boolean,
+    provider?: "gemini" | "groq" | "auto"
   ) => void;
   isLoading: boolean;
   onLoadScholarshipSample: () => void;
   onLoadVisaSample: () => void;
+  isStandalone?: boolean;
+  hasActiveAnalysis?: boolean;
+  onNewSession?: () => void;
 }
 
 const PIPELINE_STEPS = [
@@ -47,26 +55,28 @@ export function TopicInput({
   isLoading,
   onLoadScholarshipSample,
   onLoadVisaSample,
+  isStandalone = false,
+  hasActiveAnalysis = false,
+  onNewSession,
 }: TopicInputProps) {
-  const [inputMode, setInputMode] = useState<"url" | "text">("url");
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [inputMode, setInputMode] = useState<"tavily" | "url" | "text">("tavily");
+  const [isExpanded, setIsExpanded] = useState(isStandalone || !hasActiveAnalysis);
   const [showScope, setShowScope] = useState(false);
-  const [topic, setTopic] = useState(
-    "What should I verify before applying for the Global STEM scholarship?"
-  );
+  const [selectedProvider, setSelectedProvider] = useState<"auto" | "gemini" | "groq">("auto");
+
+  const [topic, setTopic] = useState("");
 
   // User scope context
   const [scope, setScope] = useState<UserScopeContext>({
-    situation: "2nd-Year Undergraduate, CS Major",
-    jurisdiction: "United States (National)",
-    targetCycle: "2026–2027 Academic Year",
+    situation: "",
+    jurisdiction: "",
+    targetCycle: "",
   });
 
   // URL mode state
   const [urls, setUrls] = useState<string[]>([
     "https://globalstem-foundation.org/scholarships/undergrad-2026",
     "https://scholarshipinsider.net/global-stem-requirements-guide",
-    "https://nationalgrantsportal.edu/database/stem-awards-view",
   ]);
 
   // Direct Text mode state (Fail-Safe)
@@ -99,22 +109,25 @@ export function TopicInput({
   useEffect(() => {
     let interval: any;
     if (isLoading) {
-      setCurrentStepIndex(0);
       interval = setInterval(() => {
-        setCurrentStepIndex((prev) =>
-          prev < PIPELINE_STEPS.length - 1 ? prev + 1 : prev
-        );
-      }, 1500);
+        setCurrentStepIndex((prev) => (prev + 1) % PIPELINE_STEPS.length);
+      }, 1600);
+    } else {
+      setCurrentStepIndex(0);
     }
     return () => clearInterval(interval);
   }, [isLoading]);
 
   const handleAddUrl = () => {
-    if (urls.length < 5) setUrls([...urls, ""]);
+    if (urls.length < 5) {
+      setUrls([...urls, ""]);
+    }
   };
 
   const handleRemoveUrl = (index: number) => {
-    if (urls.length > 1) setUrls(urls.filter((_, i) => i !== index));
+    if (urls.length > 1) {
+      setUrls(urls.filter((_, i) => i !== index));
+    }
   };
 
   const handleUrlChange = (index: number, val: string) => {
@@ -159,95 +172,72 @@ export function TopicInput({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsExpanded(false);
-    if (inputMode === "url") {
+    if (!topic.trim()) return;
+
+    if (!isStandalone) {
+      setIsExpanded(false);
+    }
+
+    if (inputMode === "tavily") {
+      onAnalyze(topic, [], [], scope, true, selectedProvider);
+    } else if (inputMode === "url") {
       const cleanUrls = urls.filter((u) => u.trim().length > 0);
-      onAnalyze(topic, cleanUrls, [], scope);
+      onAnalyze(topic, cleanUrls, [], scope, false, selectedProvider);
     } else {
       const cleanTexts = directTexts.filter((t) => t.content.trim().length > 0);
-      onAnalyze(topic, [], cleanTexts, scope);
+      onAnalyze(topic, [], cleanTexts, scope, false, selectedProvider);
     }
   };
 
-  const handleScholarshipPreset = () => {
-    setTopic("What should I verify before applying for the Global STEM scholarship?");
-    setScope({
-      situation: "2nd-Year Undergraduate, CS Major",
-      jurisdiction: "United States (National)",
-      targetCycle: "2026–2027 Academic Year",
-    });
-    onLoadScholarshipSample();
+  const handleSetSampleQuestion = (sampleText: string) => {
+    setTopic(sampleText);
   };
 
-  const handleVisaPreset = () => {
-    setTopic("What are the requirements and missing terms for the Portugal Digital Nomad Visa?");
-    setScope({
-      situation: "Remote Software Contractor with foreign clients",
-      jurisdiction: "Portugal / Schengen Area",
-      targetCycle: "2026 Residency Window",
-    });
-    onLoadVisaSample();
-  };
-
-  if (!isExpanded && !isLoading) {
-    const activeCount =
-      inputMode === "url"
-        ? urls.filter((u) => u.trim().length > 0).length
-        : directTexts.filter((t) => t.content.trim().length > 0).length;
-
+  // Compact collapsed bar when active analysis is showing
+  if (hasActiveAnalysis && !isExpanded && !isLoading) {
     return (
-      <div className="bg-white border border-zinc-200/90 rounded-2xl p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all hover:border-zinc-300">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="p-2 rounded-xl bg-indigo-50 border border-indigo-200/60 text-indigo-600 shrink-0">
-            <Search className="w-4 h-4" />
+      <div className="bg-white border border-zinc-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all hover:border-zinc-300">
+        <div className="flex items-center gap-3.5 min-w-0">
+          <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200/60 text-indigo-600 shrink-0">
+            <Search className="w-5 h-5" />
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200/60">
-                Active Objective
-              </span>
-              <span className="text-[11px] text-zinc-400 font-mono hidden sm:inline">
-                • {activeCount} {inputMode === "url" ? "URLs" : "Documents"} Ingested
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
+                Active Research Goal
               </span>
               {scope.situation && (
-                <span className="text-[10px] text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-md font-medium truncate max-w-[200px] hidden lg:inline">
+                <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-md font-medium truncate max-w-[240px]">
                   🎯 {scope.situation}
                 </span>
               )}
             </div>
-            <h3 className="text-sm font-bold text-zinc-950 truncate max-w-xl mt-0.5">
-              {topic}
+            <h3 className="text-base sm:text-lg font-bold text-zinc-950 truncate max-w-2xl mt-1">
+              {topic || "Current Audit In Progress"}
             </h3>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start md:self-center shrink-0">
-          <div className="flex items-center gap-1.5 bg-zinc-100/80 border border-zinc-200 px-2 py-1 rounded-lg text-xs">
+        <div className="flex items-center gap-2.5 self-start md:self-center shrink-0">
+          {onNewSession && (
             <button
               type="button"
-              onClick={handleScholarshipPreset}
-              className="text-[11px] text-zinc-600 hover:text-zinc-950 px-1.5 py-0.5 rounded hover:bg-white transition cursor-pointer"
+              onClick={onNewSession}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 text-xs sm:text-sm font-semibold border border-zinc-200 transition cursor-pointer"
             >
-              Scholarship
+              <RotateCcw className="w-4 h-4 text-zinc-600" />
+              <span>New Search</span>
             </button>
-            <span className="text-zinc-300">|</span>
-            <button
-              type="button"
-              onClick={handleVisaPreset}
-              className="text-[11px] text-zinc-600 hover:text-zinc-950 px-1.5 py-0.5 rounded hover:bg-white transition cursor-pointer"
-            >
-              Visa
-            </button>
-          </div>
+          )}
 
           <button
             type="button"
             onClick={() => setIsExpanded(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 text-xs font-semibold border border-zinc-200 transition cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-xs transition cursor-pointer"
           >
-            <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-600" />
+            <SlidersHorizontal className="w-4 h-4" />
             <span>Modify Sources & Scope</span>
-            <ChevronDown className="w-3 h-3 text-zinc-400" />
+            <ChevronDown className="w-4 h-4 ml-0.5" />
           </button>
         </div>
       </div>
@@ -255,95 +245,105 @@ export function TopicInput({
   }
 
   return (
-    <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 shadow-xs relative overflow-hidden">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Topic Input */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-semibold text-zinc-800 flex items-center gap-2">
-              <Search className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Research Objective / High-Stakes Decision Goal</span>
+    <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-7 shadow-xs relative overflow-hidden space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Topic Input: Large, readable, bold */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-sm sm:text-base font-bold text-zinc-900 flex items-center gap-2">
+              <Search className="w-4 h-4 text-indigo-600" />
+              <span>What are you trying to verify or find out?</span>
             </label>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleScholarshipPreset}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer"
-              >
-                Sample Scholarship
-              </button>
-              <span className="text-zinc-300">|</span>
-              <button
-                type="button"
-                onClick={handleVisaPreset}
-                className="text-xs text-violet-600 hover:text-violet-800 font-semibold cursor-pointer"
-              >
-                Sample Visa
-              </button>
-              <span className="text-zinc-300">|</span>
+            {hasActiveAnalysis && (
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
                 className="text-xs text-zinc-500 hover:text-zinc-900 flex items-center gap-1 cursor-pointer font-medium"
               >
                 <span>Collapse</span>
-                <ChevronUp className="w-3 h-3" />
+                <ChevronUp className="w-3.5 h-3.5" />
               </button>
-            </div>
+            )}
           </div>
-          <input
-            type="text"
+
+          <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed">
+            Be specific about your situation and criteria. For example:{" "}
+            <span
+              onClick={() =>
+                handleSetSampleQuestion(
+                  "What should I verify before applying for the Global STEM scholarship?"
+                )
+              }
+              className="text-indigo-600 hover:underline cursor-pointer font-medium"
+            >
+              “What should I verify before applying for the Global STEM scholarship?”
+            </span>{" "}
+            or{" "}
+            <span
+              onClick={() =>
+                handleSetSampleQuestion(
+                  "What are the requirements and missing terms for the Portugal Digital Nomad Visa?"
+                )
+              }
+              className="text-indigo-600 hover:underline cursor-pointer font-medium"
+            >
+              “What are the missing terms and income limits for the Digital Nomad Visa?”
+            </span>
+          </p>
+
+          <textarea
+            rows={3}
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            placeholder="e.g. What should I verify before applying for this scholarship or visa?"
+            placeholder="e.g. Am I eligible for the state STEM merit scholarship as a second-year student, and what is this cycle's renewal GPA and deadline?"
             required
-            className="w-full bg-zinc-50/80 border border-zinc-200 rounded-xl px-4 py-2.5 text-zinc-900 placeholder-zinc-400 text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
+            className="w-full bg-zinc-50/80 border border-zinc-200 rounded-xl p-3.5 sm:p-4 text-zinc-900 placeholder-zinc-400 text-sm sm:text-base font-medium focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition leading-relaxed resize-none shadow-2xs"
           />
         </div>
 
         {/* Feature 1: User Scope & Decision Context Accordion */}
-        <div className="border border-zinc-200 rounded-xl bg-zinc-50/50 p-3 space-y-2">
+        <div className="border border-zinc-200 rounded-xl bg-zinc-50/50 p-4 space-y-3">
           <button
             type="button"
             onClick={() => setShowScope(!showScope)}
-            className="w-full flex items-center justify-between text-xs font-semibold text-zinc-700 hover:text-zinc-950 transition cursor-pointer"
+            className="w-full flex items-center justify-between text-xs sm:text-sm font-bold text-zinc-800 hover:text-zinc-950 transition cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Target className="w-3.5 h-3.5 text-indigo-600" />
+              <Target className="w-4 h-4 text-indigo-600" />
               <span>Target Scope & Context (Optional)</span>
-              <span className="text-[10px] text-zinc-400 font-normal">
-                — Personalizes gap checks to your situation & year
+              <span className="text-xs text-zinc-500 font-normal hidden sm:inline">
+                — Personalizes gap checks to your exact profile & cycle
               </span>
             </div>
-            <div className="flex items-center gap-1 text-[11px] text-zinc-500">
-              <span>{showScope ? "Hide Scope" : "Customize Scope"}</span>
+            <div className="flex items-center gap-1 text-xs text-zinc-500">
+              <span>{showScope ? "Hide Details" : "Add Profile / Year"}</span>
               {showScope ? (
-                <ChevronUp className="w-3.5 h-3.5" />
+                <ChevronUp className="w-4 h-4" />
               ) : (
-                <ChevronDown className="w-3.5 h-3.5" />
+                <ChevronDown className="w-4 h-4" />
               )}
             </div>
           </button>
 
           {showScope && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-zinc-200/80">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-zinc-200">
               <div>
-                <label className="text-[11px] font-semibold text-zinc-600 flex items-center gap-1 mb-1">
-                  <UserCheck className="w-3 h-3 text-indigo-500" />
-                  <span>Your Situation</span>
+                <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
+                  <UserCheck className="w-3.5 h-3.5 text-indigo-500" />
+                  <span>Your Situation / Major</span>
                 </label>
                 <input
                   type="text"
                   value={scope.situation || ""}
                   onChange={(e) => handleScopeChange("situation", e.target.value)}
                   placeholder="e.g. 2nd-year CS undergraduate"
-                  className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-1.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-zinc-600 flex items-center gap-1 mb-1">
-                  <MapPin className="w-3 h-3 text-violet-500" />
+                <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-violet-500" />
                   <span>Jurisdiction / Region</span>
                 </label>
                 <input
@@ -351,13 +351,13 @@ export function TopicInput({
                   value={scope.jurisdiction || ""}
                   onChange={(e) => handleScopeChange("jurisdiction", e.target.value)}
                   placeholder="e.g. California, USA or National"
-                  className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-1.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-zinc-600 flex items-center gap-1 mb-1">
-                  <Calendar className="w-3 h-3 text-emerald-500" />
+                <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-emerald-500" />
                   <span>Target Cycle / Year</span>
                 </label>
                 <input
@@ -365,89 +365,153 @@ export function TopicInput({
                   value={scope.targetCycle || ""}
                   onChange={(e) => handleScopeChange("targetCycle", e.target.value)}
                   placeholder="e.g. 2026–2027 Cycle"
-                  className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-1.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
                 />
               </div>
             </div>
           )}
         </div>
 
-        {/* Ingestion Mode Switcher */}
-        <div className="flex items-center justify-between border-t border-b border-zinc-100 py-3">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-zinc-700">
-              Ingestion Method:
+        {/* Ingestion Method Tabs: Tavily Search | Custom URLs | Direct Text */}
+        <div className="space-y-3 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <span className="text-xs sm:text-sm font-bold text-zinc-800">
+              Source Material Collection:
             </span>
-            <div className="flex items-center bg-zinc-100 border border-zinc-200/80 rounded-lg p-0.5">
+
+            {/* AI Provider selector */}
+            <div className="flex items-center gap-1.5 bg-zinc-100 p-1 rounded-xl border border-zinc-200 text-xs">
+              <span className="text-zinc-500 px-1.5 font-medium flex items-center gap-1">
+                <Cpu className="w-3.5 h-3.5 text-zinc-600" />
+                <span>AI Engine:</span>
+              </span>
               <button
                 type="button"
-                onClick={() => setInputMode("url")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer ${
-                  inputMode === "url"
-                    ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/60"
-                    : "text-zinc-500 hover:text-zinc-800"
+                onClick={() => setSelectedProvider("auto")}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
+                  selectedProvider === "auto"
+                    ? "bg-white text-zinc-950 shadow-2xs border border-zinc-200/80"
+                    : "text-zinc-500 hover:text-zinc-900"
                 }`}
               >
-                <Globe className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Web / PDF URLs</span>
+                Auto (Dual)
               </button>
               <button
                 type="button"
-                onClick={() => setInputMode("text")}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer ${
-                  inputMode === "text"
-                    ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/60"
-                    : "text-zinc-500 hover:text-zinc-800"
+                onClick={() => setSelectedProvider("gemini")}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
+                  selectedProvider === "gemini"
+                    ? "bg-white text-zinc-950 shadow-2xs border border-zinc-200/80"
+                    : "text-zinc-500 hover:text-zinc-900"
                 }`}
               >
-                <FileText className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Direct Notice / Text Paste</span>
-                <span className="text-[9px] bg-emerald-100 text-emerald-800 px-1 rounded uppercase font-bold">
-                  Fail-Safe
-                </span>
+                Gemini 2.5
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedProvider("groq")}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
+                  selectedProvider === "groq"
+                    ? "bg-white text-zinc-950 shadow-2xs border border-zinc-200/80"
+                    : "text-zinc-500 hover:text-zinc-900"
+                }`}
+              >
+                Groq LPU
               </button>
             </div>
           </div>
 
-          <span className="text-[11px] text-zinc-400 hidden sm:inline">
-            {inputMode === "url"
-              ? "Live extraction with HTML Readability & PDF parser"
-              : "Paste circular text directly (immune to network & paywalls)"}
-          </span>
+          <div className="flex items-center bg-zinc-100 border border-zinc-200/90 rounded-xl p-1 gap-1">
+            <button
+              type="button"
+              onClick={() => setInputMode("tavily")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer ${
+                inputMode === "tavily"
+                  ? "bg-white text-indigo-700 shadow-xs border border-zinc-200/80"
+                  : "text-zinc-600 hover:text-zinc-900"
+              }`}
+            >
+              <Sparkles className="w-4 h-4 text-indigo-600" />
+              <span>Auto-Discover with Tavily AI</span>
+              <span className="text-[10px] bg-indigo-100 text-indigo-800 px-1.5 py-0.2 rounded font-bold uppercase hidden md:inline">
+                Automated
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setInputMode("url")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer ${
+                inputMode === "url"
+                  ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
+                  : "text-zinc-600 hover:text-zinc-900"
+              }`}
+            >
+              <Globe className="w-4 h-4 text-zinc-600" />
+              <span>Custom Web / PDF URLs</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setInputMode("text")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer ${
+                inputMode === "text"
+                  ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
+                  : "text-zinc-600 hover:text-zinc-900"
+              }`}
+            >
+              <FileText className="w-4 h-4 text-emerald-600" />
+              <span>Direct Text Paste</span>
+            </button>
+          </div>
         </div>
 
-        {/* MODE A: URL Scraper Inputs */}
+        {/* MODE A: Tavily Auto-Search Explainer */}
+        {inputMode === "tavily" && (
+          <div className="bg-indigo-50/40 border border-indigo-200/70 rounded-xl p-4 text-xs sm:text-sm text-indigo-950 space-y-1.5">
+            <div className="font-bold flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-indigo-600" />
+              <span>Automated Web Search Enabled</span>
+            </div>
+            <p className="text-zinc-600 leading-relaxed">
+              BlindspotIQ will automatically search official portals, registries, and university notices for{" "}
+              <strong>&ldquo;{topic || "your question"}&rdquo;</strong> using Tavily AI Search. You do not need to provide manual URLs.
+            </p>
+          </div>
+        )}
+
+        {/* MODE B: URL Scraper Inputs */}
         {inputMode === "url" && (
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 uppercase tracking-wider">
-                <Globe className="w-3.5 h-3.5 text-zinc-400" />
-                <span>Target Sources to Compare & Gap-Analyze (Up to 5 URLs)</span>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs sm:text-sm font-bold text-zinc-800 flex items-center gap-1.5 uppercase tracking-wider">
+                <Globe className="w-4 h-4 text-zinc-500" />
+                <span>Target Web / PDF URLs (Up to 5)</span>
               </label>
               {urls.length < 5 && (
                 <button
                   type="button"
                   onClick={handleAddUrl}
-                  className="text-xs text-zinc-700 hover:text-zinc-950 flex items-center gap-1 bg-zinc-100 hover:bg-zinc-200/80 px-2.5 py-1 rounded-md transition font-medium cursor-pointer"
+                  className="text-xs font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
                 >
-                  <Plus className="w-3 h-3" />
+                  <Plus className="w-3.5 h-3.5" />
                   <span>Add URL</span>
                 </button>
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {urls.map((url, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-zinc-400 w-6 text-center font-bold">
+                  <span className="text-xs font-mono text-zinc-500 w-7 text-center font-bold">
                     #{idx + 1}
                   </span>
                   <input
                     type="url"
                     value={url}
                     onChange={(e) => handleUrlChange(idx, e.target.value)}
-                    placeholder="https://example.com/guidelines.html or https://example.com/circular.pdf"
-                    className="flex-1 bg-zinc-50/80 border border-zinc-200 rounded-lg px-3.5 py-2 text-xs text-zinc-800 placeholder-zinc-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
+                    placeholder="https://official-portal.gov/requirements.html or PDF url"
+                    className="flex-1 bg-zinc-50/80 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-hidden focus:border-indigo-500 font-mono"
                   />
                   {urls.length > 1 && (
                     <button
@@ -465,22 +529,22 @@ export function TopicInput({
           </div>
         )}
 
-        {/* MODE B: Direct Text Paste Inputs (Fail-Safe Mode) */}
+        {/* MODE C: Direct Text Paste Inputs */}
         {inputMode === "text" && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 uppercase tracking-wider">
-                <FileText className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Pasted Source Documents / Policy Circulars</span>
+              <label className="text-xs sm:text-sm font-bold text-zinc-800 flex items-center gap-1.5 uppercase tracking-wider">
+                <FileText className="w-4 h-4 text-emerald-600" />
+                <span>Pasted Notice / Circular Text</span>
               </label>
               {directTexts.length < 4 && (
                 <button
                   type="button"
                   onClick={handleAddTextSnippet}
-                  className="text-xs text-zinc-700 hover:text-zinc-950 flex items-center gap-1 bg-zinc-100 hover:bg-zinc-200/80 px-2.5 py-1 rounded-md transition font-medium cursor-pointer"
+                  className="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
                 >
-                  <Plus className="w-3 h-3" />
-                  <span>Add Another Text Block</span>
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add Document</span>
                 </button>
               )}
             </div>
@@ -492,14 +556,14 @@ export function TopicInput({
                   className="bg-zinc-50/80 border border-zinc-200 rounded-xl p-3.5 space-y-2 relative"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-zinc-500 font-bold">
-                      SOURCE #{idx + 1}
+                    <span className="text-xs font-mono text-zinc-500 font-bold">
+                      DOCUMENT #{idx + 1}
                     </span>
                     {directTexts.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveTextSnippet(idx)}
-                        className="text-zinc-400 hover:text-rose-600"
+                        className="text-zinc-400 hover:text-rose-600 transition"
                       >
                         ✕
                       </button>
@@ -509,45 +573,17 @@ export function TopicInput({
                   <input
                     type="text"
                     value={item.title}
-                    onChange={(e) =>
-                      handleTextChange(idx, "title", e.target.value)
-                    }
-                    placeholder="Document Title (e.g. Official Gazette)"
-                    className="w-full bg-white border border-zinc-200 rounded px-2.5 py-1 text-xs text-zinc-900 font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    onChange={(e) => handleTextChange(idx, "title", e.target.value)}
+                    placeholder="Document Title"
+                    className="w-full bg-white border border-zinc-200 rounded px-2.5 py-1.5 text-xs font-bold text-zinc-900"
                   />
-
-                  <div className="flex items-center gap-2">
-                    <select
-                      value={item.authorityTier}
-                      onChange={(e) =>
-                        handleTextChange(
-                          idx,
-                          "authorityTier",
-                          e.target.value as any
-                        )
-                      }
-                      className="bg-white border border-zinc-200 rounded px-2 py-0.5 text-[11px] text-zinc-700 w-full"
-                    >
-                      <option value="primary_official">
-                        Primary Official (95% Trust)
-                      </option>
-                      <option value="secondary_aggregator">
-                        Secondary Registry (70% Trust)
-                      </option>
-                      <option value="third_party_unverified">
-                        Third-Party Guide (35% Trust)
-                      </option>
-                    </select>
-                  </div>
 
                   <textarea
                     rows={4}
                     value={item.content}
-                    onChange={(e) =>
-                      handleTextChange(idx, "content", e.target.value)
-                    }
-                    placeholder="Paste text excerpt or circular content here..."
-                    className="w-full bg-white border border-zinc-200 rounded p-2 text-[11px] text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none font-mono"
+                    onChange={(e) => handleTextChange(idx, "content", e.target.value)}
+                    placeholder="Paste excerpt or notice text here..."
+                    className="w-full bg-white border border-zinc-200 rounded p-2 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500 resize-none font-mono"
                   />
                 </div>
               ))}
@@ -557,52 +593,53 @@ export function TopicInput({
 
         {/* Dynamic Progressive Pipeline Feedback */}
         {isLoading && (
-          <div className="bg-indigo-50/50 border border-indigo-200/80 rounded-xl p-3.5 space-y-2">
-            <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-indigo-700 font-semibold">
+          <div className="bg-indigo-50/60 border border-indigo-200/80 rounded-xl p-4 space-y-2.5">
+            <div className="flex items-center justify-between text-xs sm:text-sm">
+              <div className="flex items-center gap-2.5 text-indigo-900 font-bold">
                 <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
                 <span>{PIPELINE_STEPS[currentStepIndex]}</span>
               </div>
-              <span className="text-zinc-500 font-mono text-[11px] font-bold">
+              <span className="text-indigo-600 font-mono text-xs font-bold">
                 Step {currentStepIndex + 1}/{PIPELINE_STEPS.length}
               </span>
             </div>
-            <div className="w-full bg-indigo-100 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-indigo-100 h-2 rounded-full overflow-hidden">
               <div
                 className="bg-gradient-to-r from-indigo-500 to-violet-500 h-full transition-all duration-500"
                 style={{
-                  width: `${
-                    ((currentStepIndex + 1) / PIPELINE_STEPS.length) * 100
-                  }%`,
+                  width: `${((currentStepIndex + 1) / PIPELINE_STEPS.length) * 100}%`,
                 }}
               />
             </div>
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-1">
-          <div className="text-xs text-zinc-500 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+        {/* Submit Action Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-zinc-100">
+          <div className="text-xs sm:text-sm text-zinc-500 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>
-              {inputMode === "url"
-                ? "Live multi-source ingestion active"
-                : "Direct text mode guarantees 100% demo uptime"}
+              {inputMode === "tavily"
+                ? "Tavily AI searches official web sources in real time"
+                : inputMode === "url"
+                ? "Live URL scraping & PDF parsing active"
+                : "Direct text mode guarantees instant analysis without external network"}
             </span>
           </div>
 
           <button
             type="submit"
-            disabled={isLoading}
-            className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow-sm disabled:opacity-50 transition cursor-pointer"
+            disabled={isLoading || !topic.trim()}
+            className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold px-7 py-3 rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-sm disabled:opacity-50 transition cursor-pointer"
           >
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Scanning Dark Spots...</span>
+                <span>Auditing Dark Spots & Clashes...</span>
               </>
             ) : (
               <>
-                <span>Detect Gaps & Clashes</span>
+                <span>Run Gap & Contradiction Audit</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

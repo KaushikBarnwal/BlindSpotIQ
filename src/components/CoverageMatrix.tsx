@@ -93,25 +93,25 @@ export function CoverageMatrix({
   });
 
   const renderStatusBadge = (status: MatrixCell["status"], size: "sm" | "md" = "sm") => {
-    const pad = size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-3 py-1 text-xs";
+    const pad = size === "sm" ? "px-2.5 py-0.5 text-xs font-bold" : "px-3.5 py-1 text-xs sm:text-sm font-bold";
     switch (status) {
       case "covered":
         return (
-          <span className={`inline-flex items-center gap-1 rounded-full font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 ${pad}`}>
+          <span className={`inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 ${pad}`}>
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Covered</span>
           </span>
         );
       case "conflicting":
         return (
-          <span className={`inline-flex items-center gap-1 rounded-full font-semibold bg-amber-50 text-amber-700 border border-amber-200 animate-pulse ${pad}`}>
+          <span className={`inline-flex items-center gap-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 animate-pulse ${pad}`}>
             <AlertTriangle className="w-3.5 h-3.5" />
             <span>Conflict</span>
           </span>
         );
       case "partial":
         return (
-          <span className={`inline-flex items-center gap-1 rounded-full font-semibold bg-sky-50 text-sky-700 border border-sky-200 ${pad}`}>
+          <span className={`inline-flex items-center gap-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 ${pad}`}>
             <Info className="w-3.5 h-3.5" />
             <span>Partial</span>
           </span>
@@ -119,7 +119,7 @@ export function CoverageMatrix({
       case "missing":
       default:
         return (
-          <span className={`inline-flex items-center gap-1 rounded-full font-semibold bg-rose-50 text-rose-700 border border-rose-200 ${pad}`}>
+          <span className={`inline-flex items-center gap-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 ${pad}`}>
             <XCircle className="w-3.5 h-3.5" />
             <span>Dark Spot</span>
           </span>
@@ -130,19 +130,19 @@ export function CoverageMatrix({
   return (
     <div className="space-y-4">
       {/* Meta explanation banner + View Mode Switcher */}
-      <div className="bg-white border border-zinc-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-xl bg-indigo-50 border border-indigo-200/60 text-indigo-600 mt-0.5 shrink-0">
-            <Sparkles className="w-4 h-4" />
+          <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200/60 text-indigo-600 mt-0.5 shrink-0">
+            <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-zinc-950 flex items-center gap-2">
+            <h4 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2 flex-wrap">
               <span>Schema-Driven Information Audit</span>
-              <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
+              <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
                 {detectedCategory}
               </span>
             </h4>
-            <p className="text-xs text-zinc-500 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-600 mt-1 max-w-2xl leading-relaxed">
               An AI cannot detect what is missing unless it understands what a complete answer looks like. Below is the decision schema evaluated across all ingested material.
             </p>
           </div>
@@ -398,44 +398,44 @@ export function CoverageMatrix({
                   {/* Accordion Card Header */}
                   <div
                     onClick={() => toggleCard(dim.id)}
-                    className="p-3.5 sm:p-4 flex items-start sm:items-center justify-between gap-3 cursor-pointer hover:bg-zinc-50/80 transition select-none"
+                    className="p-4 sm:p-5 flex items-start sm:items-center justify-between gap-3 cursor-pointer hover:bg-zinc-50/80 transition select-none"
                   >
-                    <div className="space-y-1 min-w-0 flex-1">
+                    <div className="space-y-1.5 min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-bold text-sm text-zinc-900">
+                        <span className="font-bold text-base text-zinc-950">
                           {dim.name}
                         </span>
                         {dim.category === "critical" && (
-                          <span className="text-[9px] uppercase font-bold px-1.5 py-0.2 rounded bg-zinc-100 text-zinc-700">
+                          <span className="text-xs uppercase font-bold px-2 py-0.5 rounded bg-zinc-100 text-zinc-700">
                             Critical
                           </span>
                         )}
                         {allMissing ? (
-                          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200 animate-pulse">
+                          <span className="text-xs uppercase font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200 animate-pulse">
                             ⚠️ Dark Spot (0/{sources.length} Sources)
                           </span>
                         ) : hasConflict ? (
-                          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                          <span className="text-xs uppercase font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
                             ⚡ Clash Found
                           </span>
                         ) : (
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                             ✓ Covered ({coveredCount}/{sources.length})
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-zinc-500 line-clamp-1">{dim.description}</p>
+                      <p className="text-xs sm:text-sm text-zinc-600 line-clamp-1">{dim.description}</p>
                     </div>
 
                     <div className="shrink-0 flex items-center gap-2">
-                      <span className="text-[11px] text-zinc-400 hidden sm:inline">
+                      <span className="text-xs text-zinc-500 hidden sm:inline">
                         {isExpanded ? "Hide Evidence" : "Inspect Sources"}
                       </span>
-                      <div className="p-1 rounded-lg bg-zinc-100 text-zinc-500">
+                      <div className="p-1.5 rounded-lg bg-zinc-100 text-zinc-500">
                         {isExpanded ? (
-                          <ChevronUp className="w-3.5 h-3.5" />
+                          <ChevronUp className="w-4 h-4" />
                         ) : (
-                          <ChevronDown className="w-3.5 h-3.5" />
+                          <ChevronDown className="w-4 h-4" />
                         )}
                       </div>
                     </div>
@@ -443,11 +443,11 @@ export function CoverageMatrix({
 
                   {/* Expanded Source Details & Inline Evidence */}
                   {isExpanded && (
-                    <div className="px-4 pb-4 pt-2 border-t border-zinc-100 bg-zinc-50/50 space-y-3">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">
+                    <div className="px-5 pb-5 pt-3 border-t border-zinc-100 bg-zinc-50/50 space-y-3.5">
+                      <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 block">
                         Source-by-Source Evidence:
                       </span>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
                         {dimCells.map(({ source, cell }) => (
                           <div
                             key={source.id}
@@ -460,29 +460,29 @@ export function CoverageMatrix({
                             }`}
                           >
                             <div className="flex items-center justify-between">
-                              <span className="font-semibold text-zinc-800 truncate max-w-[140px]">
+                              <span className="font-bold text-xs sm:text-sm text-zinc-900 truncate max-w-[160px]">
                                 {source.title}
                               </span>
                               {renderStatusBadge(cell.status)}
                             </div>
-                            <p className="text-zinc-600 text-[11px] leading-relaxed">
+                            <p className="text-zinc-700 text-xs sm:text-sm leading-relaxed">
                               {cell.summary}
                             </p>
                             {cell.exactQuote && (
-                              <div className="bg-zinc-50 p-2 rounded border border-zinc-200 font-mono text-[10px] text-zinc-600 leading-relaxed italic">
+                              <div className="bg-zinc-50 p-2.5 rounded-lg border border-zinc-200 font-mono text-xs text-zinc-700 leading-relaxed italic">
                                 &ldquo;{cell.exactQuote}&rdquo;
                               </div>
                             )}
-                            <div className="text-[10px] text-zinc-400 flex items-center justify-between pt-1">
+                            <div className="text-xs text-zinc-500 flex items-center justify-between pt-1">
                               <span>[{cell.confidence.replace("_", " ")}]</span>
                               <a
                                 href={source.url}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-indigo-600 hover:underline flex items-center gap-0.5 font-medium"
+                                className="text-indigo-600 hover:underline flex items-center gap-1 font-semibold text-xs"
                               >
-                                <span>Link</span>
-                                <ExternalLink className="w-2.5 h-2.5" />
+                                <span>Source ↗</span>
+                                <ExternalLink className="w-3 h-3" />
                               </a>
                             </div>
                           </div>

@@ -23,8 +23,8 @@ export function ContradictionViewer({
     return (
       <div className="bg-white border border-zinc-200 rounded-2xl p-8 text-center text-zinc-500 shadow-xs">
         <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-        <h4 className="font-bold text-zinc-900 text-sm">No Direct Fact Clashes Found</h4>
-        <p className="text-xs text-zinc-500 mt-1">
+        <h4 className="font-bold text-zinc-900 text-base">No Direct Fact Clashes Found</h4>
+        <p className="text-sm text-zinc-500 mt-1">
           The analyzed sources are aligned on reported facts, or differences are minor.
         </p>
       </div>
@@ -35,21 +35,21 @@ export function ContradictionViewer({
     switch (tier) {
       case "primary_official":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-            <Award className="w-3 h-3 text-emerald-600" />
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+            <Award className="w-3.5 h-3.5 text-emerald-600" />
             <span>Primary Authority ({weight}%)</span>
           </span>
         );
       case "secondary_aggregator":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-sky-800 border border-sky-200">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-50 text-sky-800 border border-sky-200">
             <span>Secondary Registry ({weight}%)</span>
           </span>
         );
       case "third_party_unverified":
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-zinc-100 text-zinc-600 border border-zinc-200">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-zinc-100 text-zinc-600 border border-zinc-200">
             <span>Third-Party Guide ({weight}%)</span>
           </span>
         );
@@ -60,25 +60,25 @@ export function ContradictionViewer({
     switch (type) {
       case "document_list_conflict":
         return (
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
+          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200">
             Document List Conflict
           </span>
         );
       case "numerical_clash":
         return (
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">
+          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-rose-50 text-rose-800 border border-rose-200">
             Numerical Clash
           </span>
         );
       case "cycle_mismatch":
         return (
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-orange-50 text-orange-800 border border-orange-200">
+          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-orange-50 text-orange-800 border border-orange-200">
             Cycle Mismatch
           </span>
         );
       case "scope_difference":
         return (
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-200">
+          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-800 border border-indigo-200">
             Scope Difference
           </span>
         );
@@ -90,23 +90,23 @@ export function ContradictionViewer({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-700">
-            <Scale className="w-4 h-4" />
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-700">
+            <Scale className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-zinc-950 flex items-center gap-2">
+            <h3 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2">
               <span>Cross-Source Contradiction Engine</span>
-              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
+              <span className="text-xs uppercase font-bold px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200">
                 Authority-Weighted
               </span>
             </h3>
-            <p className="text-xs text-zinc-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-zinc-500 mt-0.5">
               Evaluates conflicting claims using institutional domain trust weights rather than naive text matching.
             </p>
           </div>
         </div>
-        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
+        <span className="text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
           {contradictions.length} Active Conflict{contradictions.length > 1 ? "s" : ""}
         </span>
       </div>
@@ -115,20 +115,20 @@ export function ContradictionViewer({
         {contradictions.map((conflict) => (
           <div
             key={conflict.id}
-            className="bg-white border border-amber-200/90 rounded-2xl p-5 shadow-xs space-y-4 relative overflow-hidden"
+            className="bg-white border border-amber-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4 relative overflow-hidden"
           >
             <div className="flex items-center justify-between border-b border-zinc-100 pb-3 flex-wrap gap-2">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-bold text-amber-700 uppercase tracking-wide">
+                <span className="text-xs uppercase font-bold text-amber-700 tracking-wide">
                   Contested Dimension:
                 </span>
-                <span className="text-sm font-extrabold text-zinc-950">
+                <span className="text-base sm:text-lg font-black text-zinc-950">
                   {conflict.dimensionName}
                 </span>
                 {renderConflictTypeBadge(conflict.conflictType)}
               </div>
               <span
-                className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                className={`text-xs font-bold uppercase px-2.5 py-0.5 rounded-full ${
                   conflict.severity === "high"
                     ? "bg-rose-100 text-rose-800 border border-rose-200"
                     : "bg-amber-100 text-amber-800 border border-amber-200"
@@ -141,9 +141,9 @@ export function ContradictionViewer({
             {/* Side-by-side claim comparison with Authority Badges */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Claim A */}
-              <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 space-y-2.5">
+              <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 sm:p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-rose-700">
+                  <span className="font-bold text-xs uppercase text-rose-700 tracking-wider">
                     Source A
                   </span>
                   {renderAuthorityBadge(
@@ -151,16 +151,16 @@ export function ContradictionViewer({
                     conflict.claimA.authorityWeight
                   )}
                 </div>
-                <div className="text-xs font-semibold text-zinc-900">
+                <div className="text-sm font-bold text-zinc-950">
                   {conflict.claimA.sourceTitle}
                 </div>
-                <p className="text-xs text-zinc-700 leading-relaxed">
+                <p className="text-sm text-zinc-800 leading-relaxed">
                   {conflict.claimA.statement}
                 </p>
 
                 {/* Direct Quoted Snippet: Monospace, Gray Background, Quoted */}
-                <div className="bg-white border border-zinc-200 p-2.5 rounded-lg text-xs font-mono text-zinc-700 flex items-start gap-2 shadow-2xs">
-                  <Quote className="w-3.5 h-3.5 text-zinc-400 shrink-0 mt-0.5" />
+                <div className="bg-white border border-zinc-200 p-3 rounded-lg text-xs sm:text-sm font-mono text-zinc-800 flex items-start gap-2 shadow-2xs">
+                  <Quote className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
                   <span className="italic leading-relaxed">
                     &ldquo;{conflict.claimA.quote}&rdquo;
                   </span>
@@ -168,9 +168,9 @@ export function ContradictionViewer({
               </div>
 
               {/* Claim B */}
-              <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 space-y-2.5">
+              <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 sm:p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-amber-700">
+                  <span className="font-bold text-xs uppercase text-amber-700 tracking-wider">
                     Source B
                   </span>
                   {renderAuthorityBadge(
@@ -178,16 +178,16 @@ export function ContradictionViewer({
                     conflict.claimB.authorityWeight
                   )}
                 </div>
-                <div className="text-xs font-semibold text-zinc-900">
+                <div className="text-sm font-bold text-zinc-950">
                   {conflict.claimB.sourceTitle}
                 </div>
-                <p className="text-xs text-zinc-700 leading-relaxed">
+                <p className="text-sm text-zinc-800 leading-relaxed">
                   {conflict.claimB.statement}
                 </p>
 
                 {/* Direct Quoted Snippet */}
-                <div className="bg-white border border-zinc-200 p-2.5 rounded-lg text-xs font-mono text-zinc-700 flex items-start gap-2 shadow-2xs">
-                  <Quote className="w-3.5 h-3.5 text-zinc-400 shrink-0 mt-0.5" />
+                <div className="bg-white border border-zinc-200 p-3 rounded-lg text-xs sm:text-sm font-mono text-zinc-800 flex items-start gap-2 shadow-2xs">
+                  <Quote className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
                   <span className="italic leading-relaxed">
                     &ldquo;{conflict.claimB.quote}&rdquo;
                   </span>
@@ -196,32 +196,32 @@ export function ContradictionViewer({
             </div>
 
             {/* AI Source Authority Resolution Verdict */}
-            <div className="bg-indigo-50/60 border border-indigo-200/80 rounded-xl p-3.5 space-y-1.5">
+            <div className="bg-indigo-50/60 border border-indigo-200/80 rounded-xl p-4 space-y-2">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <Sparkles className="w-4 h-4 text-indigo-600" />
                 <span className="text-xs font-bold uppercase tracking-wider text-indigo-900">
                   Authority Resolution Signal:
                 </span>
               </div>
-              <p className="text-xs text-zinc-800 leading-relaxed">
+              <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed">
                 {conflict.authorityVerdict?.rationale || conflict.recommendation}
               </p>
             </div>
 
             {/* Why it matters & Practical resolution */}
-            <div className="bg-amber-50/50 border border-amber-200 rounded-xl p-3 space-y-1 text-xs">
-              <div className="flex items-start gap-2">
+            <div className="bg-amber-50/50 border border-amber-200 rounded-xl p-4 space-y-2 text-xs sm:text-sm">
+              <div className="flex items-start gap-2.5">
                 <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-amber-900">Why this matters: </span>
                   <span className="text-zinc-700">{conflict.whyItMatters}</span>
                 </div>
               </div>
-              <div className="flex items-start gap-2 pt-1 border-t border-amber-200/60">
+              <div className="flex items-start gap-2.5 pt-2 border-t border-amber-200/60">
                 <span className="font-bold text-emerald-800 shrink-0">
                   Safe Resolution:
                 </span>
-                <span className="text-zinc-700">{conflict.recommendation}</span>
+                <span className="text-zinc-800 font-medium">{conflict.recommendation}</span>
               </div>
             </div>
           </div>
