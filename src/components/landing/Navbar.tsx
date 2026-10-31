@@ -28,13 +28,13 @@ export function LandingNavbar() {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-sm group-hover:shadow-indigo-300/60 transition-shadow">
             <ShieldAlert className="w-4 h-4 text-white" />
           </div>
-          <span className="font-bold text-base tracking-tight text-zinc-950">
+          <span className="font-black text-lg tracking-tight text-zinc-950">
             Blindspot<span className="text-indigo-600">IQ</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-500">
+        <nav className="hidden md:flex items-center gap-8 text-base font-semibold text-zinc-600">
           <a href="#how-it-works" className="hover:text-zinc-950 transition-colors">
             How it Works
           </a>
@@ -50,7 +50,7 @@ export function LandingNavbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/app"
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-950 hover:bg-zinc-800 text-white text-sm font-semibold transition-all shadow-sm hover:shadow-md"
+            className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white text-sm font-bold transition-all shadow-sm hover:shadow-md"
           >
             Launch Platform →
           </Link>

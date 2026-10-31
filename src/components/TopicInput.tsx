@@ -9,7 +9,6 @@ import {
   Loader2,
   ArrowRight,
   FileText,
-  ShieldCheck,
   Sparkles,
   SlidersHorizontal,
   ChevronDown,
@@ -62,7 +61,6 @@ export function TopicInput({
 }: TopicInputProps) {
   const [inputMode, setInputMode] = useState<"tavily" | "url" | "text">("tavily");
   const [isExpanded, setIsExpanded] = useState(isStandalone || !hasActiveAnalysis);
-  const [showScope, setShowScope] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<"auto" | "gemini" | "groq">("auto");
 
   const [topic, setTopic] = useState("");
@@ -74,34 +72,34 @@ export function TopicInput({
     targetCycle: "",
   });
 
-  // URL mode state
-  const [urls, setUrls] = useState<string[]>([
-    "https://globalstem-foundation.org/scholarships/undergrad-2026",
-    "https://scholarshipinsider.net/global-stem-requirements-guide",
-  ]);
+  // URL mode state: clean and blank by default with helpful placeholders
+  const [urls, setUrls] = useState<string[]>(["", ""]);
 
-  // Direct Text mode state (Fail-Safe)
+  // Direct Text mode state: 4 blank document slots in 2x2 grid by default
   const [directTexts, setDirectTexts] = useState<DirectTextInput[]>([
     {
-      title: "Official Foundation Gazette",
-      sourceLabel: "Official Award Portal",
+      title: "",
+      sourceLabel: "Document #1",
       authorityTier: "primary_official",
-      content:
-        "Global STEM Excellence Scholarship 2026-2027: Award provides $10,000 per academic year for undergraduate students in computing and engineering. Applicants must maintain a minimum 3.5 GPA and submit official transcripts, 2 letters of recommendation, and a statement of purpose. Deadline is November 15, 2026.",
+      content: "",
     },
     {
-      title: "Student Community Blog",
-      sourceLabel: "ScholarshipInsider Guide",
-      authorityTier: "third_party_unverified",
-      content:
-        "Guide: You must mail your physical transcripts by October 1, 2024. The foundation gives $7,500 disbursed across two terms. You only need to provide 1 recommendation letter from your counselor.",
-    },
-    {
-      title: "National Grants Registry",
-      sourceLabel: "NationalGrants Database",
+      title: "",
+      sourceLabel: "Document #2",
       authorityTier: "secondary_aggregator",
-      content:
-        "Global STEM Scholarship: Award is $10,000. Required documentation: 3 recommendation letters, family tax returns proving income under $75k, and birth certificate. Audited independently.",
+      content: "",
+    },
+    {
+      title: "",
+      sourceLabel: "Document #3",
+      authorityTier: "third_party_unverified",
+      content: "",
+    },
+    {
+      title: "",
+      sourceLabel: "Document #4",
+      authorityTier: "third_party_unverified",
+      content: "",
     },
   ]);
 
@@ -152,12 +150,12 @@ export function TopicInput({
   };
 
   const handleAddTextSnippet = () => {
-    if (directTexts.length < 4) {
+    if (directTexts.length < 6) {
       setDirectTexts([
         ...directTexts,
         {
-          title: `Document #${directTexts.length + 1}`,
-          sourceLabel: `Notice #${directTexts.length + 1}`,
+          title: "",
+          sourceLabel: `Document #${directTexts.length + 1}`,
           authorityTier: "third_party_unverified",
           content: "",
         },
@@ -194,7 +192,7 @@ export function TopicInput({
     setTopic(sampleText);
   };
 
-  // Compact collapsed bar when active analysis is showing (Single sleek navbar row)
+  // Compact collapsed bar when active analysis is showing
   if (hasActiveAnalysis && !isExpanded && !isLoading) {
     return (
       <div className="bg-white border border-zinc-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all hover:border-zinc-300">
@@ -278,7 +276,7 @@ export function TopicInput({
           </p>
 
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="text-zinc-600 font-medium">Quick examples:</span>
+            <span className="text-zinc-500 font-medium">Quick examples:</span>
             <button
               type="button"
               onClick={() =>
@@ -313,75 +311,61 @@ export function TopicInput({
           />
         </div>
 
-        {/* User Scope & Personal Context Accordion */}
-        <div className="border border-zinc-200 rounded-xl bg-zinc-50/50 p-3.5 space-y-3">
-          <button
-            type="button"
-            onClick={() => setShowScope(!showScope)}
-            className="w-full flex items-center justify-between text-xs sm:text-sm font-bold text-zinc-800 hover:text-zinc-950 transition cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <Target className="w-4 h-4 text-indigo-600" />
-              <span>Target profile & cycle (optional)</span>
-              <span className="text-xs text-zinc-500 font-normal hidden sm:inline">
-                — Personalizes checks to your major, state, or year
-              </span>
-            </div>
-            <div className="flex items-center gap-1 text-xs text-zinc-500">
-              <span>{showScope ? "Hide Details" : "Add Profile / Year"}</span>
-              {showScope ? (
-                <ChevronUp className="w-4 h-4" />
-              ) : (
-                <ChevronDown className="w-4 h-4" />
-              )}
-            </div>
-          </button>
+        {/* User Scope & Personal Context: Always Open by Default without Hide Details toggle */}
+        <div className="border border-zinc-200 rounded-xl bg-zinc-50/60 p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <Target className="w-4 h-4 text-indigo-600" />
+            <span className="text-sm font-bold text-zinc-900">
+              Target profile &amp; cycle (optional)
+            </span>
+            <span className="text-xs text-zinc-500 font-normal hidden sm:inline">
+              — Personalizes checks to your major, state, or year
+            </span>
+          </div>
 
-          {showScope && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-zinc-200">
-              <div>
-                <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
-                  <UserCheck className="w-3.5 h-3.5 text-indigo-500" />
-                  <span>Your Situation / Major</span>
-                </label>
-                <input
-                  type="text"
-                  value={scope.situation || ""}
-                  onChange={(e) => handleScopeChange("situation", e.target.value)}
-                  placeholder="e.g. 2nd-year CS undergraduate"
-                  className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-violet-500" />
-                  <span>Jurisdiction / Region</span>
-                </label>
-                <input
-                  type="text"
-                  value={scope.jurisdiction || ""}
-                  onChange={(e) => handleScopeChange("jurisdiction", e.target.value)}
-                  placeholder="e.g. California, USA or National"
-                  className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Target Cycle / Year</span>
-                </label>
-                <input
-                  type="text"
-                  value={scope.targetCycle || ""}
-                  onChange={(e) => handleScopeChange("targetCycle", e.target.value)}
-                  placeholder="e.g. 2026–2027 Cycle"
-                  className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
-                />
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-zinc-200/80">
+            <div>
+              <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
+                <UserCheck className="w-3.5 h-3.5 text-indigo-500" />
+                <span>Your Situation / Major</span>
+              </label>
+              <input
+                type="text"
+                value={scope.situation || ""}
+                onChange={(e) => handleScopeChange("situation", e.target.value)}
+                placeholder="e.g. 2nd-year CS undergraduate"
+                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
+              />
             </div>
-          )}
+
+            <div>
+              <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
+                <MapPin className="w-3.5 h-3.5 text-violet-500" />
+                <span>Jurisdiction / Region</span>
+              </label>
+              <input
+                type="text"
+                value={scope.jurisdiction || ""}
+                onChange={(e) => handleScopeChange("jurisdiction", e.target.value)}
+                placeholder="e.g. California, USA or National"
+                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
+                <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Target Cycle / Year</span>
+              </label>
+              <input
+                type="text"
+                value={scope.targetCycle || ""}
+                onChange={(e) => handleScopeChange("targetCycle", e.target.value)}
+                placeholder="e.g. 2026–2027 Cycle"
+                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Clean Source Selection Pills */}
@@ -434,14 +418,14 @@ export function TopicInput({
           </div>
         </div>
 
-        {/* MODE A: Auto Search Note (Clean & Minimal, no giant blue box) */}
+        {/* MODE A: Auto Search Note */}
         {inputMode === "tavily" && (
           <p className="text-xs text-zinc-500 leading-relaxed px-1">
             BlindspotIQ will automatically search official portals, registries, and announcements for your query.
           </p>
         )}
 
-        {/* MODE B: URL Scraper Inputs */}
+        {/* MODE B: URL Scraper Inputs (Blank by default with clean placeholders) */}
         {inputMode === "url" && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -471,7 +455,11 @@ export function TopicInput({
                     type="url"
                     value={url}
                     onChange={(e) => handleUrlChange(idx, e.target.value)}
-                    placeholder="https://official-portal.gov/requirements.html or PDF url"
+                    placeholder={
+                      idx === 0
+                        ? "https://official-portal.gov/requirements.html"
+                        : "https://secondary-source.org/policy-notice.html"
+                    }
                     className="flex-1 bg-zinc-50/80 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-hidden focus:border-indigo-500 font-mono"
                   />
                   {urls.length > 1 && (
@@ -490,7 +478,7 @@ export function TopicInput({
           </div>
         )}
 
-        {/* MODE C: Direct Text Paste Inputs */}
+        {/* MODE C: Direct Text Paste Inputs in Clean 2x2 Grid */}
         {inputMode === "text" && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -498,7 +486,7 @@ export function TopicInput({
                 <FileText className="w-4 h-4 text-emerald-600" />
                 <span>Pasted Notice / Document Text</span>
               </label>
-              {directTexts.length < 4 && (
+              {directTexts.length < 6 && (
                 <button
                   type="button"
                   onClick={handleAddTextSnippet}
@@ -510,21 +498,23 @@ export function TopicInput({
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {/* 2x2 Grid for balanced layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {directTexts.map((item, idx) => (
                 <div
                   key={idx}
-                  className="bg-zinc-50/80 border border-zinc-200 rounded-xl p-3.5 space-y-2 relative"
+                  className="bg-zinc-50/80 border border-zinc-200 rounded-xl p-4 space-y-2.5 relative shadow-2xs hover:border-zinc-300 transition"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono text-zinc-500 font-bold">
+                    <span className="text-xs font-mono text-zinc-500 font-bold uppercase tracking-wider">
                       DOCUMENT #{idx + 1}
                     </span>
                     {directTexts.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveTextSnippet(idx)}
-                        className="text-zinc-400 hover:text-rose-600 transition"
+                        className="text-zinc-400 hover:text-rose-600 transition cursor-pointer p-1 rounded"
+                        title="Remove document"
                       >
                         ✕
                       </button>
@@ -535,16 +525,16 @@ export function TopicInput({
                     type="text"
                     value={item.title}
                     onChange={(e) => handleTextChange(idx, "title", e.target.value)}
-                    placeholder="Document Title"
-                    className="w-full bg-white border border-zinc-200 rounded px-2.5 py-1.5 text-xs font-bold text-zinc-900"
+                    placeholder={`Document Title (e.g. Official Gazette #${idx + 1})`}
+                    className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold text-zinc-900 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
                   />
 
                   <textarea
                     rows={4}
                     value={item.content}
                     onChange={(e) => handleTextChange(idx, "content", e.target.value)}
-                    placeholder="Paste notice or guide excerpt here..."
-                    className="w-full bg-white border border-zinc-200 rounded p-2 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500 resize-none font-mono"
+                    placeholder="Paste notice, guidelines, or circular excerpt here..."
+                    className="w-full bg-white border border-zinc-200 rounded-lg p-3 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500 resize-none font-mono leading-relaxed"
                   />
                 </div>
               ))}
