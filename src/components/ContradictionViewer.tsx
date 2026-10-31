@@ -96,13 +96,13 @@ export function ContradictionViewer({
           </div>
           <div>
             <h3 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2">
-              <span>Cross-Source Contradiction Engine</span>
+              <span>Conflicting Information Between Sources</span>
               <span className="text-xs uppercase font-bold px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200">
-                Authority-Weighted
+                Cross-Checked
               </span>
             </h3>
             <p className="text-xs sm:text-sm text-zinc-500 mt-0.5">
-              Evaluates conflicting claims using institutional domain trust weights rather than naive text matching.
+              Where official portals, community guides, and registries disagree on requirements or figures.
             </p>
           </div>
         </div>

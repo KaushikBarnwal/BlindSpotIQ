@@ -137,13 +137,13 @@ export function CoverageMatrix({
           </div>
           <div>
             <h4 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2 flex-wrap">
-              <span>Schema-Driven Information Audit</span>
+              <span>Topics Checked & Missing Details</span>
               <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
                 {detectedCategory}
               </span>
             </h4>
             <p className="text-xs sm:text-sm text-zinc-600 mt-1 max-w-2xl leading-relaxed">
-              An AI cannot detect what is missing unless it understands what a complete answer looks like. Below is the decision schema evaluated across all ingested material.
+              Every topic required for a complete application, cross-checked against all your sources.
             </p>
           </div>
         </div>
@@ -189,7 +189,7 @@ export function CoverageMatrix({
                 : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
             }`}
           >
-            All Dimensions ({dimensions.length})
+            All Topics ({dimensions.length})
           </button>
           <button
             onClick={() => setStatusFilter("missing")}
@@ -200,7 +200,7 @@ export function CoverageMatrix({
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-            <span>Dark Spots ({missingCount})</span>
+            <span>Missing ({missingCount})</span>
           </button>
           <button
             onClick={() => setStatusFilter("conflicting")}
@@ -211,7 +211,7 @@ export function CoverageMatrix({
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-amber-500" />
-            <span>Clashes ({conflictCount})</span>
+            <span>Conflicts ({conflictCount})</span>
           </button>
           <button
             onClick={() => setStatusFilter("covered")}
@@ -222,7 +222,7 @@ export function CoverageMatrix({
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span>Covered ({coveredCount})</span>
+            <span>Verified ({coveredCount})</span>
           </button>
         </div>
 
@@ -411,16 +411,16 @@ export function CoverageMatrix({
                           </span>
                         )}
                         {allMissing ? (
-                          <span className="text-xs uppercase font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200 animate-pulse">
-                            ⚠️ Dark Spot (0/{sources.length} Sources)
+                          <span className="text-xs uppercase font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200">
+                            ⚠️ Missing in All Sources
                           </span>
                         ) : hasConflict ? (
                           <span className="text-xs uppercase font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
-                            ⚡ Clash Found
+                            ⚡ Conflicting Information
                           </span>
                         ) : (
                           <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            ✓ Covered ({coveredCount}/{sources.length})
+                            ✓ Verified ({coveredCount}/{sources.length})
                           </span>
                         )}
                       </div>

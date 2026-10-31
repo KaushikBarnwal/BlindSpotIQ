@@ -86,7 +86,7 @@ export function Header({
         <div className="flex items-center gap-2">
           <div className="flex items-center bg-zinc-100/80 border border-zinc-200/90 rounded-xl p-1 text-xs sm:text-sm">
             <span className="text-xs font-medium text-zinc-400 px-2.5 hidden lg:inline">
-              Pre-curated:
+              Demos:
             </span>
             <button
               onClick={onLoadScholarshipSample}

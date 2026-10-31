@@ -5,10 +5,6 @@ import { ConfirmedFact, DarkSpotGap, GapType } from "@/types";
 import {
   CheckCircle2,
   AlertOctagon,
-  ExternalLink,
-  Copy,
-  Check,
-  ShieldCheck,
   Quote,
   Sparkles,
   ChevronDown,
@@ -26,21 +22,10 @@ interface StructuredSummaryProps {
 export function StructuredSummary({
   confirmedFacts,
   gaps,
-  officialApplicationUrl,
-  officialApplicationTitle,
   topic,
 }: StructuredSummaryProps) {
-  const [copiedLink, setCopiedLink] = useState(false);
   const [expandedFactIdx, setExpandedFactIdx] = useState<number | null>(null);
   const [isSectionCollapsed, setIsSectionCollapsed] = useState(false);
-
-  const handleCopyLink = () => {
-    if (officialApplicationUrl) {
-      navigator.clipboard.writeText(officialApplicationUrl);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2000);
-    }
-  };
 
   const toggleFact = (idx: number) => {
     setExpandedFactIdx(expandedFactIdx === idx ? null : idx);
@@ -50,25 +35,25 @@ export function StructuredSummary({
     switch (type) {
       case "completely_omitted":
         return (
-          <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-200">
-            Completely Omitted
+          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-200">
+            Missing
           </span>
         );
       case "unspecified_conditions":
         return (
-          <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200">
-            Unspecified Conditions
+          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200">
+            Unclear Terms
           </span>
         );
       case "single_source_outlier":
         return (
-          <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-violet-100 text-violet-800 border border-violet-200">
-            Single-Source Outlier
+          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-violet-100 text-violet-800 border border-violet-200">
+            Single Source
           </span>
         );
       case "scope_mismatch":
         return (
-          <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-sky-100 text-sky-800 border border-sky-200">
+          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-sky-100 text-sky-800 border border-sky-200">
             Scope Mismatch
           </span>
         );
@@ -79,68 +64,15 @@ export function StructuredSummary({
 
   return (
     <div className="space-y-4">
-      {/* 1. Official Application Gateway Banner */}
-      {officialApplicationUrl && (
-        <div className="bg-emerald-50/80 border border-emerald-200 rounded-xl px-4 py-3 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="p-2 rounded-lg bg-emerald-100 text-emerald-700 shrink-0">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-200/60 text-emerald-900 border border-emerald-300">
-                  Verified Official Portal
-                </span>
-                <span className="text-sm font-bold text-zinc-950 truncate">
-                  {officialApplicationTitle || "Primary Official Application Gateway"}
-                </span>
-              </div>
-              <span className="text-xs text-zinc-500 font-mono truncate block mt-0.5">
-                {officialApplicationUrl}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
-            <button
-              onClick={handleCopyLink}
-              className="px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
-            >
-              {copiedLink ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5 text-zinc-400" />
-                  <span>Copy Link</span>
-                </>
-              )}
-            </button>
-
-            <a
-              href={officialApplicationUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow-xs transition cursor-pointer"
-            >
-              <span>Visit Portal</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </div>
-      )}
-
-      {/* 2. Collapsible Toggle Header for Dual Panel */}
+      {/* Collapsible Toggle Header for Dual Panel */}
       <div className="flex items-center justify-between bg-zinc-100/80 border border-zinc-200/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm">
         <div className="flex items-center gap-2 flex-wrap">
           <Sparkles className="w-4 h-4 text-indigo-600" />
           <span className="font-bold text-zinc-900">
-            Synthesized Findings:
+            Summary Breakdown:
           </span>
           <span className="text-emerald-700 font-semibold">
-            {confirmedFacts.length} Confirmed Facts
+            {confirmedFacts.length} Found
           </span>
           <span className="text-zinc-300">•</span>
           <span className="text-rose-600 font-semibold">
@@ -161,10 +93,10 @@ export function StructuredSummary({
         </button>
       </div>
 
-      {/* 3. Side-by-Side Dual-Panel: Confirmed Facts vs Missing Dark Spots */}
+      {/* Side-by-Side Dual-Panel: Confirmed Facts vs Missing Dark Spots */}
       {!isSectionCollapsed && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1">
-          {/* Panel A: Structured Summary of Key Information Found */}
+          {/* Panel A: What Was Found */}
           <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 shadow-xs space-y-3.5">
             <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
               <div className="flex items-center gap-2.5">
@@ -173,15 +105,15 @@ export function StructuredSummary({
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-zinc-900">
-                    Confirmed Key Information
+                    What Was Found
                   </h4>
                   <p className="text-xs text-zinc-500">
-                    Corroborated by primary authoritative sources
+                    Corroborated by official sources
                   </p>
                 </div>
               </div>
               <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-                {confirmedFacts.length} Facts
+                {confirmedFacts.length} Items
               </span>
             </div>
 
@@ -234,7 +166,7 @@ export function StructuredSummary({
             </div>
           </div>
 
-          {/* Panel B: Critical Omissions & Information Gaps */}
+          {/* Panel B: What Was Left Out (Dark Spots) */}
           <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 shadow-xs space-y-3.5">
             <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
               <div className="flex items-center gap-2.5">
@@ -243,10 +175,10 @@ export function StructuredSummary({
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-zinc-900">
-                    Critical Information Gaps (Dark Spots)
+                    What Was Left Out (Dark Spots)
                   </h4>
                   <p className="text-xs text-zinc-500">
-                    Mandatory criteria omitted across all evaluated sources
+                    Mandatory requirements missing across sources
                   </p>
                 </div>
               </div>
@@ -279,7 +211,7 @@ export function StructuredSummary({
 
                   <div className="bg-white border border-zinc-200 p-2.5 rounded-lg text-xs space-y-1">
                     <div>
-                      <span className="text-zinc-500 font-semibold">Vulnerability: </span>
+                      <span className="text-zinc-500 font-semibold">Risk: </span>
                       <span className="text-zinc-700">{gap.impactReason}</span>
                     </div>
                     <div>

@@ -20,7 +20,7 @@ export function TemporalWarnings({ alerts }: TemporalWarningsProps) {
           <CalendarX className="w-5 h-5 text-amber-600 shrink-0" />
           <div className="flex items-center gap-2 flex-wrap min-w-0">
             <span className="font-bold text-amber-950">
-              Temporal Freshness Alert:
+              Outdated Information Warning:
             </span>
             <span className="text-zinc-700 truncate">
               {alerts.length} source{alerts.length > 1 ? "s cite" : " cites"} an earlier decision cycle ({alerts[0].detectedCycleOrYear || "previous cycle"}).

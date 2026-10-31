@@ -53,7 +53,7 @@ export function SourceCardList({ sources }: SourceCardListProps) {
       <div className="flex items-center justify-between">
         <h4 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2">
           <Globe className="w-5 h-5 text-indigo-600" />
-          <span>Ingested Sources & Trust Hierarchy ({sources.length})</span>
+          <span>Sources Used ({sources.length})</span>
         </h4>
         <span className="text-xs sm:text-sm text-zinc-500">
           Traceable provenance for every claim

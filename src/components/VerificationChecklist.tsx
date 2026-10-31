@@ -124,7 +124,7 @@ Prospective Applicant`,
           </div>
           <div>
             <h3 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2">
-              <span>Actionable Verification Loop</span>
+              <span>Next Steps Verification Checklist</span>
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-200 font-bold">
                 {completedCount}/{checklist.length} Verified
               </span>

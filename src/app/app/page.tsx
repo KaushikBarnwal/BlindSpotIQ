@@ -198,10 +198,10 @@ export default function PlatformPage() {
                 <span>Research Workspace</span>
               </div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-zinc-950 tracking-tight">
-                Start a research session
+                Check any scholarship, visa, or policy.
               </h1>
               <p className="text-base sm:text-lg text-zinc-600 max-w-3xl leading-relaxed">
-                Write your question, specify your situation, and collect your sources. BlindspotIQ scans across all material to expose critical missing conditions, factual contradictions, and cycle freshness warnings into a prioritized action checklist.
+                Find what official websites left out or got wrong before you apply. BlindspotIQ cross-examines official portals and guides to uncover hidden conditions and conflicting rules.
               </p>
             </div>
 
@@ -230,19 +230,19 @@ export default function PlatformPage() {
                     <li className="flex items-start gap-2.5">
                       <span className="text-rose-500 font-bold text-base">•</span>
                       <span>
-                        <strong>Multi-Source Cross-Examination:</strong> It reviews web pages, PDF circulars, or automated Tavily search results you select.
+                        <strong>Checks multiple sources:</strong> Gathers official portals, registries, and community guides to catch omissions.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="text-rose-500 font-bold text-base">•</span>
                       <span>
-                        <strong>Institutional Authority Hierarchy:</strong> Official government (<code className="text-zinc-800 font-mono">.gov</code>) and academic (<code className="text-zinc-800 font-mono">.edu</code>) portals override secondary blogs.
+                        <strong>Official portals rank highest:</strong> Verified <code className="text-zinc-800 font-mono">.gov</code> and <code className="text-zinc-800 font-mono">.edu</code> notices always override blogs and forums.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="text-rose-500 font-bold text-base">•</span>
                       <span>
-                        <strong>Dual-AI Inference Engine:</strong> Supports Google Gemini 2.5 Flash and Groq LPU with automated fallback.
+                        <strong>Dual AI verification:</strong> Uses Gemini and Groq in tandem for instant, cross-checked accuracy.
                       </span>
                     </li>
                   </ul>
@@ -346,29 +346,8 @@ export default function PlatformPage() {
           </div>
         ) : (
           /* VIEW 2: Active Analysis Dashboard */
-          <div className="space-y-6">
-            {/* Top Bar with New Session Reset Button */}
-            <div className="flex items-center justify-between">
-              <button
-                type="button"
-                onClick={handleResetToNewSession}
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-100 text-zinc-800 text-xs sm:text-sm font-bold border border-zinc-200 shadow-2xs transition cursor-pointer"
-              >
-                <RotateCcw className="w-4 h-4 text-zinc-500" />
-                <span>← Start New Research Session</span>
-              </button>
-
-              <div className="flex items-center gap-2">
-                {analysis.providerUsed && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-200 text-xs font-bold">
-                    <Cpu className="w-3.5 h-3.5 text-indigo-600" />
-                    <span>Engine: {analysis.providerUsed === "groq" ? "Groq LPU" : "Gemini 2.5"}</span>
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Collapsed Search & Scope Input */}
+          <div className="space-y-5">
+            {/* Consolidated Single Search & Scope Bar */}
             <TopicInput
               onAnalyze={handleAnalyze}
               isLoading={isLoading}
@@ -377,16 +356,17 @@ export default function PlatformPage() {
               isStandalone={false}
               hasActiveAnalysis={true}
               onNewSession={handleResetToNewSession}
+              providerUsed={analysis.providerUsed}
             />
 
-            {/* Executive Summary & High-Level Metrics (Large, Readable Typography) */}
+            {/* Executive Summary & High-Level Metrics (Clean, Spacious Typography) */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="md:col-span-2 bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4 text-indigo-600" />
-                      <span>Synthesized Domain Schema Verdict</span>
+                      <span>Audit Summary</span>
                     </span>
                     <span className="text-xs text-zinc-400 font-mono">
                       {analysis.sources.length} Ingested Sources
@@ -435,7 +415,7 @@ export default function PlatformPage() {
                     <span>•</span>
                     <span className="text-emerald-700 font-semibold flex items-center gap-1 text-xs">
                       <Award className="w-4 h-4 text-emerald-600" />
-                      <span>Authority-Weighted Active</span>
+                      <span>Official Sources Cross-Checked</span>
                     </span>
                   </div>
 
@@ -456,7 +436,7 @@ export default function PlatformPage() {
               {/* Completeness Gauge */}
               <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                  Decision Completeness
+                  Information Completeness
                 </span>
                 <div className="my-2">
                   <div className="flex items-baseline gap-2">
@@ -474,15 +454,15 @@ export default function PlatformPage() {
                 </div>
                 <p className="text-xs text-zinc-500 leading-relaxed">
                   {analysis.overallCompletenessScore < 70
-                    ? "⚠️ High uncertainty: Mandatory criteria missing."
-                    : "Moderate coverage: Verify remaining gaps."}
+                    ? "⚠️ Key requirements missing from the sources reviewed."
+                    : "✓ Good coverage: Verify remaining details."}
                 </p>
               </div>
 
               {/* Red Flag Summary Counters */}
               <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                  Detected Vulnerabilities
+                  Audit Findings
                 </span>
                 <div className="grid grid-cols-3 gap-2 my-2 text-center">
                   <div className="bg-rose-50/70 p-2.5 rounded-xl border border-rose-200">
@@ -490,7 +470,7 @@ export default function PlatformPage() {
                       {darkSpotsCount}
                     </span>
                     <span className="text-xs text-rose-800 block uppercase font-bold">
-                      Dark Spots
+                      Missing Info
                     </span>
                   </div>
                   <div className="bg-amber-50/70 p-2.5 rounded-xl border border-amber-200">
@@ -498,7 +478,7 @@ export default function PlatformPage() {
                       {conflictsCount}
                     </span>
                     <span className="text-xs text-amber-800 block uppercase font-bold">
-                      Clashes
+                      Contradictions
                     </span>
                   </div>
                   <div className="bg-zinc-50 p-2.5 rounded-xl border border-zinc-200">
@@ -506,12 +486,12 @@ export default function PlatformPage() {
                       {staleCount}
                     </span>
                     <span className="text-xs text-zinc-500 block uppercase font-bold">
-                      Stale
+                      Outdated
                     </span>
                   </div>
                 </div>
                 <span className="text-xs text-rose-600 font-bold block text-center">
-                  {analysis.highRiskCount} High-Risk Blind Spots Require Action
+                  {analysis.highRiskCount} High-Risk Item(s) Need Verification
                 </span>
               </div>
             </div>
@@ -534,9 +514,9 @@ export default function PlatformPage() {
                   }`}
                 >
                   <Grid className="w-4 h-4" />
-                  <span>1. Blind-Spot Matrix & Gaps</span>
+                  <span>1. What&apos;s Missing &amp; Found</span>
                   <span className="ml-1 px-2 py-0.5 rounded-full bg-zinc-100 text-xs text-zinc-600 font-semibold">
-                    {analysis.expectedDimensions.length} Dimensions
+                    {analysis.expectedDimensions.length} Topics
                   </span>
                 </button>
 
@@ -550,7 +530,7 @@ export default function PlatformPage() {
                   }`}
                 >
                   <ArrowRightLeft className="w-4 h-4" />
-                  <span>2. Source Contradictions</span>
+                  <span>2. Conflicting Claims</span>
                   {conflictsCount > 0 && (
                     <span className="ml-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
                       {conflictsCount}
@@ -568,7 +548,7 @@ export default function PlatformPage() {
                   }`}
                 >
                   <ListTodo className="w-4 h-4" />
-                  <span>3. Action Verification Checklist</span>
+                  <span>3. Next Steps Checklist</span>
                   <span className="ml-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
                     {analysis.verificationChecklist.length}
                   </span>
@@ -584,7 +564,7 @@ export default function PlatformPage() {
                   }`}
                 >
                   <Layers className="w-4 h-4" />
-                  <span>4. Ingested Sources & Hierarchy</span>
+                  <span>4. Sources Used</span>
                   <span className="ml-1 px-2 py-0.5 rounded-full bg-zinc-100 text-xs text-zinc-600 font-semibold">
                     {analysis.sources.length}
                   </span>

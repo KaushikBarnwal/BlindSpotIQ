@@ -19,7 +19,6 @@ import {
   Calendar,
   UserCheck,
   Cpu,
-  Compass,
   RotateCcw,
 } from "lucide-react";
 import { DirectTextInput, UserScopeContext } from "@/types";
@@ -39,15 +38,16 @@ interface TopicInputProps {
   isStandalone?: boolean;
   hasActiveAnalysis?: boolean;
   onNewSession?: () => void;
+  providerUsed?: "gemini" | "groq";
 }
 
 const PIPELINE_STEPS = [
-  "Ingesting sources & parsing HTML/PDF/Text documents...",
-  "Applying user scope context (situation, jurisdiction, cycle)...",
-  "Synthesizing expected decision schema for domain...",
-  "Scanning coverage matrix & detecting dark spots...",
-  "Cross-referencing factual contradictions & authority tiers...",
-  "Auditing temporal freshness & building verification loop...",
+  "Searching web and parsing documents...",
+  "Applying your background and target cycle...",
+  "Synthesizing complete application requirements...",
+  "Detecting missing dark spots and omitted terms...",
+  "Cross-checking conflicting numbers and rules...",
+  "Generating actionable next-steps checklist...",
 ];
 
 export function TopicInput({
@@ -58,6 +58,7 @@ export function TopicInput({
   isStandalone = false,
   hasActiveAnalysis = false,
   onNewSession,
+  providerUsed,
 }: TopicInputProps) {
   const [inputMode, setInputMode] = useState<"tavily" | "url" | "text">("tavily");
   const [isExpanded, setIsExpanded] = useState(isStandalone || !hasActiveAnalysis);
@@ -193,7 +194,7 @@ export function TopicInput({
     setTopic(sampleText);
   };
 
-  // Compact collapsed bar when active analysis is showing
+  // Compact collapsed bar when active analysis is showing (Single sleek navbar row)
   if (hasActiveAnalysis && !isExpanded && !isLoading) {
     return (
       <div className="bg-white border border-zinc-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all hover:border-zinc-300">
@@ -204,10 +205,16 @@ export function TopicInput({
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
-                Active Research Goal
+                Active Audit
               </span>
+              {providerUsed && (
+                <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-md font-semibold flex items-center gap-1 border border-zinc-200">
+                  <Cpu className="w-3 h-3 text-indigo-500" />
+                  <span>{providerUsed === "groq" ? "Groq LPU" : "Gemini 2.5"}</span>
+                </span>
+              )}
               {scope.situation && (
-                <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-md font-medium truncate max-w-[240px]">
+                <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-md font-medium truncate max-w-[220px]">
                   🎯 {scope.situation}
                 </span>
               )}
@@ -226,7 +233,7 @@ export function TopicInput({
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 text-xs sm:text-sm font-semibold border border-zinc-200 transition cursor-pointer"
             >
               <RotateCcw className="w-4 h-4 text-zinc-600" />
-              <span>New Search</span>
+              <span>← New Search</span>
             </button>
           )}
 
@@ -236,7 +243,7 @@ export function TopicInput({
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-xs transition cursor-pointer"
           >
             <SlidersHorizontal className="w-4 h-4" />
-            <span>Modify Sources & Scope</span>
+            <span>Modify Scope & Sources</span>
             <ChevronDown className="w-4 h-4 ml-0.5" />
           </button>
         </div>
@@ -247,12 +254,12 @@ export function TopicInput({
   return (
     <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-7 shadow-xs relative overflow-hidden space-y-5">
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Topic Input: Large, readable, bold */}
+        {/* Topic Input: Clean, humanized, friendly */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-sm sm:text-base font-bold text-zinc-900 flex items-center gap-2">
-              <Search className="w-4 h-4 text-indigo-600" />
-              <span>What are you trying to verify or find out?</span>
+            <label className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2">
+              <Search className="w-5 h-5 text-indigo-600" />
+              <span>What are you applying for or checking?</span>
             </label>
             {hasActiveAnalysis && (
               <button
@@ -266,43 +273,48 @@ export function TopicInput({
             )}
           </div>
 
-          <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed">
-            Be specific about your situation and criteria. For example:{" "}
-            <span
+          <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
+            Enter a scholarship, visa, grant, or policy to check for missing requirements and contradictions.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="text-zinc-600 font-medium">Quick examples:</span>
+            <button
+              type="button"
               onClick={() =>
                 handleSetSampleQuestion(
                   "What should I verify before applying for the Global STEM scholarship?"
                 )
               }
-              className="text-indigo-600 hover:underline cursor-pointer font-medium"
+              className="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/70 transition cursor-pointer font-medium"
             >
-              “What should I verify before applying for the Global STEM scholarship?”
-            </span>{" "}
-            or{" "}
-            <span
+              Global STEM Scholarship
+            </button>
+            <button
+              type="button"
               onClick={() =>
                 handleSetSampleQuestion(
-                  "What are the requirements and missing terms for the Portugal Digital Nomad Visa?"
+                  "What are the missing terms and income limits for the Portugal Digital Nomad Visa?"
                 )
               }
-              className="text-indigo-600 hover:underline cursor-pointer font-medium"
+              className="px-2.5 py-1 rounded-lg bg-violet-50 text-violet-700 hover:bg-violet-100 border border-violet-200/70 transition cursor-pointer font-medium"
             >
-              “What are the missing terms and income limits for the Digital Nomad Visa?”
-            </span>
-          </p>
+              Portugal Nomad Visa
+            </button>
+          </div>
 
           <textarea
             rows={3}
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            placeholder="e.g. Am I eligible for the state STEM merit scholarship as a second-year student, and what is this cycle's renewal GPA and deadline?"
+            placeholder="e.g. What are the missing requirements, renewal rules, and income limits for the Portugal Nomad Visa?"
             required
-            className="w-full bg-zinc-50/80 border border-zinc-200 rounded-xl p-3.5 sm:p-4 text-zinc-900 placeholder-zinc-400 text-sm sm:text-base font-medium focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition leading-relaxed resize-none shadow-2xs"
+            className="w-full bg-zinc-50/80 border border-zinc-200 rounded-xl p-3.5 sm:p-4 text-zinc-900 placeholder-zinc-400 text-sm sm:text-base font-medium focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition leading-relaxed resize-none shadow-2xs mt-1"
           />
         </div>
 
-        {/* Feature 1: User Scope & Decision Context Accordion */}
-        <div className="border border-zinc-200 rounded-xl bg-zinc-50/50 p-4 space-y-3">
+        {/* User Scope & Personal Context Accordion */}
+        <div className="border border-zinc-200 rounded-xl bg-zinc-50/50 p-3.5 space-y-3">
           <button
             type="button"
             onClick={() => setShowScope(!showScope)}
@@ -310,9 +322,9 @@ export function TopicInput({
           >
             <div className="flex items-center gap-2">
               <Target className="w-4 h-4 text-indigo-600" />
-              <span>Target Scope & Context (Optional)</span>
+              <span>Target profile & cycle (optional)</span>
               <span className="text-xs text-zinc-500 font-normal hidden sm:inline">
-                — Personalizes gap checks to your exact profile & cycle
+                — Personalizes checks to your major, state, or year
               </span>
             </div>
             <div className="flex items-center gap-1 text-xs text-zinc-500">
@@ -372,53 +384,12 @@ export function TopicInput({
           )}
         </div>
 
-        {/* Ingestion Method Tabs: Tavily Search | Custom URLs | Direct Text */}
-        <div className="space-y-3 pt-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        {/* Clean Source Selection Pills */}
+        <div className="space-y-3 pt-1">
+          <div className="flex items-center justify-between">
             <span className="text-xs sm:text-sm font-bold text-zinc-800">
-              Source Material Collection:
+              How would you like to provide sources?
             </span>
-
-            {/* AI Provider selector */}
-            <div className="flex items-center gap-1.5 bg-zinc-100 p-1 rounded-xl border border-zinc-200 text-xs">
-              <span className="text-zinc-500 px-1.5 font-medium flex items-center gap-1">
-                <Cpu className="w-3.5 h-3.5 text-zinc-600" />
-                <span>AI Engine:</span>
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedProvider("auto")}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
-                  selectedProvider === "auto"
-                    ? "bg-white text-zinc-950 shadow-2xs border border-zinc-200/80"
-                    : "text-zinc-500 hover:text-zinc-900"
-                }`}
-              >
-                Auto (Dual)
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedProvider("gemini")}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
-                  selectedProvider === "gemini"
-                    ? "bg-white text-zinc-950 shadow-2xs border border-zinc-200/80"
-                    : "text-zinc-500 hover:text-zinc-900"
-                }`}
-              >
-                Gemini 2.5
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedProvider("groq")}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
-                  selectedProvider === "groq"
-                    ? "bg-white text-zinc-950 shadow-2xs border border-zinc-200/80"
-                    : "text-zinc-500 hover:text-zinc-900"
-                }`}
-              >
-                Groq LPU
-              </button>
-            </div>
           </div>
 
           <div className="flex items-center bg-zinc-100 border border-zinc-200/90 rounded-xl p-1 gap-1">
@@ -432,10 +403,7 @@ export function TopicInput({
               }`}
             >
               <Sparkles className="w-4 h-4 text-indigo-600" />
-              <span>Auto-Discover with Tavily AI</span>
-              <span className="text-[10px] bg-indigo-100 text-indigo-800 px-1.5 py-0.2 rounded font-bold uppercase hidden md:inline">
-                Automated
-              </span>
+              <span>Auto Web Search</span>
             </button>
 
             <button
@@ -448,7 +416,7 @@ export function TopicInput({
               }`}
             >
               <Globe className="w-4 h-4 text-zinc-600" />
-              <span>Custom Web / PDF URLs</span>
+              <span>Paste Links</span>
             </button>
 
             <button
@@ -461,32 +429,25 @@ export function TopicInput({
               }`}
             >
               <FileText className="w-4 h-4 text-emerald-600" />
-              <span>Direct Text Paste</span>
+              <span>Paste Text</span>
             </button>
           </div>
         </div>
 
-        {/* MODE A: Tavily Auto-Search Explainer */}
+        {/* MODE A: Auto Search Note (Clean & Minimal, no giant blue box) */}
         {inputMode === "tavily" && (
-          <div className="bg-indigo-50/40 border border-indigo-200/70 rounded-xl p-4 text-xs sm:text-sm text-indigo-950 space-y-1.5">
-            <div className="font-bold flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-indigo-600" />
-              <span>Automated Web Search Enabled</span>
-            </div>
-            <p className="text-zinc-600 leading-relaxed">
-              BlindspotIQ will automatically search official portals, registries, and university notices for{" "}
-              <strong>&ldquo;{topic || "your question"}&rdquo;</strong> using Tavily AI Search. You do not need to provide manual URLs.
-            </p>
-          </div>
+          <p className="text-xs text-zinc-500 leading-relaxed px-1">
+            BlindspotIQ will automatically search official portals, registries, and announcements for your query.
+          </p>
         )}
 
         {/* MODE B: URL Scraper Inputs */}
         {inputMode === "url" && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs sm:text-sm font-bold text-zinc-800 flex items-center gap-1.5 uppercase tracking-wider">
+              <label className="text-xs sm:text-sm font-bold text-zinc-800 flex items-center gap-1.5">
                 <Globe className="w-4 h-4 text-zinc-500" />
-                <span>Target Web / PDF URLs (Up to 5)</span>
+                <span>Web or PDF Links (Up to 5)</span>
               </label>
               {urls.length < 5 && (
                 <button
@@ -495,7 +456,7 @@ export function TopicInput({
                   className="text-xs font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Add URL</span>
+                  <span>Add Link</span>
                 </button>
               )}
             </div>
@@ -533,9 +494,9 @@ export function TopicInput({
         {inputMode === "text" && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs sm:text-sm font-bold text-zinc-800 flex items-center gap-1.5 uppercase tracking-wider">
+              <label className="text-xs sm:text-sm font-bold text-zinc-800 flex items-center gap-1.5">
                 <FileText className="w-4 h-4 text-emerald-600" />
-                <span>Pasted Notice / Circular Text</span>
+                <span>Pasted Notice / Document Text</span>
               </label>
               {directTexts.length < 4 && (
                 <button
@@ -582,7 +543,7 @@ export function TopicInput({
                     rows={4}
                     value={item.content}
                     onChange={(e) => handleTextChange(idx, "content", e.target.value)}
-                    placeholder="Paste excerpt or notice text here..."
+                    placeholder="Paste notice or guide excerpt here..."
                     className="w-full bg-white border border-zinc-200 rounded p-2 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500 resize-none font-mono"
                   />
                 </div>
@@ -616,15 +577,21 @@ export function TopicInput({
 
         {/* Submit Action Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-zinc-100">
-          <div className="text-xs sm:text-sm text-zinc-500 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>
-              {inputMode === "tavily"
-                ? "Tavily AI searches official web sources in real time"
-                : inputMode === "url"
-                ? "Live URL scraping & PDF parsing active"
-                : "Direct text mode guarantees instant analysis without external network"}
+          {/* Subtle AI Engine selection */}
+          <div className="flex items-center gap-2 text-xs text-zinc-500">
+            <span className="font-semibold text-zinc-600 flex items-center gap-1">
+              <Cpu className="w-3.5 h-3.5 text-zinc-500" />
+              <span>AI Engine:</span>
             </span>
+            <select
+              value={selectedProvider}
+              onChange={(e) => setSelectedProvider(e.target.value as any)}
+              className="bg-zinc-100 border border-zinc-200 rounded-lg px-2.5 py-1 text-xs font-bold text-zinc-800 cursor-pointer focus:outline-hidden"
+            >
+              <option value="auto">Auto (Gemini + Groq)</option>
+              <option value="gemini">Gemini 2.5 Flash</option>
+              <option value="groq">Groq LPU</option>
+            </select>
           </div>
 
           <button
@@ -635,12 +602,11 @@ export function TopicInput({
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Auditing Dark Spots & Clashes...</span>
+                <span>Auditing Information...</span>
               </>
             ) : (
               <>
-                <span>Run Gap & Contradiction Audit</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>Audit Information →</span>
               </>
             )}
           </button>
