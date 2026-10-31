@@ -1,70 +1,69 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { TemporalAlert } from "@/types";
-import { Clock, AlertTriangle, CalendarX, CheckCircle } from "lucide-react";
+import { CalendarX, ChevronDown, ChevronUp } from "lucide-react";
 
 interface TemporalWarningsProps {
   alerts: TemporalAlert[];
 }
 
 export function TemporalWarnings({ alerts }: TemporalWarningsProps) {
-  if (!alerts || alerts.length === 0) {
-    return (
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex items-center gap-3 text-xs text-zinc-400">
-        <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-        <span>All reviewed sources appear fresh and aligned with the current decision cycle.</span>
-      </div>
-    );
-  }
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  if (!alerts || alerts.length === 0) return null;
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <div className="p-1.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400">
-          <Clock className="w-4 h-4" />
+    <div className="bg-amber-950/25 border border-amber-500/30 rounded-xl px-4 py-2.5 text-xs text-amber-200 shadow-sm">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <CalendarX className="w-4 h-4 text-amber-400 shrink-0" />
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
+            <span className="font-bold text-amber-300">
+              Temporal Warning:
+            </span>
+            <span className="text-zinc-300 truncate">
+              {alerts.length} source{alerts.length > 1 ? "s cite" : " cites"} an outdated decision cycle ({alerts[0].detectedCycleOrYear || "previous cycle"}).
+            </span>
+          </div>
         </div>
-        <div>
-          <h4 className="text-sm font-bold text-zinc-100">
-            Temporal Freshness & Outdated Cycle Alerts
-          </h4>
-          <p className="text-xs text-zinc-400">
-            Identifies sources citing previous application windows or obsolete statutory terms.
-          </p>
-        </div>
+
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-amber-400 hover:text-white font-medium text-[11px] flex items-center gap-1 shrink-0 cursor-pointer"
+        >
+          <span>{isExpanded ? "Hide Details" : "View Alert"}</span>
+          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+        </button>
       </div>
 
-      <div className="space-y-2">
-        {alerts.map((alert, idx) => (
-          <div
-            key={idx}
-            className="bg-rose-950/20 border border-rose-500/40 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
-          >
-            <div className="flex items-start gap-3">
-              <CalendarX className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+      {isExpanded && (
+        <div className="mt-3 pt-3 border-t border-amber-500/20 space-y-2">
+          {alerts.map((alert, idx) => (
+            <div
+              key={idx}
+              className="bg-zinc-950/80 border border-amber-500/30 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
+            >
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-zinc-100">
                     {alert.sourceTitle}
                   </span>
                   {alert.detectedCycleOrYear && (
-                    <span className="px-2 py-0.5 rounded bg-rose-900/50 text-rose-300 border border-rose-800 text-[10px] font-mono">
+                    <span className="px-1.5 py-0.2 rounded bg-amber-900/50 text-amber-300 border border-amber-800 text-[10px] font-mono">
                       Cites: {alert.detectedCycleOrYear}
                     </span>
                   )}
                 </div>
                 <p className="text-zinc-300 mt-1">{alert.warningMessage}</p>
               </div>
-            </div>
-
-            <div className="shrink-0 flex items-center gap-2 self-start sm:self-center">
-              <span className="px-2.5 py-1 rounded-full bg-rose-500 text-zinc-950 font-extrabold text-[10px] uppercase tracking-wider">
-                ⚠️ Outdated Cycle
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold uppercase shrink-0 self-start sm:self-center">
+                Outdated Cycle
               </span>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

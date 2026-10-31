@@ -29,14 +29,15 @@ export function CoverageMatrix({
   cells,
   detectedCategory,
 }: CoverageMatrixProps) {
-  const [viewMode, setViewMode] = useState<"matrix" | "cards">("matrix");
+  const [viewMode, setViewMode] = useState<"matrix" | "cards">("cards");
+  const [statusFilter, setStatusFilter] = useState<"all" | "missing" | "conflicting" | "covered">("all");
   const [selectedCell, setSelectedCell] = useState<{
     dimension: ExpectedDimension;
     source: SourceDocument;
     cellData: MatrixCell;
   } | null>(null);
 
-  // Set of expanded dimension card IDs in "cards" view
+  // Set of expanded dimension card IDs in "cards" view (default collapsed for readability)
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
 
   const toggleCard = (id: string) => {
@@ -44,6 +45,16 @@ export function CoverageMatrix({
       ...prev,
       [id]: !prev[id],
     }));
+  };
+
+  const handleExpandAll = () => {
+    const all: Record<string, boolean> = {};
+    dimensions.forEach((d) => (all[d.id] = true));
+    setExpandedCards(all);
+  };
+
+  const handleCollapseAll = () => {
+    setExpandedCards({});
   };
 
   const getCellData = (dimId: string, srcId: string): MatrixCell => {
@@ -59,6 +70,27 @@ export function CoverageMatrix({
       confidence: "unverified",
     };
   };
+
+  const dimStatusMap = dimensions.map((dim) => {
+    const dimCells = sources.map((s) => getCellData(dim.id, s.id));
+    const allMissing = dimCells.every((c) => c.status === "missing");
+    const hasConflict = dimCells.some((c) => c.status === "conflicting");
+    const isCovered = !allMissing && !hasConflict;
+    return {
+      id: dim.id,
+      status: allMissing ? "missing" : hasConflict ? "conflicting" : "covered",
+    };
+  });
+
+  const missingCount = dimStatusMap.filter((d) => d.status === "missing").length;
+  const conflictCount = dimStatusMap.filter((d) => d.status === "conflicting").length;
+  const coveredCount = dimStatusMap.filter((d) => d.status === "covered").length;
+
+  const filteredDimensions = dimensions.filter((dim) => {
+    if (statusFilter === "all") return true;
+    const status = dimStatusMap.find((d) => d.id === dim.id)?.status;
+    return status === statusFilter;
+  });
 
   const renderStatusBadge = (status: MatrixCell["status"], size: "sm" | "md" = "sm") => {
     const pad = size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-3 py-1 text-xs";
@@ -119,19 +151,8 @@ export function CoverageMatrix({
         {/* View Switcher: Heatmap Matrix vs Responsive Dimension Cards */}
         <div className="flex items-center bg-zinc-950 border border-zinc-800 rounded-lg p-1 self-stretch sm:self-auto shrink-0">
           <button
-            onClick={() => setViewMode("matrix")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${
-              viewMode === "matrix"
-                ? "bg-rose-500 text-white shadow-sm"
-                : "text-zinc-400 hover:text-white"
-            }`}
-          >
-            <Grid className="w-3.5 h-3.5" />
-            <span>Heatmap Grid</span>
-          </button>
-          <button
             onClick={() => setViewMode("cards")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
               viewMode === "cards"
                 ? "bg-rose-500 text-white shadow-sm"
                 : "text-zinc-400 hover:text-white"
@@ -140,7 +161,88 @@ export function CoverageMatrix({
             <Layers className="w-3.5 h-3.5" />
             <span>Dimension Cards</span>
           </button>
+          <button
+            onClick={() => setViewMode("matrix")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+              viewMode === "matrix"
+                ? "bg-rose-500 text-white shadow-sm"
+                : "text-zinc-400 hover:text-white"
+            }`}
+          >
+            <Grid className="w-3.5 h-3.5" />
+            <span>Heatmap Grid</span>
+          </button>
         </div>
+      </div>
+
+      {/* Filtering & Expansion Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5 bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-[11px] font-semibold text-zinc-400 mr-1 hidden sm:inline">
+            Filter View:
+          </span>
+          <button
+            onClick={() => setStatusFilter("all")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
+              statusFilter === "all"
+                ? "bg-zinc-800 text-white border border-zinc-700 shadow-xs"
+                : "text-zinc-400 hover:text-zinc-200"
+            }`}
+          >
+            All Dimensions ({dimensions.length})
+          </button>
+          <button
+            onClick={() => setStatusFilter("missing")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+              statusFilter === "missing"
+                ? "bg-rose-500/20 text-rose-300 border border-rose-500/40"
+                : "text-rose-400 hover:bg-rose-950/30"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+            <span>Dark Spots ({missingCount})</span>
+          </button>
+          <button
+            onClick={() => setStatusFilter("conflicting")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+              statusFilter === "conflicting"
+                ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                : "text-amber-400 hover:bg-amber-950/30"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
+            <span>Clashes ({conflictCount})</span>
+          </button>
+          <button
+            onClick={() => setStatusFilter("covered")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+              statusFilter === "covered"
+                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                : "text-emerald-400 hover:bg-emerald-950/30"
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Covered ({coveredCount})</span>
+          </button>
+        </div>
+
+        {viewMode === "cards" && (
+          <div className="flex items-center gap-2 text-xs">
+            <button
+              onClick={handleExpandAll}
+              className="text-zinc-400 hover:text-white text-[11px] font-medium px-2 py-1 rounded hover:bg-zinc-800 transition cursor-pointer"
+            >
+              Expand All
+            </button>
+            <span className="text-zinc-700">|</span>
+            <button
+              onClick={handleCollapseAll}
+              className="text-zinc-400 hover:text-white text-[11px] font-medium px-2 py-1 rounded hover:bg-zinc-800 transition cursor-pointer"
+            >
+              Collapse All
+            </button>
+          </div>
+        )}
       </div>
 
       {/* VIEW 1: Heatmap Table (For presentations and wide screens) */}
@@ -170,7 +272,14 @@ export function CoverageMatrix({
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800/60">
-              {dimensions.map((dim) => {
+              {filteredDimensions.length === 0 ? (
+                <tr>
+                  <td colSpan={sources.length + 1} className="py-8 text-center text-zinc-500 text-xs">
+                    No dimensions match the selected filter.
+                  </td>
+                </tr>
+              ) : (
+                filteredDimensions.map((dim) => {
                 const allMissing = sources.every(
                   (s) => getCellData(dim.id, s.id).status === "missing"
                 );
@@ -247,7 +356,7 @@ export function CoverageMatrix({
                     })}
                   </tr>
                 );
-              })}
+              }))}
             </tbody>
           </table>
         </div>
@@ -255,74 +364,81 @@ export function CoverageMatrix({
 
       {/* VIEW 2: Dimension Accordion Cards (Responsive, mobile/tablet friendly) */}
       {viewMode === "cards" && (
-        <div className="space-y-3">
-          {dimensions.map((dim) => {
-            const isExpanded = expandedCards[dim.id] ?? true;
-            const dimCells = sources.map((s) => ({
-              source: s,
-              cell: getCellData(dim.id, s.id),
-            }));
+        <div className="space-y-2.5">
+          {filteredDimensions.length === 0 ? (
+            <div className="bg-zinc-900/40 border border-zinc-800 rounded-xl p-8 text-center text-zinc-500 text-xs">
+              No dimensions match the selected filter.
+            </div>
+          ) : (
+            filteredDimensions.map((dim) => {
+              const isExpanded = Boolean(expandedCards[dim.id]);
+              const dimCells = sources.map((s) => ({
+                source: s,
+                cell: getCellData(dim.id, s.id),
+              }));
 
-            const hasConflict = dimCells.some((c) => c.cell.status === "conflicting");
-            const allMissing = dimCells.every((c) => c.cell.status === "missing");
-            const coveredCount = dimCells.filter(
-              (c) => c.cell.status === "covered" || c.cell.status === "partial"
-            ).length;
+              const hasConflict = dimCells.some((c) => c.cell.status === "conflicting");
+              const allMissing = dimCells.every((c) => c.cell.status === "missing");
+              const coveredCount = dimCells.filter(
+                (c) => c.cell.status === "covered" || c.cell.status === "partial"
+              ).length;
 
-            return (
-              <div
-                key={dim.id}
-                className={`bg-zinc-900/90 border rounded-2xl overflow-hidden transition-all shadow-md ${
-                  allMissing
-                    ? "border-rose-500/40 bg-rose-950/5"
-                    : hasConflict
-                    ? "border-amber-500/40 bg-amber-950/5"
-                    : "border-zinc-800"
-                }`}
-              >
-                {/* Accordion Card Header */}
+              return (
                 <div
-                  onClick={() => toggleCard(dim.id)}
-                  className="p-4 sm:p-5 flex items-start sm:items-center justify-between gap-3 cursor-pointer hover:bg-zinc-800/30 transition"
+                  key={dim.id}
+                  className={`bg-zinc-900/90 border rounded-xl overflow-hidden transition-all shadow-sm ${
+                    allMissing
+                      ? "border-rose-500/40 bg-rose-950/10"
+                      : hasConflict
+                      ? "border-amber-500/40 bg-amber-950/10"
+                      : "border-zinc-800"
+                  }`}
                 >
-                  <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-extrabold text-base text-zinc-100">
-                        {dim.name}
-                      </span>
-                      {dim.category === "critical" && (
-                        <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-300">
-                          Critical Dimension
+                  {/* Accordion Card Header - Sleek & Scannable */}
+                  <div
+                    onClick={() => toggleCard(dim.id)}
+                    className="p-3 sm:p-3.5 flex items-start sm:items-center justify-between gap-3 cursor-pointer hover:bg-zinc-800/40 transition select-none"
+                  >
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-bold text-sm text-zinc-100">
+                          {dim.name}
                         </span>
-                      )}
-                      {allMissing ? (
-                        <span className="text-[10px] uppercase font-black px-2.5 py-0.5 rounded-full bg-rose-500 text-zinc-950 animate-pulse">
-                          ⚠️ Dark Spot (0/{sources.length} Sources)
-                        </span>
-                      ) : hasConflict ? (
-                        <span className="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                          ⚡ Disagreeing Claims Found
-                        </span>
-                      ) : (
-                        <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                          ✓ Covered ({coveredCount}/{sources.length} Sources)
-                        </span>
-                      )}
+                        {dim.category === "critical" && (
+                          <span className="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">
+                            Critical
+                          </span>
+                        )}
+                        {allMissing ? (
+                          <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-rose-500 text-zinc-950 animate-pulse">
+                            ⚠️ Dark Spot (0/{sources.length} Sources)
+                          </span>
+                        ) : hasConflict ? (
+                          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            ⚡ Disagreeing Claims Found
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            ✓ Covered ({coveredCount}/{sources.length} Sources)
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-zinc-400 line-clamp-1">{dim.description}</p>
                     </div>
-                    <p className="text-xs text-zinc-400">{dim.description}</p>
-                    <p className="text-[11px] text-zinc-500 italic">
-                      Why it matters: {dim.whyItMatters}
-                    </p>
-                  </div>
 
-                  <div className="shrink-0 p-1 rounded-lg bg-zinc-800 text-zinc-400">
-                    {isExpanded ? (
-                      <ChevronUp className="w-4 h-4" />
-                    ) : (
-                      <ChevronDown className="w-4 h-4" />
-                    )}
+                    <div className="shrink-0 flex items-center gap-2">
+                      <span className="text-[11px] text-zinc-500 hidden sm:inline">
+                        {isExpanded ? "Hide Evidence" : "Inspect Sources"}
+                      </span>
+                      <div className="p-1 rounded-lg bg-zinc-800 text-zinc-400">
+                        {isExpanded ? (
+                          <ChevronUp className="w-3.5 h-3.5" />
+                        ) : (
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
 
                 {/* Expanded Source Details & Inline Evidence */}
                 {isExpanded && (
@@ -375,7 +491,7 @@ export function CoverageMatrix({
                 )}
               </div>
             );
-          })}
+          }))}
         </div>
       )}
 

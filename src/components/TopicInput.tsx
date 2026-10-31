@@ -11,6 +11,9 @@ import {
   FileText,
   ShieldCheck,
   Sparkles,
+  SlidersHorizontal,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { DirectTextInput } from "@/types";
 
@@ -36,6 +39,7 @@ export function TopicInput({
   onLoadVisaSample,
 }: TopicInputProps) {
   const [inputMode, setInputMode] = useState<"url" | "text">("url");
+  const [isExpanded, setIsExpanded] = useState(false);
   const [topic, setTopic] = useState(
     "What should I verify before applying for the Global STEM scholarship?"
   );
@@ -133,6 +137,7 @@ export function TopicInput({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsExpanded(false);
     if (inputMode === "url") {
       const cleanUrls = urls.filter((u) => u.trim().length > 0);
       onAnalyze(topic, cleanUrls, []);
@@ -142,19 +147,79 @@ export function TopicInput({
     }
   };
 
+  if (!isExpanded && !isLoading) {
+    const activeCount =
+      inputMode === "url"
+        ? urls.filter((u) => u.trim().length > 0).length
+        : directTexts.filter((t) => t.content.trim().length > 0).length;
+
+    return (
+      <div className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-4 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="p-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 shrink-0">
+            <Search className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400">
+                Active Research Objective
+              </span>
+              <span className="text-[10px] text-zinc-500 font-mono hidden sm:inline">
+                • {activeCount} {inputMode === "url" ? "URLs" : "Documents"} Ingested
+              </span>
+            </div>
+            <h3 className="text-sm font-bold text-white truncate max-w-xl">
+              {topic}
+            </h3>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 self-start md:self-center shrink-0">
+          <div className="flex items-center gap-1.5 bg-zinc-950 border border-zinc-800 px-2 py-1 rounded-lg text-xs">
+            <button
+              type="button"
+              onClick={onLoadScholarshipSample}
+              className="text-[11px] text-zinc-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-zinc-800 transition cursor-pointer"
+            >
+              Scholarship
+            </button>
+            <span className="text-zinc-600">|</span>
+            <button
+              type="button"
+              onClick={onLoadVisaSample}
+              className="text-[11px] text-zinc-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-zinc-800 transition cursor-pointer"
+            >
+              Visa
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsExpanded(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold border border-zinc-700 transition cursor-pointer"
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5 text-rose-400" />
+            <span>Modify Sources & Query</span>
+            <ChevronDown className="w-3 h-3 text-zinc-400" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+    <div className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-5 shadow-xl relative overflow-hidden">
       <div className="absolute -top-24 -right-24 w-64 h-64 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Topic Input */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-semibold text-zinc-200 flex items-center gap-2">
-              <Search className="w-4 h-4 text-rose-400" />
+            <label className="text-xs font-semibold text-zinc-200 flex items-center gap-2">
+              <Search className="w-3.5 h-3.5 text-rose-400" />
               <span>Research Objective / High-Stakes Decision Goal</span>
             </label>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={onLoadScholarshipSample}
@@ -170,6 +235,15 @@ export function TopicInput({
               >
                 Sample Visa
               </button>
+              <span className="text-zinc-600">|</span>
+              <button
+                type="button"
+                onClick={() => setIsExpanded(false)}
+                className="text-xs text-zinc-400 hover:text-zinc-200 flex items-center gap-1 cursor-pointer"
+              >
+                <span>Collapse</span>
+                <ChevronUp className="w-3 h-3" />
+              </button>
             </div>
           </div>
           <input
@@ -178,7 +252,7 @@ export function TopicInput({
             onChange={(e) => setTopic(e.target.value)}
             placeholder="e.g. What should I verify before applying for this scholarship or visa?"
             required
-            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-rose-500 transition"
+            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-zinc-100 placeholder-zinc-500 text-xs focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-rose-500 transition"
           />
         </div>
 
