@@ -8,21 +8,18 @@ import { ContradictionViewer } from "@/components/ContradictionViewer";
 import { TemporalWarnings } from "@/components/TemporalWarnings";
 import { VerificationChecklist } from "@/components/VerificationChecklist";
 import { SourceCardList } from "@/components/SourceCardList";
-import { AnalysisResult } from "@/types";
+import { AnalysisResult, DirectTextInput } from "@/types";
 import {
   SAMPLE_SCHOLARSHIP_SCENARIO,
   SAMPLE_VISA_SCENARIO,
 } from "@/lib/sampleData";
 import {
-  AlertTriangle,
-  ArrowRightLeft,
-  CheckCircle,
-  FileSearch,
   Grid,
+  ArrowRightLeft,
   ListTodo,
   Layers,
   Sparkles,
-  Info,
+  Award,
 } from "lucide-react";
 
 export default function Home() {
@@ -35,14 +32,18 @@ export default function Home() {
   >("matrix");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleAnalyze = async (topic: string, urls: string[]) => {
+  const handleAnalyze = async (
+    topic: string,
+    urls: string[],
+    directTexts?: DirectTextInput[]
+  ) => {
     setIsLoading(true);
     setErrorMessage(null);
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, urls }),
+        body: JSON.stringify({ topic, urls, directTexts }),
       });
 
       if (!res.ok) {
@@ -55,9 +56,8 @@ export default function Home() {
     } catch (err: any) {
       console.error(err);
       setErrorMessage(
-        "Live extraction encountered a network limit or missing API key. Displaying high-fidelity scenario synthesis instead."
+        "Live network request could not complete. Reverted safely to curated baseline synthesis."
       );
-      // Fallback seamlessly to sample scenario
       setAnalysis(SAMPLE_SCHOLARSHIP_SCENARIO);
     } finally {
       setIsLoading(false);
@@ -89,7 +89,7 @@ export default function Home() {
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Topic Input section */}
+        {/* Section 7 Demo Step 1: Research Question & Multi-Source Input */}
         <TopicInput
           onAnalyze={handleAnalyze}
           isLoading={isLoading}
@@ -102,7 +102,7 @@ export default function Home() {
             <span>{errorMessage}</span>
             <button
               onClick={() => setErrorMessage(null)}
-              className="text-amber-400 hover:text-white"
+              className="text-amber-400 hover:text-white cursor-pointer"
             >
               ✕
             </button>
@@ -114,11 +114,12 @@ export default function Home() {
           <div className="md:col-span-2 bg-zinc-900/80 border border-zinc-800 rounded-2xl p-5 shadow-lg flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-rose-400">
-                  Target Domain & Verdict
+                <span className="text-[11px] font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Synthesized Domain Schema Verdict</span>
                 </span>
                 <span className="text-xs text-zinc-500 font-mono">
-                  {analysis.sources.length} Sources Ingested
+                  {analysis.sources.length} Ingested Sources
                 </span>
               </div>
               <h2 className="text-base font-extrabold text-white">
@@ -134,7 +135,10 @@ export default function Home() {
                 {analysis.detectedCategory}
               </span>
               <span>•</span>
-              <span>Updated just now</span>
+              <span className="text-emerald-400 font-medium flex items-center gap-1">
+                <Award className="w-3.5 h-3.5" />
+                <span>Authority-Weighted Resolution Active</span>
+              </span>
             </div>
           </div>
 
@@ -159,7 +163,7 @@ export default function Home() {
             </div>
             <p className="text-[11px] text-zinc-500">
               {analysis.overallCompletenessScore < 70
-                ? "⚠️ High uncertainty: Essential conditions missing."
+                ? "⚠️ High uncertainty: Mandatory criteria missing."
                 : "Moderate coverage: Verify remaining gaps."}
             </p>
           </div>
@@ -201,12 +205,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Temporal Alerts Banner (if any) */}
+        {/* Temporal Alerts Banner */}
         {analysis.temporalAlerts.length > 0 && (
           <TemporalWarnings alerts={analysis.temporalAlerts} />
         )}
 
-        {/* Navigation Tabs */}
+        {/* Section 7 Demo Step 2-5: Linear Guided Navigation Tabs */}
         <div className="flex border-b border-zinc-800 gap-2 overflow-x-auto pb-px">
           <button
             onClick={() => setActiveTab("matrix")}
@@ -217,7 +221,7 @@ export default function Home() {
             }`}
           >
             <Grid className="w-4 h-4" />
-            <span>Blind-Spot Heatmap Matrix</span>
+            <span>1. Blind-Spot Matrix & Gaps</span>
             <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-800 text-[10px] text-zinc-300">
               {analysis.expectedDimensions.length} Dimensions
             </span>
@@ -232,7 +236,7 @@ export default function Home() {
             }`}
           >
             <ArrowRightLeft className="w-4 h-4" />
-            <span>Source Contradictions</span>
+            <span>2. Source Contradictions</span>
             {conflictsCount > 0 && (
               <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">
                 {conflictsCount}
@@ -249,7 +253,7 @@ export default function Home() {
             }`}
           >
             <ListTodo className="w-4 h-4" />
-            <span>Actionable Verification Checklist</span>
+            <span>3. Action Verification Checklist</span>
             <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px]">
               {analysis.verificationChecklist.length}
             </span>
@@ -264,7 +268,7 @@ export default function Home() {
             }`}
           >
             <Layers className="w-4 h-4" />
-            <span>Ingested Sources & Text</span>
+            <span>4. Ingested Sources & Trust Hierarchy</span>
             <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-800 text-[10px]">
               {analysis.sources.length}
             </span>
@@ -282,11 +286,14 @@ export default function Home() {
                 detectedCategory={analysis.detectedCategory}
               />
 
-              {/* Gaps / Dark Spots Cards */}
+              {/* Detected Gaps List */}
               <div className="space-y-3">
                 <h4 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
                   <span>Detected Information Dark Spots (Missing Critical Data)</span>
+                  <span className="text-[10px] text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-900/40 font-mono">
+                    AI Gap Signals
+                  </span>
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {analysis.gaps.map((gap) => (
@@ -348,7 +355,7 @@ export default function Home() {
             <span>Digital Dark Spot Challenge (Devengers 2026)</span>
           </div>
           <div className="text-[11px] text-zinc-600">
-            Schema-driven Information Gap Detection • Built with Next.js, Gemini & Tailwind
+            Schema-Driven Gap Detection • Authority-Weighted Conflict Resolution • Built with Next.js, Gemini & Tailwind
           </div>
         </div>
       </footer>

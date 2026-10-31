@@ -6,7 +6,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
   topic: "Global STEM Excellence Undergraduate Scholarship",
   detectedCategory: "Higher Education & Scholarship Grant",
   executiveSummary:
-    "Analysis of 3 primary sources reveals critical missing renewal guidelines, conflicting document requirements between official portals and aggregator guides, and high-risk temporal discrepancies regarding application cycle deadlines.",
+    "Cross-source evaluation across 3 distinct authority tiers reveals a critical omission regarding multi-year renewal rules, contradictory document requirements (2 vs 3 recommendation letters), and an obsolete 2024 deadline circulating in community guides.",
   overallCompletenessScore: 58,
   highRiskCount: 3,
   sources: [
@@ -21,6 +21,9 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       cleanTextSnippet:
         "The Global STEM Excellence Scholarship provides $10,000 per academic year for undergraduate students in computing and engineering. Applicants must maintain a minimum 3.5 GPA and submit an official transcript, 2 letters of recommendation, and a statement of purpose. Application deadline is November 15, 2026.",
       wordCount: 342,
+      authorityTier: "primary_official",
+      authorityWeight: 95,
+      authorityRationale: "Primary issuing foundation and statutory grant holder.",
     },
     {
       id: "src-blog",
@@ -34,6 +37,9 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       cleanTextSnippet:
         "Important tip: You must mail your physical transcripts by October 1, 2024. The foundation gives $7,500 disbursed across two terms. You only need to provide 1 recommendation letter from your high school counselor.",
       wordCount: 520,
+      authorityTier: "third_party_unverified",
+      authorityWeight: 35,
+      authorityRationale: "Informal student blog with unverified editorial cycle and evident temporal drift.",
     },
     {
       id: "src-aggregator",
@@ -46,6 +52,9 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       cleanTextSnippet:
         "Global STEM Excellence Scholarship: Award is $10,000. Required documentation: 3 recommendation letters, tax returns/proof of family income under $75k, certified copy of birth certificate, and high school transcript. Verification is conducted by third-party auditors.",
       wordCount: 410,
+      authorityTier: "secondary_aggregator",
+      authorityWeight: 75,
+      authorityRationale: "Accredited national university aggregator; reputable but secondary to primary foundation notice.",
     },
   ],
   expectedDimensions: [
@@ -82,7 +91,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       name: "Renewal & Maintenance Conditions",
       description: "Annual GPA requirements, credit completion pace, ongoing research/volunteer hours",
       category: "critical",
-      whyItMatters: "Students may accept thinking it is 4-year funding only to lose it in sophomore year.",
+      whyItMatters: "Students risk losing multi-year funding in Year 2 if renewal terms are unverified.",
     },
     {
       id: "dim-appeals",
@@ -236,12 +245,12 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
     {
       id: "gap-renewal",
       dimensionId: "dim-renewal",
-      dimensionName: "Renewal & Multi-Year Policy",
+      dimensionName: "Renewal & Multi-Year Maintenance Policy",
       riskLevel: "high",
       description:
-        "None of the 3 reviewed sources define whether this $10,000 scholarship is renewable beyond Year 1, or what credit hours/GPA must be sustained to retain it.",
+        "None of the 3 evaluated sources define whether this $10,000 scholarship is renewable beyond Year 1, or what credit completion pace/GPA must be sustained.",
       impactReason:
-        "Students risk facing unexpected out-of-pocket tuition in years 2-4 if funding terminates after the first 12 months.",
+        "Students risk facing unexpected out-of-pocket tuition in years 2-4 if funding terminates after the initial 12 months.",
       actionRequired:
         "Contact the Global STEM financial aid office directly to request the written policy for multi-year tenure.",
       isAiInferred: true,
@@ -249,12 +258,12 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
     {
       id: "gap-appeals",
       dimensionId: "dim-appeals",
-      dimensionName: "Appeals & Extenuating Circumstances",
+      dimensionName: "Disqualification Appeals & Leave Exemptions",
       riskLevel: "medium",
       description:
         "No guidance exists across any source outlining how GPA drop exemptions or medical deferrals are handled.",
       impactReason:
-        "Zero transparency on rights if unexpected emergencies occur during the semester.",
+        "Zero transparency on rights if unexpected emergencies occur during the academic semester.",
       actionRequired:
         "Verify student handbook policy regarding leave of absence and scholarship pauses.",
       isAiInferred: true,
@@ -264,46 +273,64 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
     {
       id: "conflict-docs",
       dimensionId: "dim-documents",
-      dimensionName: "Required Recommendation Letters & Financial Proof",
+      dimensionName: "Required Recommendation Letters & Income Documentation",
       severity: "high",
       claimA: {
         sourceId: "src-official",
         sourceTitle: "Global STEM Foundation (Official)",
         statement: "Official portal mandates 2 letters of recommendation; mentions no income cap.",
         quote: "submit an official transcript, 2 letters of recommendation, and a statement of purpose.",
+        authorityTier: "primary_official",
+        authorityWeight: 95,
       },
       claimB: {
         sourceId: "src-aggregator",
         sourceTitle: "National Grants Registry",
         statement: "Aggregator demands 3 letters plus family tax returns proving income under $75,000.",
         quote: "3 recommendation letters, tax returns/proof of family income under $75k, certified copy of birth certificate.",
+        authorityTier: "secondary_aggregator",
+        authorityWeight: 75,
+      },
+      authorityVerdict: {
+        preferredClaim: "claimA",
+        rationale:
+          "Claim A holds 95% Authority Weight (Primary Issuing Body) vs 75% for the Aggregator. Follow the official portal's 2-letter requirement, but clarify with admissions whether income is an optional tie-breaker.",
       },
       whyItMatters:
-        "If you follow the wrong guide, you may either be disqualified for missing a third letter, or reveal sensitive tax records unnecessarily.",
+        "Submitting an unnecessary third letter or revealing confidential tax records risks bureaucratic processing delays.",
       recommendation:
-        "Prioritize the official portal, but email admissions to verify whether financial need is a tie-breaker.",
+        "Prioritize the official portal (95% trust weight), but email admissions to verify whether financial need is a tie-breaker.",
     },
     {
       id: "conflict-award",
       dimensionId: "dim-award",
-      dimensionName: "Total Award Amount",
+      dimensionName: "Total Award Amount & Disbursal Structure",
       severity: "high",
       claimA: {
         sourceId: "src-official",
         sourceTitle: "Global STEM Foundation (Official)",
         statement: "States the scholarship is $10,000 per academic year.",
         quote: "The Global STEM Excellence Scholarship provides $10,000 per academic year.",
+        authorityTier: "primary_official",
+        authorityWeight: 95,
       },
       claimB: {
         sourceId: "src-blog",
         sourceTitle: "ScholarshipInsider Guide",
         statement: "Reports the funding amount is only $7,500 total.",
         quote: "The foundation gives $7,500 disbursed across two terms.",
+        authorityTier: "third_party_unverified",
+        authorityWeight: 35,
+      },
+      authorityVerdict: {
+        preferredClaim: "claimA",
+        rationale:
+          "Claim A holds 95% Authority Weight vs 35% for the informal blog. The $7,500 figure stems from a stale 2024 blog post and must be discarded.",
       },
       whyItMatters:
-        "A $2,500 funding gap can alter financial budgeting or loan applications.",
+        "A $2,500 funding shortfall will distort student budgeting and financial aid packaging.",
       recommendation:
-        "The blog figure originates from a stale 2024 article; disregard the $7,500 claim.",
+        "The blog figure originates from a stale 2024 article (35% trust weight); disregard the $7,500 claim.",
     },
   ],
   temporalAlerts: [
@@ -324,20 +351,22 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       dimensionId: "dim-renewal",
       task: "Clarify renewal terms: Inquire whether the $10,000 scholarship repeats annually or requires re-application.",
       priority: "high",
-      reason: "Complete dark spot across all evaluated documents.",
+      reason: "Potential blind spot: Missing across all evaluated documents.",
       recommendedOfficialSource: "Global STEM Foundation Financial Aid Office",
-      searchQueryShortcut: "Global STEM Excellence scholarship renewal GPA requirements 2026",
+      searchQueryShortcut: "site:globalstem-foundation.org scholarship renewal requirements 2026",
       completed: false,
+      isAiSuggestedSignal: true,
     },
     {
       id: "chk-2",
       dimensionId: "dim-documents",
       task: "Confirm exact letter of recommendation count (2 vs 3) and whether tax filings are needed.",
       priority: "high",
-      reason: "Direct contradiction between Official Portal and National Grants Registry.",
+      reason: "Direct contradiction between Official Portal (95% trust) and National Grants Registry (75% trust).",
       recommendedOfficialSource: "https://globalstem-foundation.org/scholarships/undergrad-2026",
-      searchQueryShortcut: "Global STEM scholarship official application guidelines checklist",
+      searchQueryShortcut: "site:globalstem-foundation.org required application documents undergraduate",
       completed: false,
+      isAiSuggestedSignal: true,
     },
     {
       id: "chk-3",
@@ -346,18 +375,20 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       priority: "medium",
       reason: "Third-party blog cites obsolete 2024 postal cut-off.",
       recommendedOfficialSource: "Official foundation portal",
-      searchQueryShortcut: "Global STEM Foundation application deadline November 2026 timezone",
+      searchQueryShortcut: "site:globalstem-foundation.org application deadline 2026 timezone",
       completed: false,
+      isAiSuggestedSignal: true,
     },
     {
       id: "chk-4",
       dimensionId: "dim-appeals",
       task: "Check institutional policy on emergency leaves or GPA probation exemptions.",
       priority: "low",
-      reason: "Omitted dimension across all sources.",
+      reason: "Potential blind spot: Omitted dimension across all sources.",
       recommendedOfficialSource: "University Student Affairs",
-      searchQueryShortcut: "STEM scholarship undergraduate academic probation appeals process",
+      searchQueryShortcut: "site:globalstem-foundation.org academic probation appeals policy",
       completed: false,
+      isAiSuggestedSignal: true,
     },
   ],
 };
@@ -365,10 +396,10 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
 export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
   id: "scenario-visa-2026",
   timestamp: new Date().toISOString(),
-  topic: "Digital Nomad & Remote Worker Visa Requirements (Portugal / Spain)",
+  topic: "Digital Nomad & Remote Worker Visa Requirements (Portugal)",
   detectedCategory: "Immigration & Legal Residency",
   executiveSummary:
-    "Comparison of immigration guidelines reveals severe discrepancies in monthly income thresholds (€2,800 vs €3,280 minimum wage multiples) and complete absence of dual-tax treaty clarification.",
+    "Comparison across consular portals and expat forums reveals statutory contradictions in monthly wage multiples (€3,280 vs €2,800) and complete absence of double-taxation treaty clarification.",
   overallCompletenessScore: 62,
   highRiskCount: 2,
   sources: [
@@ -383,6 +414,9 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       cleanTextSnippet:
         "Temporary stay and residence visa for remote workers requires proof of average monthly income earned in the last three months exceeding four times the guaranteed national minimum wage (€820 × 4 = €3,280/month). Applicants must present 12-month lease and clean criminal record check apostilled within 90 days.",
       wordCount: 420,
+      authorityTier: "primary_official",
+      authorityWeight: 98,
+      authorityRationale: "Official state immigration and consular authority (.gov.pt).",
     },
     {
       id: "visa-expat",
@@ -396,6 +430,9 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       cleanTextSnippet:
         "All you need is €2,800/month in remote invoices and an Airbnb booking for your first month. You don't need a full annual lease until you arrive at the immigration appointment.",
       wordCount: 610,
+      authorityTier: "third_party_unverified",
+      authorityWeight: 35,
+      authorityRationale: "Crowdsourced nomad forum; lacks statutory verification and lags current minimum wage laws.",
     },
   ],
   expectedDimensions: [
@@ -514,35 +551,23 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
         sourceTitle: "Official Consular Portal (2026)",
         statement: "Official law mandates €3,280/month (4x 2026 minimum wage €820).",
         quote: "exceeding four times the guaranteed national minimum wage (€820 × 4 = €3,280/month).",
+        authorityTier: "primary_official",
+        authorityWeight: 98,
       },
       claimB: {
         sourceId: "visa-expat",
         sourceTitle: "Nomad Community Guide (2023)",
         statement: "Community guide claims only €2,800/month is required.",
         quote: "All you need is €2,800/month in remote invoices.",
+        authorityTier: "third_party_unverified",
+        authorityWeight: 35,
+      },
+      authorityVerdict: {
+        preferredClaim: "claimA",
+        rationale: "Claim A carries 98% Authority Weight (Official State Law) vs 35% for an unverified 2023 forum post. Submitting €2,800 guarantees consular rejection.",
       },
       whyItMatters: "Applying with €2,800 will trigger an automatic consular rejection under 2026 statutory rates.",
       recommendation: "Ensure 3 consecutive months of bank slips meet the official €3,280 baseline.",
-    },
-    {
-      id: "conflict-housing",
-      dimensionId: "dim-housing",
-      dimensionName: "Accommodation Agreement Type",
-      severity: "high",
-      claimA: {
-        sourceId: "visa-gov",
-        sourceTitle: "Official Consular Portal",
-        statement: "Requires a 12-month registered residential lease.",
-        quote: "Applicants must present 12-month lease.",
-      },
-      claimB: {
-        sourceId: "visa-expat",
-        sourceTitle: "Nomad Community Guide",
-        statement: "Claims temporary Airbnb booking is acceptable.",
-        quote: "an Airbnb booking for your first month. You don't need a full annual lease.",
-      },
-      whyItMatters: "Consulates in 2026 strictly reject short-stay hotel/Airbnb vouchers for residence visas.",
-      recommendation: "Obtain a formal long-term rental contract registered with local tax authority before consular interview.",
     },
   ],
   temporalAlerts: [
@@ -562,31 +587,11 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       dimensionId: "dim-tax",
       task: "Verify 183-day tax residency rule and bilateral double-tax treaty with home jurisdiction.",
       priority: "high",
-      reason: "Critical dark spot completely unmentioned in consular leaflets.",
+      reason: "Potential blind spot: Critical dimension completely unmentioned in consular leaflets.",
       recommendedOfficialSource: "Autoridade Tributária e Aduaneira (Tax Authority)",
-      searchQueryShortcut: "Portugal remote worker digital nomad visa double tax treaty 183 days",
+      searchQueryShortcut: "site:portaldasfinancas.gov.pt non habitual resident remote work double tax treaty",
       completed: false,
-    },
-    {
-      id: "chk-visa-2",
-      dimensionId: "dim-income",
-      task: "Confirm latest 2026 national minimum wage multiple (€3,280) on consular portal.",
-      priority: "high",
-      reason: "Conflicting numbers online due to annual statutory increases.",
-      recommendedOfficialSource: "Official Consular Portal",
-      searchQueryShortcut: "Portugal residence visa remote work 4x minimum wage official 2026",
-      completed: false,
-    },
-    {
-      id: "chk-visa-3",
-      dimensionId: "dim-background",
-      task: "Verify that police clearance certificate apostille date is within 90 days of consular interview.",
-      priority: "medium",
-      reason: "Time-sensitive document expiration criteria.",
-      recommendedOfficialSource: "Consulate Visa Checklist",
-      searchQueryShortcut: "apostilled criminal record background check 90 days expiration visa",
-      completed: false,
+      isAiSuggestedSignal: true,
     },
   ],
 };
-

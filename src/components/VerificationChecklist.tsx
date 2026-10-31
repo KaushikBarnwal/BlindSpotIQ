@@ -10,7 +10,7 @@ import {
   Check,
   Mail,
   ListTodo,
-  Sparkles,
+  Info,
 } from "lucide-react";
 
 interface VerificationChecklistProps {
@@ -27,7 +27,6 @@ export function VerificationChecklist({
   const [emailModalItem, setEmailModalItem] = useState<VerificationChecklistItem | null>(null);
   const [emailCopied, setEmailCopied] = useState(false);
 
-  // Sync state if items change
   React.useEffect(() => {
     setChecklist(items);
   }, [items]);
@@ -44,7 +43,7 @@ export function VerificationChecklist({
   const progressPercent = Math.round((completedCount / (checklist.length || 1)) * 100);
 
   const handleCopyMarkdown = () => {
-    const md = `# BlindspotIQ Verification Checklist: ${topic}\n\nGenerated: ${new Date().toLocaleDateString()}\n\n` +
+    const md = `# BlindspotIQ Actionable Verification Checklist: ${topic}\n\nGenerated: ${new Date().toLocaleDateString()}\n\n` +
       checklist
         .map(
           (item) =>
@@ -105,7 +104,7 @@ Prospective Applicant`,
 
         <button
           onClick={handleCopyMarkdown}
-          className="self-start sm:self-center flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold border border-zinc-700 transition"
+          className="self-start sm:self-center flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold border border-zinc-700 transition cursor-pointer"
         >
           {copied ? (
             <>
@@ -172,6 +171,9 @@ Prospective Applicant`,
                   >
                     {item.priority} Priority
                   </span>
+                  <span className="text-[10px] text-indigo-400 font-mono bg-indigo-950/30 px-1.5 rounded border border-indigo-900/40">
+                    AI Suggested Signal
+                  </span>
                   <span
                     className={`font-semibold text-sm ${
                       item.completed ? "line-through text-zinc-500" : "text-zinc-100"
@@ -205,7 +207,7 @@ Prospective Applicant`,
                   e.stopPropagation();
                   setEmailModalItem(item);
                 }}
-                className="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 transition flex items-center gap-1.5 text-xs font-medium"
+                className="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 transition flex items-center gap-1.5 text-xs font-medium cursor-pointer"
                 title="Draft an official inquiry email to the issuing authority"
               >
                 <Mail className="w-3.5 h-3.5 text-rose-400" />
@@ -219,7 +221,7 @@ Prospective Applicant`,
                 target="_blank"
                 rel="noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 transition flex items-center gap-1.5 text-xs font-medium"
+                className="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 transition flex items-center gap-1.5 text-xs font-medium cursor-pointer"
                 title="Search authoritative sources on Google"
               >
                 <Search className="w-3.5 h-3.5 text-amber-400" />
@@ -228,6 +230,14 @@ Prospective Applicant`,
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Responsible AI Disclaimer Banner (Criterion 5 Alignment) */}
+      <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 flex items-start gap-2.5 text-[11px] text-zinc-500">
+        <Info className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+        <span>
+          <strong className="text-zinc-400">Responsible AI Disclosure:</strong> All AI-generated checklist tasks and gap signals represent potential verification pointers derived from reviewed material, not guaranteed facts or legal rulings. Always confirm critical conditions directly with the issuing authority.
+        </span>
       </div>
 
       {/* Draft Inquiry Email Modal */}
@@ -252,7 +262,7 @@ Prospective Applicant`,
                 </div>
                 <button
                   onClick={() => setEmailModalItem(null)}
-                  className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-zinc-800"
+                  className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-zinc-800 cursor-pointer"
                 >
                   ✕
                 </button>
@@ -285,7 +295,7 @@ Prospective Applicant`,
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleCopyEmailText(draft)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500 hover:bg-rose-600 text-white font-semibold text-xs shadow-md transition"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500 hover:bg-rose-600 text-white font-semibold text-xs shadow-md transition cursor-pointer"
                   >
                     {emailCopied ? (
                       <>
@@ -301,7 +311,7 @@ Prospective Applicant`,
                   </button>
                   <button
                     onClick={() => setEmailModalItem(null)}
-                    className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold"
+                    className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold cursor-pointer"
                   >
                     Close
                   </button>

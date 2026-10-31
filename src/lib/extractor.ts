@@ -1,6 +1,50 @@
 import { JSDOM } from "jsdom";
 import { Readability } from "@mozilla/readability";
-import { SourceDocument } from "@/types";
+import { SourceDocument, AuthorityTier } from "@/types";
+
+export function determineAuthorityTier(hostname: string, title: string): {
+  tier: AuthorityTier;
+  weight: number;
+  rationale: string;
+} {
+  const lowerHost = hostname.toLowerCase();
+  const lowerTitle = title.toLowerCase();
+
+  if (
+    lowerHost.endsWith(".gov") ||
+    lowerHost.includes(".gov.") ||
+    lowerHost.endsWith(".edu") ||
+    lowerHost.includes(".edu.") ||
+    lowerTitle.includes("official portal") ||
+    lowerTitle.includes("ministry of")
+  ) {
+    return {
+      tier: "primary_official",
+      weight: 95,
+      rationale: "Direct government, institutional registrar, or official issuing authority.",
+    };
+  }
+
+  if (
+    lowerHost.endsWith(".org") ||
+    lowerHost.includes("portal") ||
+    lowerHost.includes("registry") ||
+    lowerTitle.includes("registry") ||
+    lowerTitle.includes("database")
+  ) {
+    return {
+      tier: "secondary_aggregator",
+      weight: 70,
+      rationale: "Institutional registry or secondary aggregator; generally structured but secondary.",
+    };
+  }
+
+  return {
+    tier: "third_party_unverified",
+    weight: 35,
+    rationale: "Third-party commercial blog or informal guide; high risk of editorial lag or drift.",
+  };
+}
 
 export async function extractSourceFromUrl(
   url: string,
@@ -39,11 +83,9 @@ export async function extractSourceFromUrl(
     let publishDate: string | undefined;
 
     if (isPdfContent) {
-      // Handle PDF Document Extraction
       try {
         const arrayBuf = await response.arrayBuffer();
         const buf = Buffer.from(arrayBuf);
-        // Dynamic import / require of pdf-parse
         const { PDFParse } = require("pdf-parse");
         const parser = new PDFParse({ data: buf });
         const parsed = await parser.getText();
@@ -55,7 +97,6 @@ export async function extractSourceFromUrl(
         cleanText = `PDF document detected at ${url}. Content parsing completed via stream.`;
       }
     } else {
-      // Handle Standard Web / HTML Extraction
       const html = await response.text();
       const dom = new JSDOM(html, { url });
       const reader = new Readability(dom.window.document);
@@ -72,7 +113,6 @@ export async function extractSourceFromUrl(
         title = dom.window.document.title || hostname;
       }
 
-      // Try to extract publish date from meta tags
       const metaDate = dom.window.document.querySelector(
         'meta[name="date"], meta[property="article:published_time"], meta[name="pubdate"], time'
       );
@@ -84,7 +124,6 @@ export async function extractSourceFromUrl(
       }
     }
 
-    // Temporal Cycle & Staleness Heuristic
     const currentYear = new Date().getFullYear();
     const cycleMatch = cleanText.match(/\b(202[0-9])(?:-202[0-9])?\s*(?:cycle|session|intake|deadline|academic year)?\b/i);
     const detectedCycle = cycleMatch ? cycleMatch[0] : undefined;
@@ -93,6 +132,8 @@ export async function extractSourceFromUrl(
       cycleMatch &&
       parseInt(cycleMatch[1]) < currentYear - 1
     );
+
+    const authority = determineAuthorityTier(hostname, title);
 
     return {
       id: fallbackId,
@@ -103,10 +144,14 @@ export async function extractSourceFromUrl(
       cycleOrYear: detectedCycle,
       isStale,
       staleReason: isStale ? `Content references earlier cycle (${detectedCycle})` : undefined,
-      cleanTextSnippet: cleanText.slice(0, 10000), // Feed up to 10k clean chars per source
+      cleanTextSnippet: cleanText.slice(0, 10000),
       wordCount: cleanText.split(/\s+/).filter(Boolean).length,
+      authorityTier: authority.tier,
+      authorityWeight: authority.weight,
+      authorityRationale: authority.rationale,
     };
   } catch (err: any) {
+    const authority = determineAuthorityTier(hostname, hostname);
     return {
       id: fallbackId,
       url,
@@ -115,6 +160,9 @@ export async function extractSourceFromUrl(
       isStale: false,
       cleanTextSnippet: `Notice: Source was reviewed based on available domain metadata (${err.message || "Network issue"}).`,
       wordCount: 15,
+      authorityTier: authority.tier,
+      authorityWeight: authority.weight,
+      authorityRationale: authority.rationale,
     };
   }
 }

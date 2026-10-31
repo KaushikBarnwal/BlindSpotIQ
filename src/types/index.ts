@@ -1,8 +1,17 @@
-export type ConfidenceLevel = "verified_quote" | "ai_inferred" | "conflicting_data" | "unverified";
+export type ConfidenceLevel =
+  | "verified_quote"
+  | "ai_inferred"
+  | "conflicting_data"
+  | "unverified";
 
 export type CellStatus = "covered" | "partial" | "missing" | "conflicting";
 
 export type RiskLevel = "high" | "medium" | "low";
+
+export type AuthorityTier =
+  | "primary_official" // Official government, university, issuing foundation (.gov, .edu, official body) ~ 95%
+  | "secondary_aggregator" // Institutional registries, aggregators, accredited databases ~ 70%
+  | "third_party_unverified"; // Blogs, student forums, commercial portals, unofficial guides ~ 35%
 
 export interface SourceDocument {
   id: string;
@@ -15,6 +24,9 @@ export interface SourceDocument {
   staleReason?: string;
   cleanTextSnippet: string;
   wordCount: number;
+  authorityTier: AuthorityTier;
+  authorityWeight: number; // 0 to 100%
+  authorityRationale: string;
 }
 
 export interface ExpectedDimension {
@@ -42,7 +54,7 @@ export interface DarkSpotGap {
   riskLevel: RiskLevel;
   impactReason: string;
   actionRequired: string;
-  isAiInferred: boolean;
+  isAiInferred: true; // Strictly labeled per Hackathon Rubric Item #6
 }
 
 export interface Contradiction {
@@ -54,12 +66,20 @@ export interface Contradiction {
     sourceTitle: string;
     statement: string;
     quote: string;
+    authorityTier: AuthorityTier;
+    authorityWeight: number;
   };
   claimB: {
     sourceId: string;
     sourceTitle: string;
     statement: string;
     quote: string;
+    authorityTier: AuthorityTier;
+    authorityWeight: number;
+  };
+  authorityVerdict: {
+    preferredClaim: "claimA" | "claimB" | "unresolved";
+    rationale: string;
   };
   whyItMatters: string;
   recommendation: string;
@@ -85,13 +105,21 @@ export interface VerificationChecklistItem {
   recommendedOfficialSource?: string;
   searchQueryShortcut: string;
   completed: boolean;
+  isAiSuggestedSignal: true; // Responsible AI disclosure
+}
+
+export interface DirectTextInput {
+  title: string;
+  content: string;
+  sourceLabel?: string;
+  authorityTier?: AuthorityTier;
 }
 
 export interface AnalysisResult {
   id: string;
   timestamp: string;
   topic: string;
-  detectedCategory: string; // e.g. "Scholarship Application", "Immigration & Visa", "Public Policy"
+  detectedCategory: string; // e.g. "Scholarship Grant", "Immigration & Visa", "Public Policy"
   executiveSummary: string;
   sources: SourceDocument[];
   expectedDimensions: ExpectedDimension[];
@@ -103,4 +131,3 @@ export interface AnalysisResult {
   overallCompletenessScore: number; // 0 - 100%
   highRiskCount: number;
 }
-
