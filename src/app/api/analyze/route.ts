@@ -3,6 +3,9 @@ import { extractSourceFromUrl } from "@/lib/extractor";
 import { analyzeInformationGaps } from "@/lib/gemini";
 import { SourceDocument } from "@/types";
 
+// Prevent Vercel serverless function from timing out prematurely on live multi-source analysis
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -24,7 +27,7 @@ export async function POST(request: Request) {
     let sources: SourceDocument[] = [];
 
     if (validUrls.length > 0) {
-      // Extract up to 5 URLs in parallel
+      // Extract up to 5 URLs in parallel with HTML and PDF parsing
       const fetchPromises = validUrls.slice(0, 5).map((url, i) =>
         extractSourceFromUrl(url, i)
       );

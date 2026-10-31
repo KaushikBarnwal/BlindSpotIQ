@@ -589,3 +589,4 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
     },
   ],
 };
+

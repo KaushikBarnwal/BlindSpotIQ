@@ -103,3 +103,4 @@ export interface AnalysisResult {
   overallCompletenessScore: number; // 0 - 100%
   highRiskCount: number;
 }
+

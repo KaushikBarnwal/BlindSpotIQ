@@ -68,3 +68,4 @@ export function TemporalWarnings({ alerts }: TemporalWarningsProps) {
     </div>
   );
 }
+
