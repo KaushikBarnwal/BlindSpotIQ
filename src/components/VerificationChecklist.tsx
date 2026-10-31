@@ -100,20 +100,24 @@ export function VerificationChecklist({
   };
 
   const generateEmailDraft = (item: VerificationChecklistItem) => {
+    const cleanTopic = topic || "Application";
+    const cleanTask = item.task
+      .replace(/^(Verify|Confirm|Check|Clarify)\s+/i, "")
+      .replace(/\.$/, "");
     return {
-      subject: `Urgent Inquiry Regarding ${topic}: Clarification on ${item.task.slice(0, 45)}...`,
-      body: `Dear Admissions & Program Review Committee,
+      subject: `Inquiry: Question regarding ${cleanTopic} (${cleanTask.slice(0, 45)})`,
+      body: `Dear Program Coordinator,
 
-I am currently preparing my application for "${topic}". While reviewing available materials and notices, I noted an important information gap regarding:
+I am currently preparing my application for "${cleanTopic}" and wanted to confirm a detail regarding the requirements:
 
-• Question: ${item.task}
+• Requirement in question: ${item.task}
 • Reason for inquiry: ${item.reason}
 
-Could you please confirm the official current policy or point me to the relevant updated circular for this application cycle?
+Could you please confirm the current policy for this cycle or direct me to the latest official guidelines?
 
-Thank you for your guidance and time.
+Thank you for your time and guidance.
 
-Sincerely,
+Best regards,
 Prospective Applicant`,
     };
   };
@@ -173,7 +177,7 @@ Prospective Applicant`,
         </div>
       </div>
 
-      {/* Inline Add Custom Item Form */}
+      {/* Add Custom Item Modal / Form */}
       {showAddForm && (
         <form
           onSubmit={handleAddCustomItem}
@@ -261,7 +265,7 @@ Prospective Applicant`,
         </div>
         <div className="w-full bg-zinc-100 h-2.5 rounded-full overflow-hidden border border-zinc-200">
           <div
-            className="bg-gradient-to-r from-indigo-500 via-violet-500 to-emerald-500 h-full transition-all duration-300"
+            className="bg-emerald-500 h-full rounded-full transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -273,16 +277,18 @@ Prospective Applicant`,
           <div
             key={item.id}
             onClick={() => toggleItem(item.id)}
-            className={`p-4 sm:p-5 rounded-2xl border transition cursor-pointer flex flex-col sm:flex-row items-start gap-4 ${
+            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col sm:flex-row sm:items-start justify-between gap-4 ${
               item.completed
-                ? "bg-zinc-50/50 border-zinc-200/60 opacity-60"
-                : "bg-zinc-50/60 border-zinc-200 hover:border-zinc-300 hover:bg-white"
+                ? "bg-zinc-50/60 border-zinc-200 opacity-60"
+                : item.priority === "high"
+                ? "bg-rose-50/20 border-rose-200/80 hover:border-rose-300 shadow-2xs"
+                : "bg-white border-zinc-200 hover:border-zinc-300 shadow-2xs"
             }`}
           >
-            <div className="flex items-start gap-3.5 w-full sm:w-auto sm:flex-1">
+            <div className="flex items-start gap-3 min-w-0">
               <button
                 type="button"
-                className="mt-0.5 text-zinc-400 hover:text-indigo-600 transition shrink-0"
+                className="mt-0.5 text-zinc-400 hover:text-zinc-600 shrink-0 cursor-pointer"
               >
                 {item.completed ? (
                   <CheckSquare className="w-5 h-5 text-emerald-600" />
@@ -291,26 +297,26 @@ Prospective Applicant`,
                 )}
               </button>
 
-              <div className="flex-1 space-y-1.5">
-                <div className="flex flex-wrap items-center gap-2">
+              <div className="space-y-1.5 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span
-                    className={`font-bold uppercase text-xs px-2.5 py-0.5 rounded-full ${
+                    className={`text-xs font-bold uppercase px-2 py-0.5 rounded border ${
                       item.priority === "high"
-                        ? "bg-rose-50 text-rose-700 border border-rose-200"
+                        ? "bg-rose-50 text-rose-700 border-rose-200"
                         : item.priority === "medium"
                         ? "bg-amber-50 text-amber-700 border border-amber-200"
-                        : "bg-zinc-100 text-zinc-700"
+                        : "bg-zinc-100 text-zinc-700 border-zinc-200"
                     }`}
                   >
                     {item.priority} Priority
                   </span>
                   {item.isUserAdded ? (
-                    <span className="text-xs text-emerald-700 font-mono bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
+                    <span className="text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
                       Added by You
                     </span>
                   ) : (
-                    <span className="text-xs text-indigo-700 font-mono bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 font-semibold">
-                      AI Suggested Signal
+                    <span className="text-xs text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200/80 font-semibold">
+                      Suggested Action
                     </span>
                   )}
                   <span
@@ -323,14 +329,14 @@ Prospective Applicant`,
                 </div>
 
                 <p className="text-zinc-700 text-xs sm:text-sm leading-relaxed">
-                  <span className="text-zinc-400 font-medium">Why check this: </span>
-                  {item.reason}
+                  <span className="text-zinc-400 font-medium">Why: </span>
+                  {item.reason.replace(/^Potential blind spot:\s*/i, "")}
                 </p>
 
                 {item.recommendedOfficialSource && (
                   <p className="text-xs text-zinc-500">
-                    Target Authority:{" "}
-                    <span className="text-zinc-900 font-mono font-semibold">
+                    Target Department:{" "}
+                    <span className="text-zinc-800 font-semibold">
                       {item.recommendedOfficialSource}
                     </span>
                   </p>
@@ -383,11 +389,11 @@ Prospective Applicant`,
         ))}
       </div>
 
-      {/* Responsible AI Disclaimer Banner */}
+      {/* Friendly Advice Banner */}
       <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-zinc-600 leading-relaxed">
         <Info className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
         <span>
-          <strong className="text-zinc-800">Responsible AI Disclosure:</strong> All AI-generated checklist tasks and gap signals represent potential verification pointers derived from reviewed material, not guaranteed facts or legal rulings. Always confirm critical conditions directly with the issuing authority.
+          <strong className="text-zinc-800">Tip:</strong> These checklist items are recommendations created by cross-referencing your sources. Always confirm critical requirements directly with the issuing department before applying.
         </span>
       </div>
 
@@ -404,10 +410,10 @@ Prospective Applicant`,
                   </div>
                   <div>
                     <h4 className="font-bold text-zinc-950 text-base">
-                      Pre-filled Authority Inquiry Draft
+                      Ready-to-Send Inquiry Email
                     </h4>
                     <p className="text-xs text-zinc-500">
-                      Copy and send directly to the scholarship or visa department
+                      Copy and send directly to the department or program coordinator
                     </p>
                   </div>
                 </div>
@@ -424,7 +430,7 @@ Prospective Applicant`,
                   <span className="text-zinc-500 font-semibold block text-xs uppercase">
                     Subject Line:
                   </span>
-                  <div className="bg-zinc-50 p-3 rounded-lg border border-zinc-200 text-zinc-900 font-mono mt-1 text-xs">
+                  <div className="bg-zinc-50 p-3 rounded-lg border border-zinc-200 text-zinc-900 font-medium mt-1 text-xs">
                     {draft.subject}
                   </div>
                 </div>
@@ -440,8 +446,8 @@ Prospective Applicant`,
               </div>
 
               <div className="flex justify-between items-center pt-2 border-t border-zinc-100">
-                <span className="text-xs text-zinc-500">
-                  Target: {emailModalItem.recommendedOfficialSource || "Program Officer"}
+                <span className="text-xs text-zinc-500 truncate max-w-[240px]">
+                  Recipient: {emailModalItem.recommendedOfficialSource || "Program Coordinator"}
                 </span>
                 <div className="flex gap-2">
                   <button
@@ -456,7 +462,7 @@ Prospective Applicant`,
                     ) : (
                       <>
                         <Copy className="w-4 h-4" />
-                        <span>Copy Email Template</span>
+                        <span>Copy Email</span>
                       </>
                     )}
                   </button>

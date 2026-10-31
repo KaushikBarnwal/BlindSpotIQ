@@ -459,38 +459,45 @@ export default function PlatformPage() {
                 </p>
               </div>
 
-              {/* Red Flag Summary Counters */}
+              {/* Red Flag Summary Counters - Clean Vertical Layout (Zero text clipping) */}
               <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
                   Audit Findings
                 </span>
-                <div className="grid grid-cols-3 gap-2 my-2 text-center">
-                  <div className="bg-rose-50/70 p-2.5 rounded-xl border border-rose-200">
-                    <span className="text-2xl sm:text-3xl font-black text-rose-700 block">
+                
+                <div className="space-y-2 my-auto py-2">
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-rose-50/70 border border-rose-200">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-rose-500" />
+                      <span className="text-xs font-bold text-rose-950">Missing Details</span>
+                    </div>
+                    <span className="text-xs sm:text-sm font-black text-rose-700 bg-white px-2 py-0.5 rounded-md border border-rose-200/80">
                       {darkSpotsCount}
                     </span>
-                    <span className="text-xs text-rose-800 block uppercase font-bold">
-                      Missing Info
-                    </span>
                   </div>
-                  <div className="bg-amber-50/70 p-2.5 rounded-xl border border-amber-200">
-                    <span className="text-2xl sm:text-3xl font-black text-amber-700 block">
+
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-amber-50/70 border border-amber-200">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-amber-500" />
+                      <span className="text-xs font-bold text-amber-950">Contradictions</span>
+                    </div>
+                    <span className="text-xs sm:text-sm font-black text-amber-700 bg-white px-2 py-0.5 rounded-md border border-amber-200/80">
                       {conflictsCount}
                     </span>
-                    <span className="text-xs text-amber-800 block uppercase font-bold">
-                      Contradictions
-                    </span>
                   </div>
-                  <div className="bg-zinc-50 p-2.5 rounded-xl border border-zinc-200">
-                    <span className="text-2xl sm:text-3xl font-black text-zinc-800 block">
+
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-zinc-400" />
+                      <span className="text-xs font-bold text-zinc-800">Outdated Info</span>
+                    </div>
+                    <span className="text-xs sm:text-sm font-black text-zinc-700 bg-white px-2 py-0.5 rounded-md border border-zinc-200">
                       {staleCount}
-                    </span>
-                    <span className="text-xs text-zinc-500 block uppercase font-bold">
-                      Outdated
                     </span>
                   </div>
                 </div>
-                <span className="text-xs text-rose-600 font-bold block text-center">
+
+                <span className="text-xs text-rose-600 font-bold block text-center pt-2 border-t border-zinc-100">
                   {analysis.highRiskCount} High-Risk Item(s) Need Verification
                 </span>
               </div>
