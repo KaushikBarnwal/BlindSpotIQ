@@ -13,6 +13,24 @@ export type AuthorityTier =
   | "secondary_aggregator"
   | "third_party_unverified";
 
+export type GapType =
+  | "completely_omitted"
+  | "unspecified_conditions"
+  | "single_source_outlier"
+  | "scope_mismatch";
+
+export type ConflictType =
+  | "document_list_conflict"
+  | "numerical_clash"
+  | "cycle_mismatch"
+  | "scope_difference";
+
+export interface UserScopeContext {
+  situation?: string;      // e.g., "2nd-year undergraduate, CS major"
+  jurisdiction?: string;   // e.g., "California, USA" or "National / State"
+  targetCycle?: string;    // e.g., "2026–2027 Cycle"
+}
+
 export interface SourceDocument {
   id: string;
   url: string;
@@ -52,6 +70,7 @@ export interface DarkSpotGap {
   dimensionName: string;
   description: string;
   riskLevel: RiskLevel;
+  gapType?: GapType;
   impactReason: string;
   actionRequired: string;
   isAiInferred: true;
@@ -61,6 +80,7 @@ export interface Contradiction {
   id: string;
   dimensionId: string;
   dimensionName: string;
+  conflictType?: ConflictType;
   claimA: {
     sourceId: string;
     sourceTitle: string;
@@ -105,7 +125,8 @@ export interface VerificationChecklistItem {
   recommendedOfficialSource?: string;
   searchQueryShortcut: string;
   completed: boolean;
-  isAiSuggestedSignal: true;
+  isAiSuggestedSignal?: boolean;
+  isUserAdded?: boolean;
   isOfficialLinkCheck?: boolean;
 }
 
@@ -125,12 +146,23 @@ export interface DirectTextInput {
   authorityTier?: AuthorityTier;
 }
 
+export interface RecentSession {
+  id: string;
+  topic: string;
+  timestamp: string;
+  completenessScore: number;
+  darkSpotsCount: number;
+  conflictsCount: number;
+  detectedCategory: string;
+}
+
 export interface AnalysisResult {
   id: string;
   timestamp: string;
   topic: string;
   detectedCategory: string;
   executiveSummary: string;
+  userScope?: UserScopeContext;
   sources: SourceDocument[];
   expectedDimensions: ExpectedDimension[];
   coverageMatrix: MatrixCell[];
@@ -138,8 +170,8 @@ export interface AnalysisResult {
   contradictions: Contradiction[];
   temporalAlerts: TemporalAlert[];
   verificationChecklist: VerificationChecklistItem[];
-  confirmedFacts: ConfirmedFact[]; // Directly satisfies brief requirement #3
-  officialApplicationUrl?: string; // Directly satisfies brief requirement in Section 3
+  confirmedFacts: ConfirmedFact[];
+  officialApplicationUrl?: string;
   officialApplicationTitle?: string;
   overallCompletenessScore: number;
   highRiskCount: number;

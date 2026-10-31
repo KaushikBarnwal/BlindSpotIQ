@@ -31,3 +31,24 @@
 .dark-scrollbar ::-webkit-scrollbar-thumb:hover {
   background: #71717a;
 }
+
+/* Clean Print / PDF styles */
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #09090b !important;
+    font-size: 11pt !important;
+  }
+  .shadow-xs,
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg,
+  .shadow-2xs {
+    box-shadow: none !important;
+  }
+}

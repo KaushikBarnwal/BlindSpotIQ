@@ -11,6 +11,8 @@ import {
   Mail,
   ListTodo,
   Info,
+  Plus,
+  Trash2,
 } from "lucide-react";
 
 interface VerificationChecklistProps {
@@ -27,6 +29,12 @@ export function VerificationChecklist({
   const [emailModalItem, setEmailModalItem] = useState<VerificationChecklistItem | null>(null);
   const [emailCopied, setEmailCopied] = useState(false);
 
+  // Custom Item Form state
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newTask, setNewTask] = useState("");
+  const [newReason, setNewReason] = useState("");
+  const [newPriority, setNewPriority] = useState<"high" | "medium" | "low">("medium");
+
   React.useEffect(() => {
     setChecklist(items);
   }, [items]);
@@ -42,12 +50,37 @@ export function VerificationChecklist({
   const completedCount = checklist.filter((i) => i.completed).length;
   const progressPercent = Math.round((completedCount / (checklist.length || 1)) * 100);
 
+  const handleAddCustomItem = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTask.trim()) return;
+
+    const customItem: VerificationChecklistItem = {
+      id: `custom-item-${Date.now()}`,
+      task: newTask.trim(),
+      reason: newReason.trim() || "User-added custom verification action.",
+      priority: newPriority,
+      completed: false,
+      isUserAdded: true,
+      searchQueryShortcut: `${topic} ${newTask.trim()}`,
+      recommendedOfficialSource: "Target Office / Program Registrar",
+    };
+
+    setChecklist((prev) => [customItem, ...prev]);
+    setNewTask("");
+    setNewReason("");
+    setShowAddForm(false);
+  };
+
+  const handleDeleteCustomItem = (id: string) => {
+    setChecklist((prev) => prev.filter((item) => item.id !== id));
+  };
+
   const handleCopyMarkdown = () => {
     const md = `# BlindspotIQ Actionable Verification Checklist: ${topic}\n\nGenerated: ${new Date().toLocaleDateString()}\n\n` +
       checklist
         .map(
           (item) =>
-            `- [${item.completed ? "x" : " "}] **[${item.priority.toUpperCase()}]** ${item.task}\n  - *Why:* ${item.reason}\n  - *Official Reference:* ${item.recommendedOfficialSource || "Primary institution portal"}`
+            `- [${item.completed ? "x" : " "}] **[${item.priority.toUpperCase()}]** ${item.task}${item.isUserAdded ? " *(User Added)*" : ""}\n  - *Why:* ${item.reason}\n  - *Official Reference:* ${item.recommendedOfficialSource || "Primary institution portal"}`
         )
         .join("\n\n");
 
@@ -102,23 +135,113 @@ Prospective Applicant`,
           </div>
         </div>
 
-        <button
-          onClick={handleCopyMarkdown}
-          className="self-start sm:self-center flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 text-xs font-semibold border border-zinc-200 transition cursor-pointer"
-        >
-          {copied ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Copied Markdown!</span>
-            </>
-          ) : (
-            <>
-              <Copy className="w-3.5 h-3.5 text-zinc-500" />
-              <span>Export Checklist</span>
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-2 self-start sm:self-center">
+          <button
+            onClick={() => setShowAddForm((prev) => !prev)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100/80 text-indigo-700 text-xs font-semibold border border-indigo-200 transition cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 text-indigo-600" />
+            <span>{showAddForm ? "Close Form" : "Add Custom Item"}</span>
+          </button>
+
+          <button
+            onClick={handleCopyMarkdown}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 text-xs font-semibold border border-zinc-200 transition cursor-pointer"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Copied Markdown!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5 text-zinc-500" />
+                <span>Export Checklist</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Inline Add Custom Item Form */}
+      {showAddForm && (
+        <form
+          onSubmit={handleAddCustomItem}
+          className="bg-indigo-50/50 border border-indigo-200/90 rounded-xl p-4 space-y-3 shadow-2xs"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
+              <Plus className="w-4 h-4 text-indigo-600" />
+              <span>Add Custom Verification Action</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowAddForm(false)}
+              className="text-xs text-zinc-400 hover:text-zinc-700 cursor-pointer"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div className="sm:col-span-2">
+              <label className="text-[10px] font-bold uppercase text-zinc-500 block mb-1">
+                Action Item / Question To Verify *
+              </label>
+              <input
+                type="text"
+                value={newTask}
+                onChange={(e) => setNewTask(e.target.value)}
+                placeholder="e.g. Confirm minimum credit hours with registrar office"
+                className="w-full px-3 py-1.5 rounded-lg border border-zinc-200 bg-white text-xs text-zinc-900 focus:outline-hidden focus:border-indigo-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-bold uppercase text-zinc-500 block mb-1">
+                Priority Level
+              </label>
+              <select
+                value={newPriority}
+                onChange={(e) =>
+                  setNewPriority(e.target.value as "high" | "medium" | "low")
+                }
+                className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 bg-white text-xs text-zinc-900 focus:outline-hidden focus:border-indigo-500"
+              >
+                <option value="high">High Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="low">Low Priority</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 items-end">
+            <div className="sm:col-span-2">
+              <label className="text-[10px] font-bold uppercase text-zinc-500 block mb-1">
+                Reason / Contact Office (Optional)
+              </label>
+              <input
+                type="text"
+                value={newReason}
+                onChange={(e) => setNewReason(e.target.value)}
+                placeholder="e.g. Unclear if summer semester counts towards 12-credit rule"
+                className="w-full px-3 py-1.5 rounded-lg border border-zinc-200 bg-white text-xs text-zinc-900 focus:outline-hidden focus:border-indigo-500"
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="w-full px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs transition cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add to Checklist</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      )}
 
       {/* Progress bar */}
       <div className="space-y-1.5">
@@ -171,9 +294,15 @@ Prospective Applicant`,
                   >
                     {item.priority} Priority
                   </span>
-                  <span className="text-[10px] text-indigo-700 font-mono bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200 font-semibold">
-                    AI Suggested Signal
-                  </span>
+                  {item.isUserAdded ? (
+                    <span className="text-[10px] text-emerald-700 font-mono bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200 font-semibold">
+                      Added by You
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-indigo-700 font-mono bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200 font-semibold">
+                      AI Suggested Signal
+                    </span>
+                  )}
                   <span
                     className={`font-bold text-sm ${
                       item.completed ? "line-through text-zinc-400" : "text-zinc-900"
@@ -227,6 +356,20 @@ Prospective Applicant`,
                 <Search className="w-3.5 h-3.5 text-amber-600" />
                 <span>Search Official</span>
               </a>
+
+              {item.isUserAdded && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteCustomItem(item.id);
+                  }}
+                  className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 hover:bg-rose-50 border border-zinc-200 transition cursor-pointer"
+                  title="Delete this custom item"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           </div>
         ))}

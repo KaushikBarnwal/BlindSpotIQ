@@ -8,7 +8,7 @@ export const maxDuration = 60;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { topic, urls, directTexts } = body;
+    const { topic, urls, directTexts, scope } = body;
 
     if (!topic || typeof topic !== "string") {
       return NextResponse.json(
@@ -72,8 +72,8 @@ export async function POST(request: Request) {
       sources.push(...urlSources);
     }
 
-    // Call Gap & Contradiction Detection Engine
-    const result = await analyzeInformationGaps(topic, sources);
+    // Call Gap & Contradiction Detection Engine with user scope
+    const result = await analyzeInformationGaps(topic, sources, scope);
 
     return NextResponse.json(result);
   } catch (error: any) {

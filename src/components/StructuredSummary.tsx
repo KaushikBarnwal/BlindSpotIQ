@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ConfirmedFact, DarkSpotGap } from "@/types";
+import { ConfirmedFact, DarkSpotGap, GapType } from "@/types";
 import {
   CheckCircle2,
   AlertOctagon,
@@ -44,6 +44,37 @@ export function StructuredSummary({
 
   const toggleFact = (idx: number) => {
     setExpandedFactIdx(expandedFactIdx === idx ? null : idx);
+  };
+
+  const renderGapTypeBadge = (type?: GapType) => {
+    switch (type) {
+      case "completely_omitted":
+        return (
+          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200">
+            Completely Omitted
+          </span>
+        );
+      case "unspecified_conditions":
+        return (
+          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
+            Unspecified Conditions
+          </span>
+        );
+      case "single_source_outlier":
+        return (
+          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-violet-100 text-violet-800 border border-violet-200">
+            Single-Source Outlier
+          </span>
+        );
+      case "scope_mismatch":
+        return (
+          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-200">
+            Scope Mismatch
+          </span>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -234,9 +265,12 @@ export function StructuredSummary({
                     <span className="text-xs font-bold text-rose-900">
                       {gap.dimensionName}
                     </span>
-                    <span className="text-[9px] uppercase font-bold px-1.5 py-0.2 rounded bg-rose-100 text-rose-800 border border-rose-200">
-                      {gap.riskLevel} Risk
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      {renderGapTypeBadge(gap.gapType)}
+                      <span className="text-[9px] uppercase font-bold px-1.5 py-0.2 rounded bg-rose-100 text-rose-800 border border-rose-200">
+                        {gap.riskLevel} Risk
+                      </span>
+                    </div>
                   </div>
 
                   <p className="text-xs text-zinc-700 leading-relaxed">

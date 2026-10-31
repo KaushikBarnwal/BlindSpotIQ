@@ -11,6 +11,11 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
   highRiskCount: 3,
   officialApplicationUrl: "https://globalstem-foundation.org/scholarships/undergrad-2026",
   officialApplicationTitle: "Global STEM Foundation — Official Application Gateway (2026-2027 Cycle)",
+  userScope: {
+    situation: "2nd-Year Undergraduate, CS Major",
+    jurisdiction: "United States (National)",
+    targetCycle: "2026–2027 Academic Year",
+  },
   sources: [
     {
       id: "src-official",
@@ -283,6 +288,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       dimensionId: "dim-renewal",
       dimensionName: "Renewal & Multi-Year Maintenance Policy",
       riskLevel: "high",
+      gapType: "completely_omitted",
       description:
         "None of the 3 evaluated sources define whether this $10,000 scholarship is renewable beyond Year 1, or what credit completion pace/GPA must be sustained.",
       impactReason:
@@ -296,6 +302,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       dimensionId: "dim-appeals",
       dimensionName: "Disqualification Appeals & Leave Exemptions",
       riskLevel: "medium",
+      gapType: "unspecified_conditions",
       description:
         "No guidance exists across any source outlining how GPA drop exemptions or medical deferrals are handled.",
       impactReason:
@@ -311,6 +318,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       dimensionId: "dim-documents",
       dimensionName: "Required Recommendation Letters & Income Documentation",
       severity: "high",
+      conflictType: "document_list_conflict",
       claimA: {
         sourceId: "src-official",
         sourceTitle: "Global STEM Foundation (Official)",
@@ -342,6 +350,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       dimensionId: "dim-award",
       dimensionName: "Total Award Amount & Disbursal Structure",
       severity: "high",
+      conflictType: "numerical_clash",
       claimA: {
         sourceId: "src-official",
         sourceTitle: "Global STEM Foundation (Official)",
@@ -452,6 +461,11 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
   highRiskCount: 2,
   officialApplicationUrl: "https://vistos.mne.gov.pt/en/national-visas/general-information/residence-visa",
   officialApplicationTitle: "Ministry of Foreign Affairs — Official Consular Appointment Portal",
+  userScope: {
+    situation: "Remote Software Contractor with foreign clients",
+    jurisdiction: "Portugal / Schengen Area",
+    targetCycle: "2026 Residency Window",
+  },
   sources: [
     {
       id: "visa-gov",
@@ -610,6 +624,7 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       dimensionId: "dim-tax",
       dimensionName: "Tax Residency & Double Taxation Treaty",
       riskLevel: "high",
+      gapType: "unspecified_conditions",
       description: "Neither the official consular page nor expat guides clarify the tax liability triggers once remote stay exceeds 183 days.",
       impactReason: "Remote workers risk unexpected 48% marginal income tax brackets in Europe without prior planning.",
       actionRequired: "Consult a certified cross-border tax specialist regarding tax residency activation.",
@@ -622,6 +637,7 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       dimensionId: "dim-income",
       dimensionName: "Minimum Monthly Income Threshold",
       severity: "high",
+      conflictType: "numerical_clash",
       claimA: {
         sourceId: "visa-gov",
         sourceTitle: "Official Consular Portal (2026)",

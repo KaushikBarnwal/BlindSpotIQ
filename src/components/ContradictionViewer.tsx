@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Contradiction, AuthorityTier } from "@/types";
+import { Contradiction, AuthorityTier, ConflictType } from "@/types";
 import {
   ArrowRightLeft,
   ShieldAlert,
@@ -56,6 +56,37 @@ export function ContradictionViewer({
     }
   };
 
+  const renderConflictTypeBadge = (type?: ConflictType) => {
+    switch (type) {
+      case "document_list_conflict":
+        return (
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
+            Document List Conflict
+          </span>
+        );
+      case "numerical_clash":
+        return (
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">
+            Numerical Clash
+          </span>
+        );
+      case "cycle_mismatch":
+        return (
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-orange-50 text-orange-800 border border-orange-200">
+            Cycle Mismatch
+          </span>
+        );
+      case "scope_difference":
+        return (
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-200">
+            Scope Difference
+          </span>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -86,14 +117,15 @@ export function ContradictionViewer({
             key={conflict.id}
             className="bg-white border border-amber-200/90 rounded-2xl p-5 shadow-xs space-y-4 relative overflow-hidden"
           >
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-3 flex-wrap gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-bold text-amber-700 uppercase tracking-wide">
                   Contested Dimension:
                 </span>
                 <span className="text-sm font-extrabold text-zinc-950">
                   {conflict.dimensionName}
                 </span>
+                {renderConflictTypeBadge(conflict.conflictType)}
               </div>
               <span
                 className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${

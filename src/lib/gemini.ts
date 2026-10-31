@@ -1,10 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
-import { AnalysisResult, SourceDocument } from "@/types";
+import { AnalysisResult, SourceDocument, UserScopeContext } from "@/types";
 import { SAMPLE_SCHOLARSHIP_SCENARIO } from "./sampleData";
 
 export async function analyzeInformationGaps(
   topic: string,
-  sources: SourceDocument[]
+  sources: SourceDocument[],
+  scope?: UserScopeContext
 ): Promise<AnalysisResult> {
   const apiKey = process.env.GEMINI_API_KEY;
 
@@ -15,6 +16,7 @@ export async function analyzeInformationGaps(
     return {
       ...SAMPLE_SCHOLARSHIP_SCENARIO,
       topic: topic || SAMPLE_SCHOLARSHIP_SCENARIO.topic,
+      userScope: scope || SAMPLE_SCHOLARSHIP_SCENARIO.userScope,
       timestamp: new Date().toISOString(),
       sources: sources.length > 0 ? sources : SAMPLE_SCHOLARSHIP_SCENARIO.sources,
     };
@@ -34,7 +36,17 @@ Your primary mission is to:
 
 USER TOPIC / RESEARCH GOAL:
 "${topic}"
-
+${
+  scope && (scope.situation || scope.jurisdiction || scope.targetCycle)
+    ? `
+USER SCOPE & APPLICANT CONTEXT:
+- Profile / Situation: ${scope.situation || "Unspecified"}
+- Jurisdiction / Region: ${scope.jurisdiction || "Unspecified"}
+- Target Cycle / Timeframe: ${scope.targetCycle || "Unspecified"}
+(Evaluate whether the ingested sources align with this applicant context, and identify any scope or cycle mismatches!)
+`
+    : ""
+}
 COLLECTED SOURCES:
 ${sources
   .map(
@@ -95,6 +107,7 @@ OUTPUT REQUIREMENT (Valid JSON matching this exact structure):
       "dimensionId": string,
       "dimensionName": string,
       "riskLevel": "high" | "medium" | "low",
+      "gapType": "completely_omitted" | "unspecified_conditions" | "single_source_outlier" | "scope_mismatch",
       "description": string,
       "impactReason": string,
       "actionRequired": string,
@@ -106,6 +119,7 @@ OUTPUT REQUIREMENT (Valid JSON matching this exact structure):
       "id": string,
       "dimensionId": string,
       "dimensionName": string,
+      "conflictType": "document_list_conflict" | "numerical_clash" | "cycle_mismatch" | "scope_difference",
       "severity": "high" | "medium" | "low",
       "claimA": {
         "sourceId": string,
@@ -175,6 +189,7 @@ OUTPUT REQUIREMENT (Valid JSON matching this exact structure):
       id: `analysis-${Date.now()}`,
       timestamp: new Date().toISOString(),
       topic,
+      userScope: scope,
       detectedCategory: parsed.detectedCategory || "General Decision Research",
       executiveSummary: parsed.executiveSummary || "Analysis completed.",
       sources,
@@ -199,6 +214,7 @@ OUTPUT REQUIREMENT (Valid JSON matching this exact structure):
     return {
       ...SAMPLE_SCHOLARSHIP_SCENARIO,
       topic: topic || SAMPLE_SCHOLARSHIP_SCENARIO.topic,
+      userScope: scope || SAMPLE_SCHOLARSHIP_SCENARIO.userScope,
       timestamp: new Date().toISOString(),
       sources: sources.length > 0 ? sources : SAMPLE_SCHOLARSHIP_SCENARIO.sources,
     };

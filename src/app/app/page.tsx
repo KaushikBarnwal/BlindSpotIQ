@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { TopicInput } from "@/components/TopicInput";
 import { CoverageMatrix } from "@/components/CoverageMatrix";
@@ -9,11 +9,13 @@ import { TemporalWarnings } from "@/components/TemporalWarnings";
 import { VerificationChecklist } from "@/components/VerificationChecklist";
 import { SourceCardList } from "@/components/SourceCardList";
 import { StructuredSummary } from "@/components/StructuredSummary";
-import { AnalysisResult, DirectTextInput } from "@/types";
+import { AnalysisResult, DirectTextInput, UserScopeContext } from "@/types";
 import {
   SAMPLE_SCHOLARSHIP_SCENARIO,
   SAMPLE_VISA_SCENARIO,
 } from "@/lib/sampleData";
+import { useRecentSessions } from "@/lib/useRecentSessions";
+import { generateFullAuditMarkdown } from "@/lib/exportMarkdown";
 import {
   Grid,
   ArrowRightLeft,
@@ -23,6 +25,9 @@ import {
   Award,
   ShieldCheck,
   ExternalLink,
+  Download,
+  Printer,
+  Target,
 } from "lucide-react";
 
 export default function PlatformPage() {
@@ -35,10 +40,23 @@ export default function PlatformPage() {
   >("matrix");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const {
+    recentSessions,
+    saveSession,
+    loadSessionPayload,
+    clearAllSessions,
+  } = useRecentSessions();
+
+  // Save initial default scenario into recent sessions cache
+  useEffect(() => {
+    saveSession(SAMPLE_SCHOLARSHIP_SCENARIO);
+  }, [saveSession]);
+
   const handleAnalyze = async (
     topic: string,
     urls: string[],
-    directTexts?: DirectTextInput[]
+    directTexts?: DirectTextInput[],
+    scope?: UserScopeContext
   ) => {
     setIsLoading(true);
     setErrorMessage(null);
@@ -46,7 +64,7 @@ export default function PlatformPage() {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, urls, directTexts }),
+        body: JSON.stringify({ topic, urls, directTexts, scope }),
       });
 
       if (!res.ok) {
@@ -55,13 +73,20 @@ export default function PlatformPage() {
 
       const data: AnalysisResult = await res.json();
       setAnalysis(data);
+      saveSession(data);
       setActiveTab("matrix");
     } catch (err: any) {
       console.error(err);
       setErrorMessage(
         "Live network request could not complete. Reverted safely to curated baseline synthesis."
       );
-      setAnalysis(SAMPLE_SCHOLARSHIP_SCENARIO);
+      const fallback: AnalysisResult = {
+        ...SAMPLE_SCHOLARSHIP_SCENARIO,
+        topic: topic || SAMPLE_SCHOLARSHIP_SCENARIO.topic,
+        userScope: scope || SAMPLE_SCHOLARSHIP_SCENARIO.userScope,
+      };
+      setAnalysis(fallback);
+      saveSession(fallback);
     } finally {
       setIsLoading(false);
     }
@@ -69,14 +94,55 @@ export default function PlatformPage() {
 
   const handleLoadScholarship = () => {
     setAnalysis(SAMPLE_SCHOLARSHIP_SCENARIO);
+    saveSession(SAMPLE_SCHOLARSHIP_SCENARIO);
     setActiveTab("matrix");
     setErrorMessage(null);
   };
 
   const handleLoadVisa = () => {
     setAnalysis(SAMPLE_VISA_SCENARIO);
+    saveSession(SAMPLE_VISA_SCENARIO);
     setActiveTab("matrix");
     setErrorMessage(null);
+  };
+
+  const handleSelectRecentSession = (id: string) => {
+    if (id === SAMPLE_SCHOLARSHIP_SCENARIO.id) {
+      handleLoadScholarship();
+      return;
+    }
+    if (id === SAMPLE_VISA_SCENARIO.id) {
+      handleLoadVisa();
+      return;
+    }
+    const payload = loadSessionPayload(id);
+    if (payload) {
+      setAnalysis(payload);
+      setActiveTab("matrix");
+      setErrorMessage(null);
+    }
+  };
+
+  const handleDownloadMarkdown = () => {
+    const md = generateFullAuditMarkdown(analysis);
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    const slug = analysis.topic
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 35);
+    a.download = `blindspotiq-audit-${slug || "report"}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   const darkSpotsCount = analysis.gaps.length;
@@ -89,6 +155,9 @@ export default function PlatformPage() {
         onLoadScholarshipSample={handleLoadScholarship}
         onLoadVisaSample={handleLoadVisa}
         activeScenarioId={analysis.id}
+        recentSessions={recentSessions}
+        onSelectRecentSession={handleSelectRecentSession}
+        onClearRecentSessions={clearAllSessions}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-4">
@@ -131,6 +200,33 @@ export default function PlatformPage() {
               <p className="text-xs text-zinc-600 mt-1.5 leading-relaxed">
                 {analysis.executiveSummary}
               </p>
+
+              {analysis.userScope &&
+                (analysis.userScope.situation ||
+                  analysis.userScope.jurisdiction ||
+                  analysis.userScope.targetCycle) && (
+                  <div className="mt-2.5 p-2 bg-indigo-50/50 border border-indigo-100 rounded-lg flex flex-wrap items-center gap-1.5 text-[11px]">
+                    <span className="font-bold text-indigo-900 flex items-center gap-1">
+                      <Target className="w-3 h-3 text-indigo-600" />
+                      <span>Target Scope:</span>
+                    </span>
+                    {analysis.userScope.situation && (
+                      <span className="px-1.5 py-0.5 rounded bg-white text-indigo-900 border border-indigo-200/80 font-medium text-[10px]">
+                        {analysis.userScope.situation}
+                      </span>
+                    )}
+                    {analysis.userScope.jurisdiction && (
+                      <span className="px-1.5 py-0.5 rounded bg-white text-indigo-900 border border-indigo-200/80 font-medium text-[10px]">
+                        {analysis.userScope.jurisdiction}
+                      </span>
+                    )}
+                    {analysis.userScope.targetCycle && (
+                      <span className="px-1.5 py-0.5 rounded bg-white text-indigo-900 border border-indigo-200/80 font-medium text-[10px]">
+                        {analysis.userScope.targetCycle}
+                      </span>
+                    )}
+                  </div>
+                )}
             </div>
 
             <div className="pt-2.5 mt-2.5 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-500">
@@ -227,69 +323,92 @@ export default function PlatformPage() {
           <TemporalWarnings alerts={analysis.temporalAlerts} />
         )}
 
-        {/* Navigation Tabs - Clean Light Mode Style */}
-        <div className="flex border-b border-zinc-200 gap-2 overflow-x-auto pb-px">
-          <button
-            onClick={() => setActiveTab("matrix")}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
-              activeTab === "matrix"
-                ? "border-indigo-600 text-indigo-700 bg-indigo-50/40"
-                : "border-transparent text-zinc-500 hover:text-zinc-900"
-            }`}
-          >
-            <Grid className="w-4 h-4" />
-            <span>1. Blind-Spot Matrix & Gaps</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-100 text-[10px] text-zinc-600 font-semibold">
-              {analysis.expectedDimensions.length} Dimensions
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("conflicts")}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
-              activeTab === "conflicts"
-                ? "border-amber-600 text-amber-800 bg-amber-50/40"
-                : "border-transparent text-zinc-500 hover:text-zinc-900"
-            }`}
-          >
-            <ArrowRightLeft className="w-4 h-4" />
-            <span>2. Source Contradictions</span>
-            {conflictsCount > 0 && (
-              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">
-                {conflictsCount}
+        {/* Navigation Tabs & Audit Export Toolbar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-200 gap-2 pb-px">
+          <div className="flex gap-2 overflow-x-auto pb-px">
+            <button
+              onClick={() => setActiveTab("matrix")}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
+                activeTab === "matrix"
+                  ? "border-indigo-600 text-indigo-700 bg-indigo-50/40"
+                  : "border-transparent text-zinc-500 hover:text-zinc-900"
+              }`}
+            >
+              <Grid className="w-4 h-4" />
+              <span>1. Blind-Spot Matrix & Gaps</span>
+              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-100 text-[10px] text-zinc-600 font-semibold">
+                {analysis.expectedDimensions.length} Dimensions
               </span>
-            )}
-          </button>
+            </button>
 
-          <button
-            onClick={() => setActiveTab("checklist")}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
-              activeTab === "checklist"
-                ? "border-emerald-600 text-emerald-800 bg-emerald-50/40"
-                : "border-transparent text-zinc-500 hover:text-zinc-900"
-            }`}
-          >
-            <ListTodo className="w-4 h-4" />
-            <span>3. Action Verification Checklist</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-              {analysis.verificationChecklist.length}
-            </span>
-          </button>
+            <button
+              onClick={() => setActiveTab("conflicts")}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
+                activeTab === "conflicts"
+                  ? "border-amber-600 text-amber-800 bg-amber-50/40"
+                  : "border-transparent text-zinc-500 hover:text-zinc-900"
+              }`}
+            >
+              <ArrowRightLeft className="w-4 h-4" />
+              <span>2. Source Contradictions</span>
+              {conflictsCount > 0 && (
+                <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">
+                  {conflictsCount}
+                </span>
+              )}
+            </button>
 
-          <button
-            onClick={() => setActiveTab("sources")}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
-              activeTab === "sources"
-                ? "border-zinc-900 text-zinc-950 bg-zinc-100/50"
-                : "border-transparent text-zinc-500 hover:text-zinc-900"
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            <span>4. Ingested Sources & Trust Hierarchy</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-100 text-[10px] text-zinc-600 font-semibold">
-              {analysis.sources.length}
-            </span>
-          </button>
+            <button
+              onClick={() => setActiveTab("checklist")}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
+                activeTab === "checklist"
+                  ? "border-emerald-600 text-emerald-800 bg-emerald-50/40"
+                  : "border-transparent text-zinc-500 hover:text-zinc-900"
+              }`}
+            >
+              <ListTodo className="w-4 h-4" />
+              <span>3. Action Verification Checklist</span>
+              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                {analysis.verificationChecklist.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("sources")}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
+                activeTab === "sources"
+                  ? "border-zinc-900 text-zinc-950 bg-zinc-100/50"
+                  : "border-transparent text-zinc-500 hover:text-zinc-900"
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              <span>4. Ingested Sources & Trust Hierarchy</span>
+              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-100 text-[10px] text-zinc-600 font-semibold">
+                {analysis.sources.length}
+              </span>
+            </button>
+          </div>
+
+          {/* Audit Export Toolbar */}
+          <div className="flex items-center gap-2 self-start sm:self-center shrink-0 mb-1 sm:mb-0 no-print">
+            <button
+              onClick={handleDownloadMarkdown}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200/90 shadow-2xs text-xs font-semibold transition cursor-pointer"
+              title="Download complete decision gap audit as a structured Markdown (.md) file"
+            >
+              <Download className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Download .md</span>
+            </button>
+
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200/90 shadow-2xs text-xs font-semibold transition cursor-pointer"
+              title="Print full audit report or save as PDF"
+            >
+              <Printer className="w-3.5 h-3.5 text-zinc-500" />
+              <span>Print / PDF</span>
+            </button>
+          </div>
         </div>
 
         {/* Tab Content Display */}
