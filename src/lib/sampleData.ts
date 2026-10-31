@@ -6,9 +6,11 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
   topic: "Global STEM Excellence Undergraduate Scholarship",
   detectedCategory: "Higher Education & Scholarship Grant",
   executiveSummary:
-    "Cross-source evaluation across 3 distinct authority tiers reveals a critical omission regarding multi-year renewal rules, contradictory document requirements (2 vs 3 recommendation letters), and an obsolete 2024 deadline circulating in community guides.",
+    "Cross-source evaluation across 3 authority tiers reveals a critical dark spot regarding multi-year renewal rules, contradictory document requirements (2 vs 3 recommendation letters), and an obsolete 2024 deadline circulating in community guides.",
   overallCompletenessScore: 58,
   highRiskCount: 3,
+  officialApplicationUrl: "https://globalstem-foundation.org/scholarships/undergrad-2026",
+  officialApplicationTitle: "Global STEM Foundation — Official Application Gateway (2026-2027 Cycle)",
   sources: [
     {
       id: "src-official",
@@ -23,7 +25,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       wordCount: 342,
       authorityTier: "primary_official",
       authorityWeight: 95,
-      authorityRationale: "Primary issuing foundation and statutory grant holder.",
+      authorityRationale: "Primary statutory foundation and official grant award holder.",
     },
     {
       id: "src-blog",
@@ -55,6 +57,40 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
       authorityTier: "secondary_aggregator",
       authorityWeight: 75,
       authorityRationale: "Accredited national university aggregator; reputable but secondary to primary foundation notice.",
+    },
+  ],
+  confirmedFacts: [
+    {
+      dimensionName: "Award Amount & Funding Structure",
+      fact: "$10,000 per academic year disbursed for undergraduate computing & engineering majors.",
+      verifiedQuote: "The Global STEM Excellence Scholarship provides $10,000 per academic year for undergraduate students in computing and engineering.",
+      sourceTitle: "Global STEM Foundation (Official)",
+      sourceId: "src-official",
+      authorityWeight: 95,
+    },
+    {
+      dimensionName: "Academic Eligibility Threshold",
+      fact: "Minimum 3.5 cumulative GPA in approved computing or engineering programs.",
+      verifiedQuote: "Applicants must maintain a minimum 3.5 GPA and submit an official transcript.",
+      sourceTitle: "Global STEM Foundation (Official)",
+      sourceId: "src-official",
+      authorityWeight: 95,
+    },
+    {
+      dimensionName: "Current Cycle Application Cutoff",
+      fact: "Official submission cut-off date is November 15, 2026.",
+      verifiedQuote: "Application deadline is November 15, 2026.",
+      sourceTitle: "Global STEM Foundation (Official)",
+      sourceId: "src-official",
+      authorityWeight: 95,
+    },
+    {
+      dimensionName: "Mandatory Core Application Dossier",
+      fact: "Official college transcript and personal Statement of Purpose are strictly required.",
+      verifiedQuote: "submit an official transcript, 2 letters of recommendation, and a statement of purpose.",
+      sourceTitle: "Global STEM Foundation (Official)",
+      sourceId: "src-official",
+      authorityWeight: 95,
     },
   ],
   expectedDimensions: [
@@ -347,6 +383,18 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
   ],
   verificationChecklist: [
     {
+      id: "chk-app-link",
+      dimensionId: "dim-deadline",
+      task: "Verify official online application gateway link directly on the foundation portal.",
+      priority: "high",
+      reason: "Protects against phishing scams and obsolete postal mailing instructions from blogs.",
+      recommendedOfficialSource: "https://globalstem-foundation.org/scholarships/undergrad-2026",
+      searchQueryShortcut: "site:globalstem-foundation.org undergraduate application portal login 2026",
+      completed: false,
+      isAiSuggestedSignal: true,
+      isOfficialLinkCheck: true,
+    },
+    {
       id: "chk-1",
       dimensionId: "dim-renewal",
       task: "Clarify renewal terms: Inquire whether the $10,000 scholarship repeats annually or requires re-application.",
@@ -402,6 +450,8 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
     "Comparison across consular portals and expat forums reveals statutory contradictions in monthly wage multiples (€3,280 vs €2,800) and complete absence of double-taxation treaty clarification.",
   overallCompletenessScore: 62,
   highRiskCount: 2,
+  officialApplicationUrl: "https://vistos.mne.gov.pt/en/national-visas/general-information/residence-visa",
+  officialApplicationTitle: "Ministry of Foreign Affairs — Official Consular Appointment Portal",
   sources: [
     {
       id: "visa-gov",
@@ -433,6 +483,32 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
       authorityTier: "third_party_unverified",
       authorityWeight: 35,
       authorityRationale: "Crowdsourced nomad forum; lacks statutory verification and lags current minimum wage laws.",
+    },
+  ],
+  confirmedFacts: [
+    {
+      dimensionName: "Statutory Monthly Income Baseline",
+      fact: "Must prove minimum €3,280/month (4x Portuguese national minimum wage of €820 in 2026).",
+      verifiedQuote: "exceeding four times the guaranteed national minimum wage (€820 × 4 = €3,280/month).",
+      sourceTitle: "Ministry of Foreign Affairs (Official)",
+      sourceId: "visa-gov",
+      authorityWeight: 98,
+    },
+    {
+      dimensionName: "Mandatory Housing Contract Duration",
+      fact: "Applicant must present a 12-month formal residential lease registered with tax authorities.",
+      verifiedQuote: "Applicants must present 12-month lease.",
+      sourceTitle: "Ministry of Foreign Affairs (Official)",
+      sourceId: "visa-gov",
+      authorityWeight: 98,
+    },
+    {
+      dimensionName: "Background Check Shelf-Life",
+      fact: "Criminal record certificate must be apostilled and issued within 90 days of filing.",
+      verifiedQuote: "clean criminal record check apostilled within 90 days.",
+      sourceTitle: "Ministry of Foreign Affairs (Official)",
+      sourceId: "visa-gov",
+      authorityWeight: 98,
     },
   ],
   expectedDimensions: [
@@ -582,6 +658,18 @@ export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
     },
   ],
   verificationChecklist: [
+    {
+      id: "chk-visa-app-link",
+      dimensionId: "dim-housing",
+      task: "Verify official online appointment scheduling link on the Ministry of Foreign Affairs (E-Visa) portal.",
+      priority: "high",
+      reason: "Avoid intermediary third-party booking agencies charging fraudulent scheduling fees.",
+      recommendedOfficialSource: "https://vistos.mne.gov.pt/en/national-visas/general-information/residence-visa",
+      searchQueryShortcut: "site:vistos.mne.gov.pt residence visa appointment schedule portal",
+      completed: false,
+      isAiSuggestedSignal: true,
+      isOfficialLinkCheck: true,
+    },
     {
       id: "chk-visa-1",
       dimensionId: "dim-tax",

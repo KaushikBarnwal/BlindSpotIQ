@@ -8,6 +8,7 @@ import { ContradictionViewer } from "@/components/ContradictionViewer";
 import { TemporalWarnings } from "@/components/TemporalWarnings";
 import { VerificationChecklist } from "@/components/VerificationChecklist";
 import { SourceCardList } from "@/components/SourceCardList";
+import { StructuredSummary } from "@/components/StructuredSummary";
 import { AnalysisResult, DirectTextInput } from "@/types";
 import {
   SAMPLE_SCHOLARSHIP_SCENARIO,
@@ -20,6 +21,7 @@ import {
   Layers,
   Sparkles,
   Award,
+  BookOpenCheck,
 } from "lucide-react";
 
 export default function Home() {
@@ -210,6 +212,15 @@ export default function Home() {
           <TemporalWarnings alerts={analysis.temporalAlerts} />
         )}
 
+        {/* Structured Key Findings & Verified Official Application Gateway */}
+        <StructuredSummary
+          confirmedFacts={analysis.confirmedFacts}
+          gaps={analysis.gaps}
+          officialApplicationUrl={analysis.officialApplicationUrl}
+          officialApplicationTitle={analysis.officialApplicationTitle}
+          topic={analysis.topic}
+        />
+
         {/* Section 7 Demo Step 2-5: Linear Guided Navigation Tabs */}
         <div className="flex border-b border-zinc-800 gap-2 overflow-x-auto pb-px">
           <button
@@ -285,47 +296,6 @@ export default function Home() {
                 cells={analysis.coverageMatrix}
                 detectedCategory={analysis.detectedCategory}
               />
-
-              {/* Detected Gaps List */}
-              <div className="space-y-3">
-                <h4 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-                  <span>Detected Information Dark Spots (Missing Critical Data)</span>
-                  <span className="text-[10px] text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-900/40 font-mono">
-                    AI Gap Signals
-                  </span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {analysis.gaps.map((gap) => (
-                    <div
-                      key={gap.id}
-                      className="bg-zinc-900/90 border border-rose-500/30 rounded-xl p-4 space-y-2 shadow-lg"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-extrabold text-sm text-rose-300">
-                          {gap.dimensionName}
-                        </span>
-                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                          {gap.riskLevel} Risk Gap
-                        </span>
-                      </div>
-                      <p className="text-xs text-zinc-300 leading-relaxed">
-                        {gap.description}
-                      </p>
-                      <div className="bg-zinc-950 p-2.5 rounded-lg border border-zinc-800 text-[11px] space-y-1">
-                        <div>
-                          <span className="text-zinc-500 font-semibold">Consequence: </span>
-                          <span className="text-zinc-300">{gap.impactReason}</span>
-                        </div>
-                        <div>
-                          <span className="text-rose-400 font-semibold">Action: </span>
-                          <span className="text-zinc-300">{gap.actionRequired}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 

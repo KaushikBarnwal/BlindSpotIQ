@@ -9,9 +9,9 @@ export type CellStatus = "covered" | "partial" | "missing" | "conflicting";
 export type RiskLevel = "high" | "medium" | "low";
 
 export type AuthorityTier =
-  | "primary_official" // Official government, university, issuing foundation (.gov, .edu, official body) ~ 95%
-  | "secondary_aggregator" // Institutional registries, aggregators, accredited databases ~ 70%
-  | "third_party_unverified"; // Blogs, student forums, commercial portals, unofficial guides ~ 35%
+  | "primary_official"
+  | "secondary_aggregator"
+  | "third_party_unverified";
 
 export interface SourceDocument {
   id: string;
@@ -25,7 +25,7 @@ export interface SourceDocument {
   cleanTextSnippet: string;
   wordCount: number;
   authorityTier: AuthorityTier;
-  authorityWeight: number; // 0 to 100%
+  authorityWeight: number;
   authorityRationale: string;
 }
 
@@ -54,7 +54,7 @@ export interface DarkSpotGap {
   riskLevel: RiskLevel;
   impactReason: string;
   actionRequired: string;
-  isAiInferred: true; // Strictly labeled per Hackathon Rubric Item #6
+  isAiInferred: true;
 }
 
 export interface Contradiction {
@@ -105,7 +105,17 @@ export interface VerificationChecklistItem {
   recommendedOfficialSource?: string;
   searchQueryShortcut: string;
   completed: boolean;
-  isAiSuggestedSignal: true; // Responsible AI disclosure
+  isAiSuggestedSignal: true;
+  isOfficialLinkCheck?: boolean;
+}
+
+export interface ConfirmedFact {
+  dimensionName: string;
+  fact: string;
+  verifiedQuote?: string;
+  sourceTitle: string;
+  sourceId: string;
+  authorityWeight: number;
 }
 
 export interface DirectTextInput {
@@ -119,7 +129,7 @@ export interface AnalysisResult {
   id: string;
   timestamp: string;
   topic: string;
-  detectedCategory: string; // e.g. "Scholarship Grant", "Immigration & Visa", "Public Policy"
+  detectedCategory: string;
   executiveSummary: string;
   sources: SourceDocument[];
   expectedDimensions: ExpectedDimension[];
@@ -128,6 +138,9 @@ export interface AnalysisResult {
   contradictions: Contradiction[];
   temporalAlerts: TemporalAlert[];
   verificationChecklist: VerificationChecklistItem[];
-  overallCompletenessScore: number; // 0 - 100%
+  confirmedFacts: ConfirmedFact[]; // Directly satisfies brief requirement #3
+  officialApplicationUrl?: string; // Directly satisfies brief requirement in Section 3
+  officialApplicationTitle?: string;
+  overallCompletenessScore: number;
   highRiskCount: number;
 }

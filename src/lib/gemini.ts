@@ -9,11 +9,14 @@ export async function analyzeInformationGaps(
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    console.warn("GEMINI_API_KEY not found in environment. Falling back to robust curated synthesis.");
+    console.warn(
+      "GEMINI_API_KEY not found in environment. Falling back to robust curated synthesis."
+    );
     return {
       ...SAMPLE_SCHOLARSHIP_SCENARIO,
       topic: topic || SAMPLE_SCHOLARSHIP_SCENARIO.topic,
       timestamp: new Date().toISOString(),
+      sources: sources.length > 0 ? sources : SAMPLE_SCHOLARSHIP_SCENARIO.sources,
     };
   }
 
@@ -21,11 +24,13 @@ export async function analyzeInformationGaps(
 
   const prompt = `
 You are the core intelligence of "BlindspotIQ", an AI-assisted Information Gap & Contradiction Detection platform.
-Unlike typical search/summarizer tools that merely repeat what is present, your PRIMARY MISSION is to detect:
-1. WHAT IS MISSING (Dark Spots / Information Gaps)
-2. WHAT IS CONTRADICTORY (Conflicting claims between sources with exact quotes)
-3. WHAT IS OUTDATED / STALE (Temporal warnings, past year cycles)
-4. WHAT THE USER MUST VERIFY NEXT (Prioritized, actionable checklist)
+Your primary mission is to:
+1. Synthesize a STRUCTURED SUMMARY OF KEY INFORMATION found across selected sources.
+2. Detect WHAT IS MISSING (Dark Spots / Information Gaps) against expected domain dimensions.
+3. Detect CONTRADICTIONS between sources, weighting them by institutional domain authority (.gov/.edu official > aggregator > commercial blog).
+4. Detect OUTDATED / STALE CYCLES.
+5. Identify the primary official application link / portal.
+6. Generate a PRIORITIZED VERIFICATION CHECKLIST (including verifying the official application link).
 
 USER TOPIC / RESEARCH GOAL:
 "${topic}"
@@ -39,6 +44,7 @@ ID: ${s.id}
 URL: ${s.url}
 Title: ${s.title}
 Domain: ${s.hostname}
+Authority Tier: ${s.authorityTier} (${s.authorityWeight}% weight)
 Published/Cycle: ${s.publishDate || s.cycleOrYear || "Undated"}
 Content:
 ${s.cleanTextSnippet.slice(0, 4000)}
@@ -46,23 +52,24 @@ ${s.cleanTextSnippet.slice(0, 4000)}
   )
   .join("\n")}
 
-YOUR TASKS:
-1. Identify the detected domain category (e.g. "Scholarship Application", "Immigration & Visa", "Public Policy", "Medical/Treatment", "Legal Compliance").
-2. Establish a benchmark list of 5-7 EXPECTED DIMENSIONS that a comprehensive, decision-ready answer MUST contain for this domain (e.g. for scholarships: Eligibility, Award Amount, Deadlines, Required Documents Checklist, Renewal Conditions, Appeals Process).
-3. Build a Coverage Matrix for every (dimension, source) pair. Status must be one of: "covered", "partial", "missing", "conflicting". Provide exact quotes where found.
-4. Identify critical DARK SPOTS (dimensions where NONE of the sources provided sufficient information, or where critical terms like renewal or appeals are omitted). Mark riskLevel as "high", "medium", or "low".
-5. Identify CONTRADICTIONS between sources. Provide the exact claim and quote from Source A and Source B, explaining "whyItMatters" and recommending the safer next step.
-6. Identify TEMPORAL ALERTS for sources that are stale, undated, or cite past cycles.
-7. Generate a PRIORITIZED VERIFICATION CHECKLIST of actionable items the user must verify, with high priority first, and recommended search queries.
-8. Calculate an overall completeness score (0-100) and an executive summary.
-
-OUTPUT REQUIREMENT:
-You MUST respond with valid JSON matching this exact structure:
+OUTPUT REQUIREMENT (Valid JSON matching this exact structure):
 {
   "detectedCategory": string,
   "executiveSummary": string,
   "overallCompletenessScore": number,
   "highRiskCount": number,
+  "officialApplicationUrl": string,
+  "officialApplicationTitle": string,
+  "confirmedFacts": [
+    {
+      "dimensionName": string,
+      "fact": string,
+      "verifiedQuote": string,
+      "sourceTitle": string,
+      "sourceId": string,
+      "authorityWeight": number
+    }
+  ],
   "expectedDimensions": [
     {
       "id": string,
@@ -104,13 +111,21 @@ You MUST respond with valid JSON matching this exact structure:
         "sourceId": string,
         "sourceTitle": string,
         "statement": string,
-        "quote": string
+        "quote": string,
+        "authorityTier": "primary_official" | "secondary_aggregator" | "third_party_unverified",
+        "authorityWeight": number
       },
       "claimB": {
         "sourceId": string,
         "sourceTitle": string,
         "statement": string,
-        "quote": string
+        "quote": string,
+        "authorityTier": "primary_official" | "secondary_aggregator" | "third_party_unverified",
+        "authorityWeight": number
+      },
+      "authorityVerdict": {
+        "preferredClaim": "claimA" | "claimB" | "unresolved",
+        "rationale": string
       },
       "whyItMatters": string,
       "recommendation": string
@@ -136,7 +151,9 @@ You MUST respond with valid JSON matching this exact structure:
       "reason": string,
       "recommendedOfficialSource": string,
       "searchQueryShortcut": string,
-      "completed": false
+      "completed": false,
+      "isAiSuggestedSignal": true,
+      "isOfficialLinkCheck": boolean
     }
   ]
 }
@@ -161,6 +178,13 @@ You MUST respond with valid JSON matching this exact structure:
       detectedCategory: parsed.detectedCategory || "General Decision Research",
       executiveSummary: parsed.executiveSummary || "Analysis completed.",
       sources,
+      confirmedFacts: parsed.confirmedFacts || [],
+      officialApplicationUrl:
+        parsed.officialApplicationUrl ||
+        sources.find((s) => s.authorityTier === "primary_official")?.url ||
+        sources[0]?.url,
+      officialApplicationTitle:
+        parsed.officialApplicationTitle || "Primary Official Application Portal",
       expectedDimensions: parsed.expectedDimensions || [],
       coverageMatrix: parsed.coverageMatrix || [],
       gaps: parsed.gaps || [],
@@ -180,4 +204,3 @@ You MUST respond with valid JSON matching this exact structure:
     };
   }
 }
-
