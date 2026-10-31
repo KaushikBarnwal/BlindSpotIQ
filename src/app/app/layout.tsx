@@ -1,7 +1,7 @@
-// Dark-mode shell for the main BlindspotIQ analysis platform at /app
+// Clean light-mode shell for the BlindspotIQ analysis platform at /app
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="dark-scrollbar min-h-screen bg-zinc-950 text-zinc-100 selection:bg-rose-500 selection:text-white">
+    <div className="min-h-screen bg-zinc-50/80 text-zinc-900 selection:bg-indigo-100 selection:text-indigo-900 font-sans">
       {children}
     </div>
   );

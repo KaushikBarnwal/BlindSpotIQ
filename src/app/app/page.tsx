@@ -21,12 +21,11 @@ import {
   Layers,
   Sparkles,
   Award,
-  BookOpenCheck,
   ShieldCheck,
   ExternalLink,
 } from "lucide-react";
 
-export default function Home() {
+export default function PlatformPage() {
   const [analysis, setAnalysis] = useState<AnalysisResult>(
     SAMPLE_SCHOLARSHIP_SCENARIO
   );
@@ -85,7 +84,7 @@ export default function Home() {
   const staleCount = analysis.temporalAlerts.length;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
+    <div className="min-h-screen bg-zinc-50/70 text-zinc-900 flex flex-col font-sans">
       <Header
         onLoadScholarshipSample={handleLoadScholarship}
         onLoadVisaSample={handleLoadVisa}
@@ -102,11 +101,11 @@ export default function Home() {
         />
 
         {errorMessage && (
-          <div className="bg-amber-950/40 border border-amber-500/30 text-amber-300 p-3 rounded-xl text-xs flex items-center justify-between">
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-xl text-xs flex items-center justify-between shadow-xs">
             <span>{errorMessage}</span>
             <button
               onClick={() => setErrorMessage(null)}
-              className="text-amber-400 hover:text-white cursor-pointer"
+              className="text-amber-600 hover:text-amber-950 cursor-pointer font-bold"
             >
               ✕
             </button>
@@ -115,33 +114,33 @@ export default function Home() {
 
         {/* Executive Summary & High-Level Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3.5">
-          <div className="md:col-span-2 bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col justify-between">
+          <div className="md:col-span-2 bg-white border border-zinc-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
                   <span>Synthesized Domain Schema Verdict</span>
                 </span>
-                <span className="text-xs text-zinc-500 font-mono">
+                <span className="text-xs text-zinc-400 font-mono">
                   {analysis.sources.length} Ingested Sources
                 </span>
               </div>
-              <h2 className="text-base font-extrabold text-white">
+              <h2 className="text-base font-extrabold text-zinc-950">
                 {analysis.topic}
               </h2>
-              <p className="text-xs text-zinc-300 mt-1.5 leading-relaxed">
+              <p className="text-xs text-zinc-600 mt-1.5 leading-relaxed">
                 {analysis.executiveSummary}
               </p>
             </div>
 
-            <div className="pt-2.5 mt-2.5 border-t border-zinc-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400">
+            <div className="pt-2.5 mt-2.5 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-500">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-medium">
+                <span className="px-2 py-0.5 rounded bg-zinc-100 text-zinc-700 font-medium">
                   {analysis.detectedCategory}
                 </span>
                 <span>•</span>
-                <span className="text-emerald-400 font-medium flex items-center gap-1">
-                  <Award className="w-3.5 h-3.5" />
+                <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                  <Award className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Authority-Weighted Resolution Active</span>
                 </span>
               </div>
@@ -151,9 +150,9 @@ export default function Home() {
                   href={analysis.officialApplicationUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 hover:text-white transition font-medium"
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 transition font-semibold"
                 >
-                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
                   <span>Official Portal ↗</span>
                 </a>
               )}
@@ -161,20 +160,20 @@ export default function Home() {
           </div>
 
           {/* Completeness Gauge */}
-          <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col justify-between">
+          <div className="bg-white border border-zinc-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
             <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
               Decision Completeness
             </span>
             <div className="my-1.5">
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-white">
+                <span className="text-3xl font-black text-zinc-950">
                   {analysis.overallCompletenessScore}%
                 </span>
-                <span className="text-[11px] text-zinc-400">criteria verified</span>
+                <span className="text-[11px] text-zinc-500">criteria verified</span>
               </div>
-              <div className="w-full bg-zinc-950 h-2 rounded-full overflow-hidden mt-2.5 border border-zinc-800">
+              <div className="w-full bg-zinc-100 h-2 rounded-full overflow-hidden mt-2.5 border border-zinc-200">
                 <div
-                  className="bg-gradient-to-r from-rose-500 to-amber-500 h-full rounded-full"
+                  className="bg-gradient-to-r from-indigo-500 via-violet-500 to-emerald-500 h-full rounded-full transition-all duration-500"
                   style={{ width: `${analysis.overallCompletenessScore}%` }}
                 />
               </div>
@@ -187,37 +186,37 @@ export default function Home() {
           </div>
 
           {/* Red Flag Summary Counters */}
-          <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col justify-between">
+          <div className="bg-white border border-zinc-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
             <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
               Detected Vulnerabilities
             </span>
             <div className="grid grid-cols-3 gap-1.5 my-1.5 text-center">
-              <div className="bg-zinc-950 p-2 rounded-xl border border-rose-500/30">
-                <span className="text-xl font-black text-rose-400 block">
+              <div className="bg-rose-50/70 p-2 rounded-xl border border-rose-200">
+                <span className="text-xl font-black text-rose-700 block">
                   {darkSpotsCount}
                 </span>
-                <span className="text-[9px] text-zinc-400 block uppercase font-medium">
+                <span className="text-[9px] text-rose-800 block uppercase font-bold">
                   Dark Spots
                 </span>
               </div>
-              <div className="bg-zinc-950 p-2 rounded-xl border border-amber-500/30">
-                <span className="text-xl font-black text-amber-400 block">
+              <div className="bg-amber-50/70 p-2 rounded-xl border border-amber-200">
+                <span className="text-xl font-black text-amber-700 block">
                   {conflictsCount}
                 </span>
-                <span className="text-[9px] text-zinc-400 block uppercase font-medium">
+                <span className="text-[9px] text-amber-800 block uppercase font-bold">
                   Clashes
                 </span>
               </div>
-              <div className="bg-zinc-950 p-2 rounded-xl border border-zinc-800">
-                <span className="text-xl font-black text-zinc-300 block">
+              <div className="bg-zinc-50 p-2 rounded-xl border border-zinc-200">
+                <span className="text-xl font-black text-zinc-800 block">
                   {staleCount}
                 </span>
-                <span className="text-[9px] text-zinc-400 block uppercase font-medium">
+                <span className="text-[9px] text-zinc-500 block uppercase font-bold">
                   Stale
                 </span>
               </div>
             </div>
-            <span className="text-[10px] text-rose-400 font-semibold block text-center">
+            <span className="text-[10px] text-rose-600 font-semibold block text-center">
               {analysis.highRiskCount} High-Risk Blind Spots Require Action
             </span>
           </div>
@@ -228,19 +227,19 @@ export default function Home() {
           <TemporalWarnings alerts={analysis.temporalAlerts} />
         )}
 
-        {/* Section 7 Demo Step 2-5: Linear Guided Navigation Tabs */}
-        <div className="flex border-b border-zinc-800 gap-2 overflow-x-auto pb-px">
+        {/* Navigation Tabs - Clean Light Mode Style */}
+        <div className="flex border-b border-zinc-200 gap-2 overflow-x-auto pb-px">
           <button
             onClick={() => setActiveTab("matrix")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
               activeTab === "matrix"
-                ? "border-rose-500 text-rose-400 bg-rose-500/5"
-                : "border-transparent text-zinc-400 hover:text-zinc-200"
+                ? "border-indigo-600 text-indigo-700 bg-indigo-50/40"
+                : "border-transparent text-zinc-500 hover:text-zinc-900"
             }`}
           >
             <Grid className="w-4 h-4" />
             <span>1. Blind-Spot Matrix & Gaps</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-800 text-[10px] text-zinc-300">
+            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-100 text-[10px] text-zinc-600 font-semibold">
               {analysis.expectedDimensions.length} Dimensions
             </span>
           </button>
@@ -249,14 +248,14 @@ export default function Home() {
             onClick={() => setActiveTab("conflicts")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
               activeTab === "conflicts"
-                ? "border-amber-500 text-amber-400 bg-amber-500/5"
-                : "border-transparent text-zinc-400 hover:text-zinc-200"
+                ? "border-amber-600 text-amber-800 bg-amber-50/40"
+                : "border-transparent text-zinc-500 hover:text-zinc-900"
             }`}
           >
             <ArrowRightLeft className="w-4 h-4" />
             <span>2. Source Contradictions</span>
             {conflictsCount > 0 && (
-              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">
+              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">
                 {conflictsCount}
               </span>
             )}
@@ -266,13 +265,13 @@ export default function Home() {
             onClick={() => setActiveTab("checklist")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
               activeTab === "checklist"
-                ? "border-emerald-500 text-emerald-400 bg-emerald-500/5"
-                : "border-transparent text-zinc-400 hover:text-zinc-200"
+                ? "border-emerald-600 text-emerald-800 bg-emerald-50/40"
+                : "border-transparent text-zinc-500 hover:text-zinc-900"
             }`}
           >
             <ListTodo className="w-4 h-4" />
             <span>3. Action Verification Checklist</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px]">
+            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
               {analysis.verificationChecklist.length}
             </span>
           </button>
@@ -281,13 +280,13 @@ export default function Home() {
             onClick={() => setActiveTab("sources")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer ${
               activeTab === "sources"
-                ? "border-zinc-400 text-white bg-zinc-800/40"
-                : "border-transparent text-zinc-400 hover:text-zinc-200"
+                ? "border-zinc-900 text-zinc-950 bg-zinc-100/50"
+                : "border-transparent text-zinc-500 hover:text-zinc-900"
             }`}
           >
             <Layers className="w-4 h-4" />
             <span>4. Ingested Sources & Trust Hierarchy</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-800 text-[10px]">
+            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-zinc-100 text-[10px] text-zinc-600 font-semibold">
               {analysis.sources.length}
             </span>
           </button>
@@ -331,16 +330,16 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer with hackathon metadata & attribution */}
-      <footer className="border-t border-zinc-800 bg-zinc-950 py-6 mt-12 text-center text-xs text-zinc-500">
+      {/* Footer */}
+      <footer className="border-t border-zinc-200/80 bg-white py-6 mt-12 text-center text-xs text-zinc-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-zinc-300">BlindspotIQ</span>
+            <span className="font-bold text-zinc-900">BlindspotIQ</span>
             <span>—</span>
             <span>Digital Dark Spot Challenge (Devengers 2026)</span>
           </div>
-          <div className="text-[11px] text-zinc-600">
-            Schema-Driven Gap Detection • Authority-Weighted Conflict Resolution • Built with Next.js, Gemini & Tailwind
+          <div className="text-[11px] text-zinc-400">
+            Schema-Driven Gap Detection • Authority-Weighted Conflict Resolution • Built with Next.js & Gemini
           </div>
         </div>
       </footer>
