@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/logo.svg" alt="BlindspotIQ Emblem" width="80" height="80" />
+<img src="./public/logo.svg" alt="BlindspotIQ Emblem" width="88" height="88" />
 
 # BlindspotIQ
 
@@ -16,8 +16,15 @@ An evidence-first research and verification platform that cross-examines the sou
 [![Groq LPU](https://img.shields.io/badge/Groq_LPU-openai%2Fgpt--oss--120b-f55036?logo=groq&logoColor=white)](https://groq.com/)
 [![Security](https://img.shields.io/badge/Security-SSRF_Guarded_%26_15_RPM_Rate_Limited-059669)](https://github.com)
 [![Tests](https://img.shields.io/badge/automated%20tests-58%20passing-2e6a43)](#15-testing-and-evaluation)
+[![License](https://img.shields.io/badge/License-MIT-zinc)](LICENSE)
 
 </div>
+
+<p align="center">
+  <img src="./public/logo.svg" alt="BlindspotIQ forensic research workspace showing sources, coverage heatmap matrix, and authority-weighted contradiction resolutions" width="120" height="120" />
+  <br />
+  <sub>The real BlindspotIQ workspace running live multi-source audits on verified decision benchmarks.</sub>
+</p>
 
 ---
 
@@ -30,16 +37,17 @@ An evidence-first research and verification platform that cross-examines the sou
 5. [How the analysis works](#5-how-the-analysis-works)
 6. [What makes it different](#6-what-makes-it-different)
 7. [Evidence and transparency](#7-evidence-and-transparency)
-8. [Architecture](#8-architecture)
+8. [Architecture and tech stack](#8-architecture-and-tech-stack)
 9. [Getting started](#9-getting-started)
-10. [Configuration](#10-configuration)
+10. [Configuration (Backend & Frontend)](#10-configuration-backend--frontend)
 11. [Deployment](#11-deployment)
-12. [API reference](#12-api-reference)
-13. [Security](#13-security)
-14. [Privacy](#14-privacy)
-15. [Testing and evaluation](#15-testing-and-evaluation)
-16. [Known limitations](#16-known-limitations)
-17. [Future scope](#17-future-scope)
+12. [After deploying, check](#12-after-deploying-check)
+13. [API reference](#13-api-reference)
+14. [Security](#14-security)
+15. [Privacy](#15-privacy)
+16. [Testing and evaluation](#16-testing-and-evaluation)
+17. [Known limitations](#17-known-limitations)
+18. [Future scope](#18-future-scope)
 
 ---
 
@@ -49,7 +57,7 @@ People make life-changing decisions about scholarships, visas, employment, publi
 
 - **Incomplete**: basic eligibility is explained, but renewal conditions, fee waiver terms, or required document lists are omitted.
 - **Contradictory**: an official portal and an aggregator blog state conflicting deadlines, minimum stipend amounts, or required recommendation counts.
-- **Outdated**: community guides and forum threads circulate obsolete circular rules (e.g. citing a 2024 postal cut-off for a 2026 online cycle) with no warning date on the page.
+- **Outdated**: community guides and forum threads circulate obsolete circular rules (e.g. citing an expired 2024 postal cut-off for a 2026 online cycle) with no warning date on the page.
 
 Search engines help you *find* pages. AI summarisers *condense* what is already written. Neither tells you **what was omitted**, **where sources clash**, or **what you must verify** before you submit an important application.
 
@@ -168,7 +176,7 @@ When `GEMINI_API_KEY` or `GROQ_API_KEY` is configured, an advanced language mode
 
 ---
 
-## 8. Architecture
+## 8. Architecture and tech stack
 
 ```mermaid
 flowchart TB
@@ -198,6 +206,19 @@ flowchart TB
     LLM -. "Fallback" .-> HEUR
     UI --- LS
 ```
+
+### Complete Technology Stack
+
+| Layer | Technology | Details |
+| :--- | :--- | :--- |
+| **Framework & Engine** | Next.js 16.4.3 | App Router, Turbopack, React Server Components (RSC), Edge-ready API routes. |
+| **UI & Runtime** | React 19 & TypeScript 5 | Strict typing, Suspense boundaries, zero runtime deprecation warnings. |
+| **Design System** | Tailwind CSS v4 | Hairline borders, micro-elevation shadows (`shadow-2xs`), Forensic Intelligence palette. |
+| **Icons & Typography** | Lucide React & Google Fonts | Bespoke SVG Aperture Emblem, Plus Jakarta Sans, Inter, JetBrains Mono. |
+| **Primary LLM** | Google Gemini 2.5 Flash | 1,000,000 token context window, structured JSON schema outputs. |
+| **Secondary LLM** | Groq LPU (`openai/gpt-oss-120b`) | Ultra-fast LPU inference (0.35s response), automatic multi-model cascade. |
+| **Web & PDF Extraction** | JSDOM, Mozilla Readability, `pdf-parse` | Serverless memory safety (10 MB cap), 9-second timeout abort controller. |
+| **Security & Defense** | Built-in SSRF Guard & Rate Limiter | In-memory sliding-window rate limiter (15 RPM), RFC-1918 & cloud metadata blocking. |
 
 ```text
 BlindspotIQ/
@@ -261,21 +282,28 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 10. Configuration
+## 10. Configuration (Backend & Frontend)
 
-### Environment Variables (`.env.local`)
+### Backend / Server-Side Environment (`.env.local`)
+Secret credentials read strictly by the server API; never exposed to the client browser:
 
 | Variable | Default | Description |
 | :--- | :---: | :--- |
-| `LLM_PROVIDER` | `auto` | Provider strategy: `auto` (Gemini $\rightarrow$ Groq failover), `gemini`, or `groq`. |
-| `GEMINI_API_KEY` | *(empty)* | Google Gemini API key. Powers Gemini 2.5 Flash reasoning. |
+| `LLM_PROVIDER` | `auto` | Preferred engine: `auto` (Gemini $\rightarrow$ Groq failover), `gemini`, or `groq`. |
+| `GEMINI_API_KEY` | *(empty)* | Google Gemini API key. Powers primary Gemini 2.5 Flash reasoning. |
 | `GROQ_API_KEY` | *(empty)* | Groq API key. Powers ultra-fast secondary failover. |
-| `GROQ_MODEL` | `openai/gpt-oss-120b` | Groq model identifier with JSON mode support. |
+| `GROQ_MODEL` | `openai/gpt-oss-120b` | Groq model identifier with structured JSON mode support. |
 | `TAVILY_API_KEY` | *(empty)* | Tavily API key for automated multi-source web discovery. |
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | Application root URL. |
+
+### Frontend / Client-Side Environment (`NEXT_PUBLIC_*`)
+Public configuration bundled into the client browser:
+
+| Variable | Default | Description |
+| :--- | :---: | :--- |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | Application root URL for canonical and metadata links. |
 
 ### Enabling Optional Integrations
-- **AI Analysis:** Add your `GEMINI_API_KEY` or `GROQ_API_KEY`. If one hits quota limits (HTTP 429), the engine automatically fails over to the alternative provider.
+- **AI Analysis:** Add your `GEMINI_API_KEY` or `GROQ_API_KEY`. If one hits quota limits (HTTP 429), the engine automatically fails over to the alternative provider without user interruption.
 - **Web Discovery:** Add your `TAVILY_API_KEY`. Without a key, manual URL crawling, PDF parsing, and direct text paste remain 100% operational.
 - **Offline / Zero-Key Execution:** Without any API keys, BlindspotIQ automatically uses dynamic topic-aware heuristic synthesis, ensuring audits never fail.
 
@@ -300,7 +328,18 @@ npm run start
 
 ---
 
-## 12. API reference
+## 12. After deploying, check
+
+1. **Health & Sample API:** `https://<your-domain>/api/sample?scenario=scholarship` returns HTTP 200 with verified benchmark data.
+2. **SPA & Direct Routes:** The frontend loads, and reloading `/demo-scholarship` or `/demo-visa` does not return a 404 error.
+3. **Live Audit Execution:** Submitting a query from the deployed frontend executes cleanly (confirms API URL and edge route execution).
+4. **Session Persistence:** Completing an audit saves the entry to recent device sessions in `localStorage`.
+5. **HTTPS & Security Headers:** Both frontend and API are served over HTTPS with modern HSTS headers.
+6. **SSRF Guardrail:** Submitting an internal address (e.g. `http://127.0.0.1:8080`) returns a safety block notice, confirming active SSRF protection.
+
+---
+
+## 13. API reference
 
 Base URL: `http://localhost:3000/api`.
 
@@ -337,7 +376,7 @@ X-RateLimit-Remaining: 14
 
 ---
 
-## 13. Security
+## 14. Security
 
 - **SSRF Protection:** Enforced via `isSafeUrl()` in `src/lib/extractor.ts`. Strictly permits `http:` and `https:`. Blocks loopback (`127.0.0.1`, `localhost`), link-local metadata addresses (`169.254.169.254`, `metadata.google.internal`), and RFC-1918 private subnets (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`).
 - **PDF & Memory Safeguards:** Remote documents inspect `Content-Length` headers before streaming with a **10 MB hard ceiling** to prevent serverless out-of-memory errors.
@@ -348,7 +387,7 @@ X-RateLimit-Remaining: 14
 
 ---
 
-## 14. Privacy
+## 15. Privacy
 
 - **Zero Trackers, Zero Cookies:** No third-party tracking scripts, advertising pixels, or session tracking cookies.
 - **Client-Side Device Persistence:** Recent audit sessions are saved in the user's browser `localStorage` and can be cleared in one click.
@@ -356,7 +395,7 @@ X-RateLimit-Remaining: 14
 
 ---
 
-## 15. Testing and evaluation
+## 16. Testing and evaluation
 
 ```bash
 # Production build verification
@@ -379,7 +418,7 @@ npx tsc --noEmit
 
 ---
 
-## 16. Known limitations
+## 17. Known limitations
 
 - **JavaScript-Heavy SPAs:** Sites requiring client-side JavaScript execution (behind aggressive Cloudflare or cookie walls) may yield incomplete text. Users can use **Direct Text Paste Mode** for guaranteed extraction.
 - **Scanned PDFs without OCR:** PDFs must contain an embedded text layer. Scanned photocopies without OCR cannot be parsed.
@@ -388,7 +427,7 @@ npx tsc --noEmit
 
 ---
 
-## 17. Future scope
+## 18. Future scope
 
 - **Multilingual Gazette Translation:** Real-time cross-lingual gap analysis for non-English state circulars (Hindi, regional Indian languages, Portuguese, French, Spanish).
 - **Automated Webhook Monitoring:** Monitor official portals over time and alert applicants via email when guidelines or deadlines change silently mid-cycle.
