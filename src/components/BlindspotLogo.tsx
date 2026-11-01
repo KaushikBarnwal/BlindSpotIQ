@@ -35,24 +35,24 @@ export function BlindspotLogo({
       >
         <defs>
           <linearGradient id="logoBgGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#09090b" />
-            <stop offset="100%" stop-color="#06241c" />
+            <stop offset="0%" stopColor="#09090b" />
+            <stop offset="100%" stopColor="#06241c" />
           </linearGradient>
 
           <linearGradient id="logoEmeraldArc" x1="6" y1="6" x2="26" y2="26" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#34d399" />
-            <stop offset="100%" stop-color="#059669" />
+            <stop offset="0%" stopColor="#34d399" />
+            <stop offset="100%" stopColor="#059669" />
           </linearGradient>
 
           <linearGradient id="logoTealArc" x1="26" y1="26" x2="6" y2="6" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#2dd4bf" />
-            <stop offset="100%" stop-color="#0d9488" />
+            <stop offset="0%" stopColor="#2dd4bf" />
+            <stop offset="100%" stopColor="#0d9488" />
           </linearGradient>
 
           <radialGradient id="logoAmberGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#fef08a" />
-            <stop offset="40%" stop-color="#fbbf24" />
-            <stop offset="100%" stop-color="#d97706" />
+            <stop offset="0%" stopColor="#fef08a" />
+            <stop offset="40%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#d97706" />
           </radialGradient>
         </defs>
 
