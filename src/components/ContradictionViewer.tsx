@@ -77,7 +77,7 @@ export function ContradictionViewer({
         );
       case "scope_difference":
         return (
-          <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-800 border border-indigo-200">
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-teal-50 text-teal-800 border border-teal-200 font-mono">
             Scope Difference
           </span>
         );
@@ -193,10 +193,10 @@ export function ContradictionViewer({
             </div>
 
             {/* Recommended Verdict */}
-            <div className="bg-indigo-50/60 border border-indigo-200/80 rounded-xl p-4 space-y-2">
+            <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-4 space-y-2">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-indigo-600" />
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-900">
+                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 font-heading">
                   Recommended Verdict:
                 </span>
               </div>

@@ -17,20 +17,20 @@ export function Hero() {
         }}
       />
       {/* Soft radial glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-indigo-50/80 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-emerald-50/70 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs sm:text-sm font-semibold mb-6 tracking-wide uppercase shadow-2xs">
-          <Sparkles className="w-4 h-4 text-indigo-600" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs sm:text-sm font-semibold mb-6 tracking-wide uppercase shadow-2xs font-mono">
+          <Sparkles className="w-4 h-4 text-emerald-600" />
           <span>Catch What Others Miss · Find Hidden Omissions &amp; Conflicts</span>
         </div>
 
         {/* Headline */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-zinc-950 leading-[1.08] mb-6">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-zinc-950 leading-[1.08] mb-6 font-heading">
           Stop guessing
           <br />
-          <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-rose-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-600 bg-clip-text text-transparent">
             what the web left out.
           </span>
         </h1>
@@ -62,10 +62,10 @@ export function Hero() {
         </div>
 
         {/* Trust line */}
-        <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-500 font-semibold">
+        <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-500 font-semibold font-mono">
           {["Scholarships", "Immigration Visas", "Student Grants", "Government Policies"].map((tag) => (
             <span key={tag} className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-indigo-500" />
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>{tag}</span>
             </span>
           ))}

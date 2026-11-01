@@ -51,11 +51,11 @@ export function SourceCardList({ sources }: SourceCardListProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2">
-          <Globe className="w-5 h-5 text-indigo-600" />
+        <h4 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2 font-heading">
+          <Globe className="w-5 h-5 text-emerald-600" />
           <span>Sources Used ({sources.length})</span>
         </h4>
-        <span className="text-xs sm:text-sm text-zinc-500">
+        <span className="text-xs sm:text-sm text-zinc-500 font-medium">
           Traceable provenance for every claim
         </span>
       </div>
@@ -107,7 +107,7 @@ export function SourceCardList({ sources }: SourceCardListProps) {
                     href={src.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-indigo-600 hover:underline flex items-center gap-1 font-bold text-xs"
+                    className="text-emerald-700 hover:text-emerald-900 hover:underline flex items-center gap-1 font-bold text-xs"
                   >
                     <span>Visit Source</span>
                     <ExternalLink className="w-3.5 h-3.5" />

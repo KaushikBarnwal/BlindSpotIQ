@@ -133,13 +133,13 @@ Prospective Applicant`,
     <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200/60 text-indigo-600">
+          <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-600">
             <ListTodo className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2">
+            <h3 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2 font-heading">
               <span>Next Steps Verification Checklist</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-200 font-bold">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-200 font-bold font-mono">
                 {completedCount}/{checklist.length} Verified
               </span>
             </h3>
@@ -152,9 +152,9 @@ Prospective Applicant`,
         <div className="flex items-center gap-2 self-start sm:self-center">
           <button
             onClick={() => setShowAddForm((prev) => !prev)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100/80 text-indigo-700 text-xs sm:text-sm font-bold border border-indigo-200 transition cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 text-xs sm:text-sm font-bold border border-emerald-200 transition cursor-pointer"
           >
-            <Plus className="w-4 h-4 text-indigo-600" />
+            <Plus className="w-4 h-4 text-emerald-600" />
             <span>{showAddForm ? "Close Form" : "Add Custom Item"}</span>
           </button>
 
@@ -181,11 +181,11 @@ Prospective Applicant`,
       {showAddForm && (
         <form
           onSubmit={handleAddCustomItem}
-          className="bg-indigo-50/50 border border-indigo-200/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-2xs"
+          className="bg-emerald-50/40 border border-emerald-200/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-2xs"
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm font-bold text-indigo-950">
-              <Plus className="w-4 h-4 text-indigo-600" />
+            <div className="flex items-center gap-2 text-sm font-bold text-emerald-950 font-heading">
+              <Plus className="w-4 h-4 text-emerald-600" />
               <span>Add Custom Verification Action</span>
             </div>
             <button
@@ -207,7 +207,7 @@ Prospective Applicant`,
                 value={newTask}
                 onChange={(e) => setNewTask(e.target.value)}
                 placeholder="e.g. Confirm minimum credit hours with registrar office"
-                className="w-full px-3.5 py-2 rounded-lg border border-zinc-200 bg-white text-xs sm:text-sm text-zinc-900 focus:outline-hidden focus:border-indigo-500 font-medium"
+                className="w-full px-3.5 py-2 rounded-lg border border-zinc-200 bg-white text-xs sm:text-sm text-zinc-900 focus:outline-hidden focus:border-emerald-500 font-medium"
                 required
               />
             </div>
@@ -221,7 +221,7 @@ Prospective Applicant`,
                 onChange={(e) =>
                   setNewPriority(e.target.value as "high" | "medium" | "low")
                 }
-                className="w-full px-3 py-2 rounded-lg border border-zinc-200 bg-white text-xs sm:text-sm text-zinc-900 focus:outline-hidden focus:border-indigo-500 font-semibold"
+                className="w-full px-3 py-2 rounded-lg border border-zinc-200 bg-white text-xs sm:text-sm text-zinc-900 focus:outline-hidden focus:border-emerald-500 font-semibold"
               >
                 <option value="high">High Priority</option>
                 <option value="medium">Medium Priority</option>
@@ -240,16 +240,16 @@ Prospective Applicant`,
                 value={newReason}
                 onChange={(e) => setNewReason(e.target.value)}
                 placeholder="e.g. Unclear if summer semester counts towards 12-credit rule"
-                className="w-full px-3.5 py-2 rounded-lg border border-zinc-200 bg-white text-xs sm:text-sm text-zinc-900 focus:outline-hidden focus:border-indigo-500"
+                className="w-full px-3.5 py-2 rounded-lg border border-zinc-200 bg-white text-xs sm:text-sm text-zinc-900 focus:outline-hidden focus:border-emerald-500"
               />
             </div>
 
             <div>
               <button
                 type="submit"
-                className="w-full px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-xs transition cursor-pointer flex items-center justify-center gap-1.5"
+                className="w-full px-4 py-2 rounded-lg bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-xs sm:text-sm shadow-xs transition cursor-pointer flex items-center justify-center gap-1.5"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-4 h-4 text-emerald-400" />
                 <span>Add to Checklist</span>
               </button>
             </div>
@@ -311,11 +311,11 @@ Prospective Applicant`,
                     {item.priority} Priority
                   </span>
                   {item.isUserAdded ? (
-                    <span className="text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
+                    <span className="text-xs text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold font-mono">
                       Added by You
                     </span>
                   ) : (
-                    <span className="text-xs text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200/80 font-semibold">
+                    <span className="text-xs text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200/80 font-semibold font-mono">
                       Suggested Action
                     </span>
                   )}
@@ -355,7 +355,7 @@ Prospective Applicant`,
                 className="px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200 transition flex items-center gap-1.5 text-xs sm:text-sm font-semibold cursor-pointer shadow-2xs"
                 title="Draft an official inquiry email to the issuing authority"
               >
-                <Mail className="w-4 h-4 text-indigo-600" />
+                <Mail className="w-4 h-4 text-emerald-600" />
                 <span>Draft Inquiry</span>
               </button>
 
@@ -405,11 +405,11 @@ Prospective Applicant`,
             <div className="bg-white border border-zinc-200 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4">
               <div className="flex items-start justify-between border-b border-zinc-100 pb-3">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-indigo-50 border border-indigo-200/60 text-indigo-600">
+                  <div className="p-1.5 rounded-lg bg-emerald-50 border border-emerald-200/60 text-emerald-600">
                     <Mail className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-zinc-950 text-base">
+                    <h4 className="font-bold text-zinc-950 text-base font-heading">
                       Ready-to-Send Inquiry Email
                     </h4>
                     <p className="text-xs text-zinc-500">

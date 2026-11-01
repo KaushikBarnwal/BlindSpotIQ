@@ -137,13 +137,13 @@ export function CoverageMatrix({
       {/* Meta explanation banner + View Mode Switcher */}
       <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200/60 text-indigo-600 mt-0.5 shrink-0">
+          <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-600 mt-0.5 shrink-0">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2 flex-wrap">
-              <span>Topics Checked & Missing Details</span>
-              <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
+            <h4 className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2 flex-wrap font-heading">
+              <span>Topics Checked &amp; Missing Details</span>
+              <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/60 font-mono">
                 {detectedCategory}
               </span>
             </h4>
@@ -163,7 +163,7 @@ export function CoverageMatrix({
                 : "text-zinc-500 hover:text-zinc-900"
             }`}
           >
-            <Layers className="w-3.5 h-3.5 text-indigo-600" />
+            <Layers className="w-3.5 h-3.5 text-emerald-600" />
             <span>Dimension Cards</span>
           </button>
           <button
@@ -174,7 +174,7 @@ export function CoverageMatrix({
                 : "text-zinc-500 hover:text-zinc-900"
             }`}
           >
-            <Grid className="w-3.5 h-3.5 text-violet-600" />
+            <Grid className="w-3.5 h-3.5 text-teal-600" />
             <span>Heatmap Grid</span>
           </button>
         </div>
@@ -493,7 +493,7 @@ export function CoverageMatrix({
                                 href={source.url}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-indigo-600 hover:underline flex items-center gap-1 font-semibold text-xs"
+                                className="text-emerald-700 hover:underline flex items-center gap-1 font-semibold text-xs"
                               >
                                 <span>Source ↗</span>
                                 <ExternalLink className="w-3 h-3" />
@@ -517,10 +517,10 @@ export function CoverageMatrix({
           <div className="bg-white border border-zinc-200 rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-start justify-between border-b border-zinc-100 pb-3">
               <div>
-                <span className="text-[10px] text-indigo-600 font-bold tracking-wide uppercase">
+                <span className="text-[10px] text-emerald-700 font-bold tracking-wide uppercase font-mono">
                   Evidence Provenance Inspector
                 </span>
-                <h3 className="text-base font-bold text-zinc-950 mt-0.5">
+                <h3 className="text-base font-bold text-zinc-950 mt-0.5 font-heading">
                   {selectedCell.dimension.name}
                 </h3>
               </div>
@@ -543,7 +543,7 @@ export function CoverageMatrix({
                     href={selectedCell.source.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-indigo-600 hover:underline flex items-center gap-1 mt-0.5 text-[11px]"
+                    className="text-emerald-700 hover:underline flex items-center gap-1 mt-0.5 text-[11px]"
                   >
                     <span>{selectedCell.source.hostname}</span>
                     <ExternalLink className="w-3 h-3" />

@@ -10,7 +10,7 @@ import { LandingFooter } from "@/components/landing/Footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-zinc-900 selection:bg-indigo-100 selection:text-indigo-900">
+    <div className="min-h-screen bg-white text-zinc-900 selection:bg-emerald-100 selection:text-emerald-950">
       <LandingNavbar />
       <Hero />
       <ComparisonPreview />

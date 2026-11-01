@@ -30,7 +30,7 @@ const STANDARD_AI = {
 const BLINDSPOTIQ = {
   label: "BlindspotIQ Analysis",
   tag: "Deep Verification",
-  tagColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
+  tagColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
   headerBg: "bg-white",
   content: (
     <div className="space-y-3.5">
@@ -38,7 +38,7 @@ const BLINDSPOTIQ = {
       <div className="flex items-start gap-3 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200/80">
         <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm">
-          <span className="font-bold text-emerald-900">Award Amount Confirmed: </span>
+          <span className="font-bold text-emerald-950 font-heading">Award Amount Confirmed: </span>
           <span className="text-emerald-800">$10,000/year — verified across official sources.</span>
         </div>
       </div>
@@ -47,7 +47,7 @@ const BLINDSPOTIQ = {
       <div className="flex items-start gap-3 p-3.5 rounded-xl bg-rose-50 border border-rose-200/80">
         <XCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm">
-          <span className="font-bold text-rose-950">Missing Requirement: </span>
+          <span className="font-bold text-rose-950 font-heading">Missing Requirement: </span>
           <span className="text-rose-800">
             None of the 3 websites mention renewal GPA requirements. Without this, students risk losing funding after year one.
           </span>
@@ -58,7 +58,7 @@ const BLINDSPOTIQ = {
       <div className="flex items-start gap-3 p-3.5 rounded-xl bg-amber-50 border border-amber-200/80">
         <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm">
-          <span className="font-bold text-amber-950">Conflicting Rules: </span>
+          <span className="font-bold text-amber-950 font-heading">Conflicting Rules: </span>
           <span className="text-amber-800">
             Official foundation requires 2 letters. Blog claims 1 letter is enough. Official portal takes priority.
           </span>
@@ -69,7 +69,7 @@ const BLINDSPOTIQ = {
       <div className="flex items-start gap-3 p-3.5 rounded-xl bg-zinc-100 border border-zinc-200/80">
         <CalendarX className="w-5 h-5 text-zinc-500 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm">
-          <span className="font-bold text-zinc-900">Outdated Rule Warning: </span>
+          <span className="font-bold text-zinc-900 font-heading">Outdated Rule Warning: </span>
           <span className="text-zinc-700">
             Student blog cites an expired October 2024 deadline. Official deadline is November 15, 2026.
           </span>
@@ -87,10 +87,10 @@ export function ComparisonPreview() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* Label */}
         <div className="text-center mb-10">
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2.5">
+          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-emerald-800 mb-2.5 font-mono">
             See the difference
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight font-heading">
             Basic AI Summary vs BlindspotIQ
           </h2>
           <p className="mt-3 text-base sm:text-lg text-zinc-600 max-w-2xl mx-auto">
@@ -115,7 +115,7 @@ export function ComparisonPreview() {
               onClick={() => setActive("blindspot")}
               className={`px-5 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 active === "blindspot"
-                  ? "bg-white shadow-sm text-indigo-700 border border-indigo-200"
+                  ? "bg-zinc-950 shadow-sm text-white border border-zinc-950"
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
@@ -129,7 +129,7 @@ export function ComparisonPreview() {
           {/* Card header */}
           <div
             className={`px-6 py-4 border-b border-zinc-200/80 flex items-center justify-between ${
-              active === "blindspot" ? "bg-indigo-50/60" : "bg-zinc-50"
+              active === "blindspot" ? "bg-emerald-50/60" : "bg-zinc-50"
             }`}
           >
             <span className="text-base font-bold text-zinc-900">

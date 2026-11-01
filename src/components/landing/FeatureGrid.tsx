@@ -7,9 +7,9 @@ const PILLARS = [
   {
     num: "01",
     icon: Grid3x3,
-    color: "text-indigo-600",
-    bg: "bg-indigo-50",
-    border: "border-indigo-100",
+    color: "text-emerald-600",
+    bg: "bg-emerald-50",
+    border: "border-emerald-100",
     title: "Finds What Websites Left Out",
     desc:
       "An AI cannot detect missing rules unless it knows what a complete application requires. BlindspotIQ knows the standard checklist for your category (scholarships, visas, grants) and flags every unstated requirement.",
@@ -17,9 +17,9 @@ const PILLARS = [
   {
     num: "02",
     icon: Scale,
-    color: "text-violet-600",
-    bg: "bg-violet-50",
-    border: "border-violet-100",
+    color: "text-teal-600",
+    bg: "bg-teal-50",
+    border: "border-teal-100",
     title: "Resolves Conflicting Rules",
     desc:
       "When sources disagree on amounts or dates, standard search gets confused. BlindspotIQ ranks verified government (.gov) and university (.edu) sites above student blogs and forums, clearly explaining which rule to follow.",
@@ -37,9 +37,9 @@ const PILLARS = [
   {
     num: "04",
     icon: ListChecks,
-    color: "text-emerald-600",
-    bg: "bg-emerald-50",
-    border: "border-emerald-100",
+    color: "text-zinc-800",
+    bg: "bg-zinc-100",
+    border: "border-zinc-200",
     title: "Clear Next-Steps Checklist",
     desc:
       "Every missing requirement and conflict turns into an actionable checklist with one-click Google search shortcuts, ready-to-send draft inquiry emails, and direct links to official portals.",
@@ -52,10 +52,10 @@ export function FeatureGrid() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="max-w-2xl mb-14">
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2.5">
+          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-emerald-800 mb-2.5 font-mono">
             How It Protects You
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight leading-tight font-heading">
             Four ways BlindspotIQ protects your application
           </h2>
           <p className="mt-3 text-base sm:text-lg text-zinc-600 leading-relaxed">

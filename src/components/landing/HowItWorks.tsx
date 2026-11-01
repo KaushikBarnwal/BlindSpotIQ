@@ -7,18 +7,18 @@ const STEPS = [
   {
     num: "01",
     icon: Upload,
-    color: "text-indigo-600",
-    ring: "ring-indigo-100",
-    bg: "bg-indigo-50",
+    color: "text-emerald-600",
+    ring: "ring-emerald-100",
+    bg: "bg-emerald-50",
     title: "1. Add Sources",
     desc: "Search the web automatically with AI, paste website links, or paste document excerpts directly from official notices.",
   },
   {
     num: "02",
     icon: Grid3x3,
-    color: "text-violet-600",
-    ring: "ring-violet-100",
-    bg: "bg-violet-50",
+    color: "text-teal-600",
+    ring: "ring-teal-100",
+    bg: "bg-teal-50",
     title: "2. Spot Omissions",
     desc: "BlindspotIQ identifies your category (scholarship, visa, or grant) and compares your sources against what a complete application requires.",
   },
@@ -34,9 +34,9 @@ const STEPS = [
   {
     num: "04",
     icon: CheckSquare,
-    color: "text-emerald-600",
-    ring: "ring-emerald-100",
-    bg: "bg-emerald-50",
+    color: "text-zinc-900",
+    ring: "ring-zinc-100",
+    bg: "bg-zinc-100",
     title: "4. Follow Checklist",
     desc: "Get an actionable checklist with Google search shortcuts and pre-written emails to contact the institution directly.",
   },
@@ -48,10 +48,10 @@ export function HowItWorks() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="max-w-2xl mb-14">
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2.5">
+          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-emerald-800 mb-2.5 font-mono">
             Simple 4-Step Process
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight font-heading">
             From confusing sources to clear answers in 4 steps
           </h2>
           <p className="mt-3 text-base sm:text-lg text-zinc-600 leading-relaxed">
@@ -62,7 +62,7 @@ export function HowItWorks() {
         {/* Steps */}
         <div className="relative">
           {/* Connector line */}
-          <div className="hidden sm:block absolute top-6 left-[28px] right-[28px] h-0.5 bg-gradient-to-r from-indigo-200 via-violet-200 via-amber-200 to-emerald-200" />
+          <div className="hidden sm:block absolute top-6 left-[28px] right-[28px] h-0.5 bg-gradient-to-r from-emerald-200 via-teal-200 via-amber-200 to-zinc-300" />
 
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
             {STEPS.map(({ num, icon: Icon, color, ring, bg, title, desc }) => (

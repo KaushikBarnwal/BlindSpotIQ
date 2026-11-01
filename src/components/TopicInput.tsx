@@ -186,17 +186,17 @@ export function TopicInput({
     return (
       <div className="bg-white border border-zinc-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all hover:border-zinc-300">
         <div className="flex items-center gap-3.5 min-w-0">
-          <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200/60 text-indigo-600 shrink-0">
+          <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/60 text-emerald-600 shrink-0">
             <Search className="w-5 h-5" />
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/60 font-mono">
                 Active Audit
               </span>
               {providerUsed && (
-                <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-md font-semibold flex items-center gap-1 border border-zinc-200">
-                  <Cpu className="w-3 h-3 text-indigo-500" />
+                <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-md font-semibold flex items-center gap-1 border border-zinc-200 font-mono">
+                  <Cpu className="w-3 h-3 text-emerald-600" />
                   <span>{providerUsed === "groq" ? "Groq LPU" : "Gemini 2.5"}</span>
                 </span>
               )}
@@ -206,7 +206,7 @@ export function TopicInput({
                 </span>
               )}
             </div>
-            <h3 className="text-base sm:text-lg font-bold text-zinc-950 truncate max-w-2xl mt-1">
+            <h3 className="text-base sm:text-lg font-bold text-zinc-950 truncate max-w-2xl mt-1 font-heading">
               {topic || "Current Audit In Progress"}
             </h3>
           </div>
@@ -227,9 +227,9 @@ export function TopicInput({
           <button
             type="button"
             onClick={() => setIsExpanded(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-xs transition cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white text-xs sm:text-sm font-bold shadow-xs transition cursor-pointer"
           >
-            <SlidersHorizontal className="w-4 h-4" />
+            <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
             <span>Modify Scope & Sources</span>
             <ChevronDown className="w-4 h-4 ml-0.5" />
           </button>
@@ -244,8 +244,8 @@ export function TopicInput({
         {/* Topic Input: Clean, humanized, friendly */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2">
-              <Search className="w-5 h-5 text-indigo-600" />
+            <label className="text-base sm:text-lg font-bold text-zinc-950 flex items-center gap-2 font-heading">
+              <Search className="w-5 h-5 text-emerald-600" />
               <span>What are you applying for or checking?</span>
             </label>
             {hasActiveAnalysis && (
@@ -273,7 +273,7 @@ export function TopicInput({
                   "What should I verify before applying for the Global STEM scholarship?"
                 )
               }
-              className="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/70 transition cursor-pointer font-medium"
+              className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200/80 transition cursor-pointer font-medium"
             >
               Global STEM Scholarship
             </button>
@@ -284,7 +284,7 @@ export function TopicInput({
                   "What are the missing terms and income limits for the Portugal Digital Nomad Visa?"
                 )
               }
-              className="px-2.5 py-1 rounded-lg bg-violet-50 text-violet-700 hover:bg-violet-100 border border-violet-200/70 transition cursor-pointer font-medium"
+              className="px-2.5 py-1 rounded-lg bg-teal-50 text-teal-800 hover:bg-teal-100 border border-teal-200/80 transition cursor-pointer font-medium"
             >
               Portugal Nomad Visa
             </button>
@@ -296,15 +296,15 @@ export function TopicInput({
             onChange={(e) => setTopic(e.target.value)}
             placeholder="e.g. What are the missing requirements, renewal rules, and income limits for the Portugal Nomad Visa?"
             required
-            className="w-full bg-zinc-50/80 border border-zinc-200 rounded-xl p-3.5 sm:p-4 text-zinc-900 placeholder-zinc-400 text-sm sm:text-base font-medium focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition leading-relaxed resize-none shadow-2xs mt-1"
+            className="w-full bg-zinc-50/80 border border-zinc-200 rounded-xl p-3.5 sm:p-4 text-zinc-900 placeholder-zinc-400 text-sm sm:text-base font-medium focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition leading-relaxed resize-none shadow-2xs mt-1"
           />
         </div>
 
         {/* User Scope & Personal Context: Always Open by Default without Hide Details toggle */}
         <div className="border border-zinc-200 rounded-xl bg-zinc-50/60 p-4 space-y-3">
           <div className="flex items-center gap-2">
-            <Target className="w-4 h-4 text-indigo-600" />
-            <span className="text-sm font-bold text-zinc-900">
+            <Target className="w-4 h-4 text-emerald-600" />
+            <span className="text-sm font-bold text-zinc-900 font-heading">
               Target profile &amp; cycle (optional)
             </span>
             <span className="text-xs text-zinc-500 font-normal hidden sm:inline">
@@ -315,7 +315,7 @@ export function TopicInput({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-zinc-200/80">
             <div>
               <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
-                <UserCheck className="w-3.5 h-3.5 text-indigo-500" />
+                <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Your Situation / Major</span>
               </label>
               <input
@@ -323,13 +323,13 @@ export function TopicInput({
                 value={scope.situation || ""}
                 onChange={(e) => handleScopeChange("situation", e.target.value)}
                 placeholder="e.g. Post-Graduation"
-                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
+                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-emerald-500"
               />
             </div>
 
             <div>
               <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
-                <MapPin className="w-3.5 h-3.5 text-violet-500" />
+                <MapPin className="w-3.5 h-3.5 text-teal-600" />
                 <span>Jurisdiction / Region</span>
               </label>
               <input
@@ -337,13 +337,13 @@ export function TopicInput({
                 value={scope.jurisdiction || ""}
                 onChange={(e) => handleScopeChange("jurisdiction", e.target.value)}
                 placeholder="e.g. Maharashtra, India"
-                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
+                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-emerald-500"
               />
             </div>
 
             <div>
               <label className="text-xs font-semibold text-zinc-700 flex items-center gap-1.5 mb-1.5">
-                <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+                <Calendar className="w-3.5 h-3.5 text-amber-600" />
                 <span>Target Cycle / Year</span>
               </label>
               <input
@@ -351,7 +351,7 @@ export function TopicInput({
                 value={scope.targetCycle || ""}
                 onChange={(e) => handleScopeChange("targetCycle", e.target.value)}
                 placeholder="e.g. 2026-2027 Cycle"
-                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
+                className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-emerald-500 font-mono"
               />
             </div>
           </div>
@@ -360,7 +360,7 @@ export function TopicInput({
         {/* Clean Source Selection Pills */}
         <div className="space-y-3 pt-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs sm:text-sm font-bold text-zinc-800">
+            <span className="text-xs sm:text-sm font-bold text-zinc-800 font-heading">
               How would you like to provide sources?
             </span>
           </div>
@@ -371,11 +371,11 @@ export function TopicInput({
               onClick={() => setInputMode("tavily")}
               className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer ${
                 inputMode === "tavily"
-                  ? "bg-white text-indigo-700 shadow-xs border border-zinc-200/80"
+                  ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
                   : "text-zinc-600 hover:text-zinc-900"
               }`}
             >
-              <Sparkles className="w-4 h-4 text-indigo-600" />
+              <Sparkles className="w-4 h-4 text-emerald-600" />
               <span>Auto Web Search</span>
             </button>
 
@@ -388,7 +388,7 @@ export function TopicInput({
                   : "text-zinc-600 hover:text-zinc-900"
               }`}
             >
-              <Globe className="w-4 h-4 text-zinc-600" />
+              <Globe className="w-4 h-4 text-teal-600" />
               <span>Paste Links</span>
             </button>
 
@@ -426,7 +426,7 @@ export function TopicInput({
                 <button
                   type="button"
                   onClick={handleAddUrl}
-                  className="text-xs font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
+                  className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Link</span>
@@ -449,7 +449,7 @@ export function TopicInput({
                         ? "https://official-portal.gov/requirements.html"
                         : "https://secondary-source.org/policy-notice.html"
                     }
-                    className="flex-1 bg-zinc-50/80 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-hidden focus:border-indigo-500 font-mono"
+                    className="flex-1 bg-zinc-50/80 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-hidden focus:border-emerald-500 font-mono"
                   />
                   {urls.length > 1 && (
                     <button
@@ -471,7 +471,7 @@ export function TopicInput({
         {inputMode === "text" && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs sm:text-sm font-bold text-zinc-800 flex items-center gap-1.5">
+              <label className="text-xs sm:text-sm font-bold text-zinc-800 flex items-center gap-1.5 font-heading">
                 <FileText className="w-4 h-4 text-emerald-600" />
                 <span>Pasted Notice / Document Text</span>
               </label>
@@ -479,7 +479,7 @@ export function TopicInput({
                 <button
                   type="button"
                   onClick={handleAddTextSnippet}
-                  className="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
+                  className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Document</span>
@@ -515,7 +515,7 @@ export function TopicInput({
                     value={item.title}
                     onChange={(e) => handleTextChange(idx, "title", e.target.value)}
                     placeholder={`Document Title`}
-                    className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold text-zinc-900 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
+                    className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold text-zinc-900 placeholder-zinc-400 focus:outline-hidden focus:border-emerald-500 font-heading"
                   />
 
                   <textarea
@@ -523,7 +523,7 @@ export function TopicInput({
                     value={item.content}
                     onChange={(e) => handleTextChange(idx, "content", e.target.value)}
                     placeholder="Paste notice, guidelines, or circular here..."
-                    className="w-full bg-white border border-zinc-200 rounded-lg p-3 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500 resize-none font-mono leading-relaxed"
+                    className="w-full bg-white border border-zinc-200 rounded-lg p-3 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-emerald-500 resize-none font-mono leading-relaxed"
                   />
                 </div>
               ))}
@@ -533,19 +533,19 @@ export function TopicInput({
 
         {/* Dynamic Progressive Pipeline Feedback */}
         {isLoading && (
-          <div className="bg-indigo-50/60 border border-indigo-200/80 rounded-xl p-4 space-y-2.5">
+          <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-4 space-y-2.5">
             <div className="flex items-center justify-between text-xs sm:text-sm">
-              <div className="flex items-center gap-2.5 text-indigo-900 font-bold">
-                <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
+              <div className="flex items-center gap-2.5 text-emerald-950 font-bold font-heading">
+                <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
                 <span>{PIPELINE_STEPS[currentStepIndex]}</span>
               </div>
-              <span className="text-indigo-600 font-mono text-xs font-bold">
+              <span className="text-emerald-700 font-mono text-xs font-bold">
                 Step {currentStepIndex + 1}/{PIPELINE_STEPS.length}
               </span>
             </div>
-            <div className="w-full bg-indigo-100 h-2 rounded-full overflow-hidden">
+            <div className="w-full bg-emerald-100 h-2 rounded-full overflow-hidden">
               <div
-                className="bg-gradient-to-r from-indigo-500 to-violet-500 h-full transition-all duration-500"
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 h-full transition-all duration-500"
                 style={{
                   width: `${((currentStepIndex + 1) / PIPELINE_STEPS.length) * 100}%`,
                 }}

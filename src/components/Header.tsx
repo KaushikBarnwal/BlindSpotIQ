@@ -74,13 +74,13 @@ export function Header({
           <div className="h-4 w-px bg-zinc-200 hidden sm:block" />
 
           <Link href="/app" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center shadow-xs group-hover:scale-105 transition">
               <ShieldAlert className="w-4 h-4 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-black text-lg tracking-tight text-zinc-950">
-                  Blindspot<span className="text-indigo-600">IQ</span>
+                <span className="font-black text-lg tracking-tight text-zinc-950 font-heading">
+                  Blindspot<span className="text-emerald-600">IQ</span>
                 </span>
               </div>
             </div>
@@ -101,7 +101,7 @@ export function Header({
                   : "text-zinc-600 hover:text-zinc-950"
               }`}
             >
-              <BookOpen className="w-4 h-4 text-indigo-600" />
+              <BookOpen className="w-4 h-4 text-emerald-600" />
               <span>Scholarship</span>
             </button>
 
@@ -113,7 +113,7 @@ export function Header({
                   : "text-zinc-600 hover:text-zinc-950"
               }`}
             >
-              <Compass className="w-4 h-4 text-violet-600" />
+              <Compass className="w-4 h-4 text-teal-600" />
               <span>Nomad Visa</span>
             </button>
           </div>
@@ -128,7 +128,7 @@ export function Header({
               <History className="w-4 h-4 text-zinc-500" />
               <span className="hidden sm:inline">Recent</span>
               {recentSessions.length > 0 && (
-                <span className="w-4 h-4 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center">
                   {recentSessions.length}
                 </span>
               )}
@@ -138,8 +138,8 @@ export function Header({
             {showHistoryDropdown && (
               <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-zinc-200 rounded-2xl shadow-xl z-50 p-3 space-y-2">
                 <div className="flex items-center justify-between border-b border-zinc-100 pb-2">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-900">
-                    <History className="w-3.5 h-3.5 text-indigo-600" />
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-900 font-heading">
+                    <History className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Recent Research Sessions</span>
                   </div>
                   {recentSessions.length > 0 && onClearRecentSessions && (
@@ -172,7 +172,7 @@ export function Header({
                         className="p-2.5 rounded-xl border border-zinc-100 hover:border-zinc-300 hover:bg-zinc-50 transition cursor-pointer space-y-1"
                       >
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-bold text-xs text-zinc-900 line-clamp-1 flex-1">
+                          <span className="font-bold text-xs text-zinc-900 line-clamp-1 flex-1 font-heading">
                             {session.topic}
                           </span>
                           <span className="text-[10px] text-zinc-400 font-mono shrink-0">
@@ -184,7 +184,7 @@ export function Header({
                         </div>
 
                         <div className="flex items-center gap-2 text-[10px]">
-                          <span className="font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200">
+                          <span className="font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
                             {session.completenessScore}% Complete
                           </span>
                           <span className="text-rose-700 bg-rose-50 px-1.5 py-0.2 rounded border border-rose-200 font-medium">
@@ -207,7 +207,7 @@ export function Header({
         <div className="flex items-center gap-2">
           <a
             href="mailto:barnwalkaushik@gmail.com"
-            title="Email Kaushik Barnwal via Gmail"
+            title="Email Kaushik Raj via Gmail"
             className="hidden md:flex items-center gap-1.5 text-xs font-semibold text-zinc-600 hover:text-red-700 px-2.5 py-1.5 rounded-lg border border-zinc-200 hover:border-red-200 hover:bg-red-50/50 transition"
           >
             <Mail className="w-3.5 h-3.5 text-red-500" />

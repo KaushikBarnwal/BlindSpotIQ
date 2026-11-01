@@ -9,9 +9,9 @@ const CASES = [
     id: "scholarship",
     icon: BookOpen,
     label: "Academic Scholarships",
-    color: "text-indigo-600",
-    bg: "bg-indigo-50",
-    activeBorder: "border-indigo-300",
+    color: "text-emerald-700",
+    bg: "bg-emerald-50",
+    activeBorder: "border-emerald-300",
     scenario: "A student applying for the Global STEM Excellence Scholarship notices eligibility details across 3 sites but nothing about renewal conditions, income limits, or disqualification triggers.",
     gaps: ["Renewal GPA requirement not mentioned in any source", "Appeal process completely absent from all 3 sources", "Disbursement schedule conflicts: annual vs. bi-term"],
     clashes: ["Required letters: 2 (official) vs 1 (blog)", "Deadline: Nov 15 2026 (official) vs Oct 1 2024 (stale guide)"],
@@ -21,9 +21,9 @@ const CASES = [
     id: "visa",
     icon: Plane,
     label: "Immigration & Visas",
-    color: "text-violet-600",
-    bg: "bg-violet-50",
-    activeBorder: "border-violet-300",
+    color: "text-teal-700",
+    bg: "bg-teal-50",
+    activeBorder: "border-teal-300",
     scenario: "A freelancer researching a Digital Nomad Visa finds income thresholds, insurance requirements, and permitted work types spread inconsistently across government portals and expat blogs.",
     gaps: ["Health insurance minimum coverage amount unclear", "Tax treaty exemption conditions absent across sources", "Dependent inclusion rules not addressed"],
     clashes: ["Monthly income floor: €2,000 (official) vs €2,500 (forum)", "Processing time: 4 weeks (gov.pt) vs 12 weeks (blog)"],
@@ -33,9 +33,9 @@ const CASES = [
     id: "grant",
     icon: Building2,
     label: "Public Grants & Policy",
-    color: "text-emerald-600",
-    bg: "bg-emerald-50",
-    activeBorder: "border-emerald-300",
+    color: "text-amber-700",
+    bg: "bg-amber-50",
+    activeBorder: "border-amber-300",
     scenario: "An NGO applying for a government infrastructure grant finds matching fund percentages, eligible expenditure categories, and reporting deadlines differ across multiple official circulars.",
     gaps: ["Audit reporting format not specified in any circular", "Penalty clauses for late delivery absent from all sources", "Eligible beneficiary definitions inconsistent"],
     clashes: ["Matching funds: 30% (Circular A) vs 40% (Ministry FAQ)", "Submission portal: two different URLs cited"],
@@ -53,10 +53,10 @@ export function UseCases() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="max-w-2xl mb-12">
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2.5">
+          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-emerald-800 mb-2.5 font-mono">
             Real-World Examples
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight font-heading">
             Important applications need zero blind spots
           </h2>
           <p className="mt-3 text-base sm:text-lg text-zinc-600 leading-relaxed">
@@ -146,7 +146,7 @@ export function UseCases() {
                     ? "/demo-visa"
                     : "/app"
                 }
-                className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-bold text-emerald-800 hover:text-emerald-950 transition-colors"
               >
                 <span>
                   {active === "scholarship"

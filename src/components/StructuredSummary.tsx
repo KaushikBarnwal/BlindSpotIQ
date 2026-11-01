@@ -47,13 +47,13 @@ export function StructuredSummary({
         );
       case "single_source_outlier":
         return (
-          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-violet-100 text-violet-800 border border-violet-200">
+          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-teal-100 text-teal-800 border border-teal-200 font-mono">
             Single Source
           </span>
         );
       case "scope_mismatch":
         return (
-          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-sky-100 text-sky-800 border border-sky-200">
+          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200 font-mono">
             Scope Mismatch
           </span>
         );
@@ -67,8 +67,8 @@ export function StructuredSummary({
       {/* Collapsible Toggle Header for Dual Panel */}
       <div className="flex items-center justify-between bg-zinc-100/80 border border-zinc-200/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm">
         <div className="flex items-center gap-2 flex-wrap">
-          <Sparkles className="w-4 h-4 text-indigo-600" />
-          <span className="font-bold text-zinc-900">
+          <Sparkles className="w-4 h-4 text-emerald-600" />
+          <span className="font-bold text-zinc-900 font-heading">
             Summary Breakdown:
           </span>
           <span className="text-emerald-700 font-semibold">

@@ -266,25 +266,25 @@ export default function PlatformDashboard({
               {/* Right Column: Guidance, Presets, and Sessions (5 cols) */}
               <div className="lg:col-span-5 space-y-4">
                 {/* Before You Start Card */}
-                <div className="bg-white border border-zinc-200 border-l-4 border-l-rose-500 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
-                  <h3 className="text-base sm:text-lg font-bold text-zinc-950">
+                <div className="bg-white border border-zinc-200 border-l-4 border-l-emerald-600 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+                  <h3 className="text-base sm:text-lg font-bold text-zinc-950 font-heading">
                     Before you start
                   </h3>
                   <ul className="space-y-3 text-xs sm:text-sm text-zinc-600 leading-relaxed">
                     <li className="flex items-start gap-2.5">
-                      <span className="text-rose-500 font-bold text-base">•</span>
+                      <span className="text-emerald-600 font-bold text-base">•</span>
                       <span>
                         <strong>Checks multiple sources:</strong> Gathers official portals, registries, and community guides to catch omissions.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <span className="text-rose-500 font-bold text-base">•</span>
+                      <span className="text-emerald-600 font-bold text-base">•</span>
                       <span>
-                        <strong>Official portals rank highest:</strong> Verified <code className="text-zinc-800 font-mono">.gov</code> and <code className="text-zinc-800 font-mono">.edu</code> notices always override blogs and forums.
+                        <strong>Official portals rank highest:</strong> Verified <code className="text-zinc-800 font-mono font-bold">.gov</code> and <code className="text-zinc-800 font-mono font-bold">.edu</code> notices always override blogs and forums.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <span className="text-rose-500 font-bold text-base">•</span>
+                      <span className="text-emerald-600 font-bold text-base">•</span>
                       <span>
                         <strong>Dual AI verification:</strong> Uses Gemini and Groq in tandem for instant, cross-checked accuracy.
                       </span>
@@ -295,10 +295,10 @@ export default function PlatformDashboard({
                 {/* Humanized Example Audits Card */}
                 <div className="bg-white border border-zinc-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-base sm:text-lg font-bold text-zinc-950">
+                    <h3 className="text-base sm:text-lg font-bold text-zinc-950 font-heading">
                       Try an Example Audit
                     </h3>
-                    <span className="text-xs font-semibold text-zinc-400">1-Click Preview</span>
+                    <span className="text-xs font-semibold text-zinc-400 font-mono">1-Click Preview</span>
                   </div>
                   <p className="text-xs sm:text-sm text-zinc-500">
                     See how BlindspotIQ flags hidden omissions and conflicting rules in real cases:
@@ -308,12 +308,12 @@ export default function PlatformDashboard({
                     <button
                       type="button"
                       onClick={handleLoadScholarship}
-                      className="w-full text-left p-4 rounded-xl border border-indigo-100 bg-indigo-50/40 hover:bg-indigo-50/80 hover:border-indigo-300 transition cursor-pointer flex items-center justify-between group"
+                      className="w-full text-left p-4 rounded-xl border border-emerald-200/90 bg-emerald-50/40 hover:bg-emerald-50/80 hover:border-emerald-300 transition cursor-pointer flex items-center justify-between group"
                     >
                       <div>
                         <div className="flex items-center gap-2">
-                          <BookOpen className="w-4 h-4 text-indigo-600" />
-                          <span className="font-bold text-sm sm:text-base text-zinc-900 group-hover:text-indigo-900">
+                          <BookOpen className="w-4 h-4 text-emerald-600" />
+                          <span className="font-bold text-sm sm:text-base text-zinc-900 group-hover:text-emerald-950 font-heading">
                             Global STEM Undergraduate Scholarship
                           </span>
                         </div>
@@ -321,18 +321,18 @@ export default function PlatformDashboard({
                           Catches unstated renewal rules and a $2,500 stipend discrepancy across sources.
                         </p>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-indigo-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition shrink-0 ml-2" />
+                      <ArrowRight className="w-4 h-4 text-emerald-500 group-hover:text-emerald-700 group-hover:translate-x-0.5 transition shrink-0 ml-2" />
                     </button>
 
                     <button
                       type="button"
                       onClick={handleLoadVisa}
-                      className="w-full text-left p-4 rounded-xl border border-violet-100 bg-violet-50/40 hover:bg-violet-50/80 hover:border-violet-300 transition cursor-pointer flex items-center justify-between group"
+                      className="w-full text-left p-4 rounded-xl border border-teal-200/90 bg-teal-50/40 hover:bg-teal-50/80 hover:border-teal-300 transition cursor-pointer flex items-center justify-between group"
                     >
                       <div>
                         <div className="flex items-center gap-2">
-                          <Compass className="w-4 h-4 text-violet-600" />
-                          <span className="font-bold text-sm sm:text-base text-zinc-900 group-hover:text-violet-900">
+                          <Compass className="w-4 h-4 text-teal-600" />
+                          <span className="font-bold text-sm sm:text-base text-zinc-900 group-hover:text-teal-950 font-heading">
                             Portugal Digital Nomad Residency Visa
                           </span>
                         </div>
@@ -340,7 +340,7 @@ export default function PlatformDashboard({
                           Catches conflicting monthly salary requirements (€3,280 vs €2,800) and missing bank proof.
                         </p>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-violet-400 group-hover:text-violet-600 group-hover:translate-x-0.5 transition shrink-0 ml-2" />
+                      <ArrowRight className="w-4 h-4 text-teal-500 group-hover:text-teal-700 group-hover:translate-x-0.5 transition shrink-0 ml-2" />
                     </button>
                   </div>
                 </div>
@@ -377,7 +377,7 @@ export default function PlatformDashboard({
                               Checked on {new Date(s.timestamp).toLocaleDateString()} • {s.completenessScore}% Complete
                             </span>
                           </div>
-                          <span className="text-xs font-semibold text-indigo-600 hover:underline shrink-0">
+                          <span className="text-xs font-semibold text-emerald-700 hover:underline shrink-0">
                             Open →
                           </span>
                         </div>
@@ -409,15 +409,15 @@ export default function PlatformDashboard({
               <div className="lg:col-span-7 bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
-                      <Sparkles className="w-4 h-4 text-indigo-600" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5 font-mono">
+                      <Sparkles className="w-4 h-4 text-emerald-600" />
                       <span>Audit Summary</span>
                     </span>
                     <span className="text-xs text-zinc-400 font-mono">
                       {analysis.sources.length} Ingested Sources
                     </span>
                   </div>
-                  <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-zinc-950 tracking-tight">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-zinc-950 tracking-tight font-heading">
                     {analysis.topic}
                   </h2>
                   <p className="text-sm sm:text-base text-zinc-700 mt-2.5 leading-relaxed">
@@ -428,23 +428,23 @@ export default function PlatformDashboard({
                     (analysis.userScope.situation ||
                       analysis.userScope.jurisdiction ||
                       analysis.userScope.targetCycle) && (
-                      <div className="mt-3.5 p-3 bg-indigo-50/50 border border-indigo-100 rounded-xl flex flex-wrap items-center gap-2 text-xs">
-                        <span className="font-bold text-indigo-900 flex items-center gap-1">
-                          <Target className="w-3.5 h-3.5 text-indigo-600" />
+                      <div className="mt-3.5 p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl flex flex-wrap items-center gap-2 text-xs">
+                        <span className="font-bold text-emerald-950 flex items-center gap-1 font-heading">
+                          <Target className="w-3.5 h-3.5 text-emerald-600" />
                           <span>Target Scope:</span>
                         </span>
                         {analysis.userScope.situation && (
-                          <span className="px-2.5 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
+                          <span className="px-2.5 py-0.5 rounded-md bg-white text-emerald-950 border border-emerald-200/80 font-medium">
                             {analysis.userScope.situation}
                           </span>
                         )}
                         {analysis.userScope.jurisdiction && (
-                          <span className="px-2.5 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
+                          <span className="px-2.5 py-0.5 rounded-md bg-white text-emerald-950 border border-emerald-200/80 font-medium">
                             {analysis.userScope.jurisdiction}
                           </span>
                         )}
                         {analysis.userScope.targetCycle && (
-                          <span className="px-2.5 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
+                          <span className="px-2.5 py-0.5 rounded-md bg-white text-emerald-950 border border-emerald-200/80 font-medium font-mono">
                             {analysis.userScope.targetCycle}
                           </span>
                         )}
@@ -454,10 +454,10 @@ export default function PlatformDashboard({
 
                 <div className="mt-5 pt-3.5 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-md bg-zinc-100 font-medium text-zinc-700">
+                    <span className="px-2.5 py-1 rounded-md bg-zinc-100 font-medium text-zinc-700 font-mono">
                       {analysis.detectedCategory}
                     </span>
-                    <span className="flex items-center gap-1 text-emerald-700 font-semibold">
+                    <span className="flex items-center gap-1 text-emerald-800 font-semibold">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       Official Sources Cross-Checked
                     </span>
@@ -469,17 +469,17 @@ export default function PlatformDashboard({
               <div className="lg:col-span-5 bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 font-mono">
                       Information Completeness
                     </span>
-                    <span className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200/80 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200/80 px-2.5 py-0.5 rounded-full font-mono">
                       {analysis.highRiskCount} High-Risk Item(s)
                     </span>
                   </div>
 
                   <div className="flex items-baseline justify-between mt-2 mb-2">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-4xl sm:text-5xl font-black text-zinc-950">
+                      <span className="text-4xl sm:text-5xl font-black text-zinc-950 font-heading">
                         {analysis.overallCompletenessScore}%
                       </span>
                       <span className="text-xs text-zinc-500 font-medium">
@@ -490,34 +490,49 @@ export default function PlatformDashboard({
 
                   <div className="w-full bg-zinc-100 h-2.5 rounded-full overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-indigo-500 via-violet-500 to-emerald-500 h-full rounded-full transition-all duration-700"
+                      className="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 h-full rounded-full transition-all duration-700"
                       style={{ width: `${analysis.overallCompletenessScore}%` }}
                     />
                   </div>
 
-                  {/* Combined Audit Findings Pills (3 in a Row) */}
-                  <div className="grid grid-cols-3 gap-2.5 mt-5 pt-4 border-t border-zinc-100">
-                    <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-xl text-center">
-                      <div className="text-xl font-black text-rose-700">{darkSpotsCount}</div>
-                      <div className="text-[11px] font-bold text-rose-950 mt-0.5">Missing Info</div>
+                  {/* Vertical Audit Findings Pills (Readable, zero truncation) */}
+                  <div className="space-y-2 mt-4 pt-3.5 border-t border-zinc-100">
+                    <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-rose-50/70 border border-rose-200/80 text-rose-950">
+                      <div className="flex items-center gap-2 font-bold text-xs sm:text-sm font-heading">
+                        <span className="w-2 h-2 rounded-full bg-rose-600" />
+                        <span>Missing Details</span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-white border border-rose-200 font-mono font-black text-xs text-rose-700 shadow-2xs">
+                        {darkSpotsCount}
+                      </span>
                     </div>
 
-                    <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-center">
-                      <div className="text-xl font-black text-amber-700">{conflictsCount}</div>
-                      <div className="text-[11px] font-bold text-amber-950 mt-0.5">Contradictions</div>
+                    <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-amber-50/70 border border-amber-200/80 text-amber-950">
+                      <div className="flex items-center gap-2 font-bold text-xs sm:text-sm font-heading">
+                        <span className="w-2 h-2 rounded-full bg-amber-600" />
+                        <span>Contradictions</span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-white border border-amber-200 font-mono font-black text-xs text-amber-700 shadow-2xs">
+                        {conflictsCount}
+                      </span>
                     </div>
 
-                    <div className="p-3 bg-zinc-100/70 border border-zinc-200 rounded-xl text-center">
-                      <div className="text-xl font-black text-zinc-700">{staleCount}</div>
-                      <div className="text-[11px] font-bold text-zinc-800 mt-0.5">Outdated Info</div>
+                    <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-zinc-100/70 border border-zinc-200/80 text-zinc-900">
+                      <div className="flex items-center gap-2 font-bold text-xs sm:text-sm font-heading">
+                        <span className="w-2 h-2 rounded-full bg-zinc-500" />
+                        <span>Outdated Info</span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-white border border-zinc-200 font-mono font-black text-xs text-zinc-700 shadow-2xs">
+                        {staleCount}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-zinc-100 text-xs font-semibold text-amber-800 flex items-center justify-between">
+                <div className="mt-4 pt-3 border-t border-zinc-100 text-xs font-semibold text-rose-700 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <span>⚠️</span>
-                    <span>Key requirements missing from sources reviewed.</span>
+                    <span>{analysis.highRiskCount} High-Risk Item(s) Need Verification</span>
                   </span>
                 </div>
               </div>
@@ -536,16 +551,16 @@ export default function PlatformDashboard({
                   onClick={() => handleTabChange("matrix")}
                   className={`px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
                     activeTab === "matrix"
-                      ? "bg-indigo-600 text-white shadow-xs"
+                      ? "bg-zinc-950 text-white shadow-xs"
                       : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
                   }`}
                 >
-                  <Grid className="w-4 h-4" />
+                  <Grid className="w-4 h-4 text-emerald-400" />
                   <span>1. What&apos;s Missing &amp; Found</span>
                   <span
-                    className={`px-1.5 py-0.5 rounded-md text-xs ${
+                    className={`px-1.5 py-0.5 rounded-md text-xs font-mono ${
                       activeTab === "matrix"
-                        ? "bg-indigo-700 text-white"
+                        ? "bg-zinc-800 text-zinc-200"
                         : "bg-zinc-100 text-zinc-600"
                     }`}
                   >
@@ -558,15 +573,15 @@ export default function PlatformDashboard({
                   onClick={() => handleTabChange("conflicts")}
                   className={`px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
                     activeTab === "conflicts"
-                      ? "bg-indigo-600 text-white shadow-xs"
+                      ? "bg-zinc-950 text-white shadow-xs"
                       : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
                   }`}
                 >
-                  <ArrowRightLeft className="w-4 h-4" />
+                  <ArrowRightLeft className="w-4 h-4 text-amber-400" />
                   <span>2. Conflicting Claims</span>
                   {conflictsCount > 0 && (
                     <span
-                      className={`px-1.5 py-0.5 rounded-md text-xs font-bold ${
+                      className={`px-1.5 py-0.5 rounded-md text-xs font-bold font-mono ${
                         activeTab === "conflicts"
                           ? "bg-amber-400 text-zinc-950"
                           : "bg-amber-100 text-amber-800"
@@ -582,16 +597,16 @@ export default function PlatformDashboard({
                   onClick={() => handleTabChange("checklist")}
                   className={`px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
                     activeTab === "checklist"
-                      ? "bg-indigo-600 text-white shadow-xs"
+                      ? "bg-zinc-950 text-white shadow-xs"
                       : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
                   }`}
                 >
-                  <ListTodo className="w-4 h-4" />
+                  <ListTodo className="w-4 h-4 text-teal-400" />
                   <span>3. Next Steps Checklist</span>
                   <span
-                    className={`px-1.5 py-0.5 rounded-md text-xs ${
+                    className={`px-1.5 py-0.5 rounded-md text-xs font-mono ${
                       activeTab === "checklist"
-                        ? "bg-indigo-700 text-white"
+                        ? "bg-zinc-800 text-zinc-200"
                         : "bg-zinc-100 text-zinc-600"
                     }`}
                   >
@@ -604,16 +619,16 @@ export default function PlatformDashboard({
                   onClick={() => handleTabChange("sources")}
                   className={`px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
                     activeTab === "sources"
-                      ? "bg-indigo-600 text-white shadow-xs"
+                      ? "bg-zinc-950 text-white shadow-xs"
                       : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
                   }`}
                 >
-                  <Layers className="w-4 h-4" />
+                  <Layers className="w-4 h-4 text-zinc-400" />
                   <span>4. Sources Used</span>
                   <span
-                    className={`px-1.5 py-0.5 rounded-md text-xs ${
+                    className={`px-1.5 py-0.5 rounded-md text-xs font-mono ${
                       activeTab === "sources"
-                        ? "bg-indigo-700 text-white"
+                        ? "bg-zinc-800 text-zinc-200"
                         : "bg-zinc-100 text-zinc-600"
                     }`}
                   >
@@ -630,7 +645,7 @@ export default function PlatformDashboard({
                   className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200/90 shadow-2xs text-xs sm:text-sm font-bold transition cursor-pointer"
                   title="Download complete decision gap audit as a structured Markdown (.md) file"
                 >
-                  <Download className="w-4 h-4 text-indigo-600" />
+                  <Download className="w-4 h-4 text-emerald-600" />
                   <span>Download .md</span>
                 </button>
 
