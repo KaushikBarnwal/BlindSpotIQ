@@ -45,52 +45,68 @@ export async function callDualProviderLLM(
   for (const provider of providerOrder) {
     try {
       if (provider === "groq" && groqKey) {
-        const groqModel = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
-        console.log(`[BlindspotIQ] Invoking Groq engine with model: ${groqModel}...`);
+        const primaryModel = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
+        const candidateModels = [primaryModel, "openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.8-27b"];
+        const uniqueModels = Array.from(new Set(candidateModels));
 
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${groqKey}`,
-          },
-          body: JSON.stringify({
-            model: groqModel,
-            messages: [
-              {
-                role: "system",
-                content:
-                  "You are BlindspotIQ core intelligence. Always output strictly valid JSON matching the exact schema requested.",
-              },
-              {
-                role: "user",
-                content: prompt,
-              },
-            ],
-            response_format: { type: "json_object" },
-            temperature: 0.1,
-          }),
-        });
+        for (const groqModel of uniqueModels) {
+          try {
+            console.log(`[BlindspotIQ] Invoking Groq engine with model: ${groqModel}...`);
 
-        if (!res.ok) {
-          const errText = await res.text();
-          if (res.status === 429) {
-            console.warn(
-              "[BlindspotIQ] Groq LPU rate limit encountered (30 RPM quota). Seamlessly switching to fallback provider..."
-            );
+            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${groqKey}`,
+              },
+              body: JSON.stringify({
+                model: groqModel,
+                messages: [
+                  {
+                    role: "system",
+                    content:
+                      "You are BlindspotIQ core intelligence. Always output strictly valid JSON matching the exact schema requested.",
+                  },
+                  {
+                    role: "user",
+                    content: prompt,
+                  },
+                ],
+                response_format: { type: "json_object" },
+                temperature: 0.1,
+              }),
+            });
+
+            if (!res.ok) {
+              const errText = await res.text();
+              if (res.status === 404 || errText.includes("model_not_found")) {
+                console.warn(`[BlindspotIQ] Model ${groqModel} not available on this Groq account, trying next candidate...`);
+                continue;
+              }
+              if (res.status === 429) {
+                console.warn(
+                  "[BlindspotIQ] Groq LPU rate limit encountered (30 RPM quota). Seamlessly switching to fallback provider..."
+                );
+              }
+              throw new Error(`Groq API returned status ${res.status}: ${errText}`);
+            }
+
+            const data = await res.json();
+            const content = data.choices?.[0]?.message?.content?.trim();
+
+            if (content) {
+              return {
+                rawJsonText: content,
+                providerUsed: "groq",
+                modelUsed: groqModel,
+              };
+            }
+          } catch (modelErr: any) {
+            console.warn(`[BlindspotIQ] Groq model ${groqModel} attempt failed:`, modelErr?.message || modelErr);
+            if (groqModel === uniqueModels[uniqueModels.length - 1]) {
+              throw modelErr;
+            }
           }
-          throw new Error(`Groq API returned status ${res.status}: ${errText}`);
-        }
-
-        const data = await res.json();
-        const content = data.choices?.[0]?.message?.content?.trim();
-
-        if (content) {
-          return {
-            rawJsonText: content,
-            providerUsed: "groq",
-            modelUsed: groqModel,
-          };
         }
       }
 
