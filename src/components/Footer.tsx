@@ -87,7 +87,7 @@ export function PlatformFooter() {
 
               {/* GitHub */}
               <a
-                href="https://github.com/KaushikBarnwal"
+                href="https://github.com/KaushikBarnwal/BlindSpotIQ"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-50 hover:bg-zinc-100 border border-zinc-200/90 hover:border-zinc-300 text-xs sm:text-sm font-semibold text-zinc-800 hover:text-zinc-950 transition group"
@@ -102,7 +102,7 @@ export function PlatformFooter() {
                     />
                   </svg>
                 </div>
-                <span>KaushikBarnwal</span>
+                <span>/KaushikBarnwal</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 ml-auto" />
               </a>
 

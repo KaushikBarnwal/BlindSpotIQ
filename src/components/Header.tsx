@@ -206,7 +206,7 @@ export function Header({
           </a>
 
           <a
-            href="https://github.com/KaushikBarnwal"
+            href="https://github.com/KaushikBarnwal/BlindSpotIQ"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1 text-xs font-semibold text-zinc-600 hover:text-zinc-950 px-2.5 py-1.5 rounded-lg border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 transition"
