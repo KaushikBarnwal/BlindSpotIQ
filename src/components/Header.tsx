@@ -49,9 +49,13 @@ export function Header({
   }, []);
 
   const isScholarshipActive =
-    activeScenarioId === "scenario-scholarship-2026" || pathname === "/app/scholarship";
+    activeScenarioId === "scenario-scholarship-2026" ||
+    pathname === "/demo-scholarship" ||
+    pathname === "/app/scholarship";
   const isVisaActive =
-    activeScenarioId === "scenario-visa-2026" || pathname === "/app/visa";
+    activeScenarioId === "scenario-visa-2026" ||
+    pathname === "/demo-visa" ||
+    pathname === "/app/visa";
 
   return (
     <header className="border-b border-zinc-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-40 transition-all">

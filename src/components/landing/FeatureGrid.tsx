@@ -10,9 +10,9 @@ const PILLARS = [
     color: "text-indigo-600",
     bg: "bg-indigo-50",
     border: "border-indigo-100",
-    title: "Decision Criteria Gap Matrix",
+    title: "Finds What Websites Left Out",
     desc:
-      "An AI cannot detect what is missing unless it understands what a complete answer looks like. BlindspotIQ dynamically generates an expected decision schema per domain — then audits every source against it, surfacing exact missing requirements.",
+      "An AI cannot detect missing rules unless it knows what a complete application requires. BlindspotIQ knows the standard checklist for your category (scholarships, visas, grants) and flags every unstated requirement.",
   },
   {
     num: "02",
@@ -20,9 +20,9 @@ const PILLARS = [
     color: "text-violet-600",
     bg: "bg-violet-50",
     border: "border-violet-100",
-    title: "Official Source Conflict Resolution",
+    title: "Resolves Conflicting Rules",
     desc:
-      "When sources disagree on numbers or deadlines, simple majority vote is wrong. BlindspotIQ assigns institutional trust weights (.gov = 95%, .edu = 80%, blogs = 35%) and resolves contradictions in favor of the official source — clearly explained.",
+      "When sources disagree on amounts or dates, standard search gets confused. BlindspotIQ ranks verified government (.gov) and university (.edu) sites above student blogs and forums, clearly explaining which rule to follow.",
   },
   {
     num: "03",
@@ -30,9 +30,9 @@ const PILLARS = [
     color: "text-amber-600",
     bg: "bg-amber-50",
     border: "border-amber-100",
-    title: "Cycle & Freshness Guardian",
+    title: "Flags Expired Dates & Rules",
     desc:
-      "A circular from the 2024 application cycle looks identical to a 2026 notice. BlindspotIQ detects cycle references, flags stale content, and warns you when a guide references an outdated statutory window before it derails your application.",
+      "A blog article from 2024 can look identical to a 2026 update. BlindspotIQ checks dates across the web and warns you when a guide quotes an old deadline or an outdated form.",
   },
   {
     num: "04",
@@ -40,9 +40,9 @@ const PILLARS = [
     color: "text-emerald-600",
     bg: "bg-emerald-50",
     border: "border-emerald-100",
-    title: "Actionable Next Steps Checklist",
+    title: "Clear Next-Steps Checklist",
     desc:
-      "Gaps and clashes become a prioritized, interactive checklist. Every item includes a targeted official search query, a pre-filled inquiry email draft, and a direct link to the verified application portal.",
+      "Every missing requirement and conflict turns into an actionable checklist with one-click Google search shortcuts, ready-to-send draft inquiry emails, and direct links to official portals.",
   },
 ];
 
@@ -53,14 +53,13 @@ export function FeatureGrid() {
         {/* Header */}
         <div className="max-w-2xl mb-14">
           <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2.5">
-            Core Architecture
+            How It Protects You
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight leading-tight">
-            Four engines working in concert
+            Four ways BlindspotIQ protects your application
           </h2>
           <p className="mt-3 text-base sm:text-lg text-zinc-600 leading-relaxed">
-            Detecting what is missing requires more than keyword search. BlindspotIQ combines four
-            complementary reasoning engines to give you a complete picture of uncertainty.
+            Finding what official websites left out takes more than standard keyword search. Here is how BlindspotIQ double-checks every rule before you submit:
           </p>
         </div>
 

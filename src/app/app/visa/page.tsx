@@ -1,18 +1,5 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import React, { Suspense } from "react";
-import PlatformDashboard from "@/components/PlatformDashboard";
-
-export default function VisaAuditPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-zinc-50 flex items-center justify-center text-zinc-400 font-sans text-sm">
-          Loading Visa Audit...
-        </div>
-      }
-    >
-      <PlatformDashboard initialScenario="visa" />
-    </Suspense>
-  );
+export default function VisaRedirect() {
+  redirect("/demo-visa");
 }

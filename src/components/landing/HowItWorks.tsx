@@ -10,8 +10,8 @@ const STEPS = [
     color: "text-indigo-600",
     ring: "ring-indigo-100",
     bg: "bg-indigo-50",
-    title: "Ingest",
-    desc: "Auto-search with Tavily AI, paste URLs, or directly paste notice text. BlindspotIQ parses HTML pages and government PDFs with authority tier assignment built in.",
+    title: "1. Add Sources",
+    desc: "Search the web automatically with AI, paste website links, or paste document excerpts directly from official notices.",
   },
   {
     num: "02",
@@ -19,8 +19,8 @@ const STEPS = [
     color: "text-violet-600",
     ring: "ring-violet-100",
     bg: "bg-violet-50",
-    title: "Map",
-    desc: "The AI detects the decision domain (scholarship, visa, grant) and generates a complete expected schema — then scans all sources to reveal coverage gaps.",
+    title: "2. Spot Omissions",
+    desc: "BlindspotIQ identifies your category (scholarship, visa, or grant) and compares your sources against what a complete application requires.",
   },
   {
     num: "03",
@@ -28,8 +28,8 @@ const STEPS = [
     color: "text-amber-600",
     ring: "ring-amber-100",
     bg: "bg-amber-50",
-    title: "Resolve",
-    desc: "Contradictory claims are surfaced side-by-side with exact source quotes. Official portal trust weights resolve conflicts toward the highest-credibility source.",
+    title: "3. Catch Conflicts",
+    desc: "Contradictory claims are placed side-by-side with exact quotes. Official notices always override secondary blogs and forums.",
   },
   {
     num: "04",
@@ -37,8 +37,8 @@ const STEPS = [
     color: "text-emerald-600",
     ring: "ring-emerald-100",
     bg: "bg-emerald-50",
-    title: "Act",
-    desc: "Every gap and clash becomes an actionable checklist item with an official search query shortcut, a pre-written inquiry email, and a direct portal link.",
+    title: "4. Follow Checklist",
+    desc: "Get an actionable checklist with Google search shortcuts and pre-written emails to contact the institution directly.",
   },
 ];
 
@@ -49,13 +49,13 @@ export function HowItWorks() {
         {/* Header */}
         <div className="max-w-2xl mb-14">
           <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2.5">
-            Workflow
+            Simple 4-Step Process
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight">
-            From raw sources to verified clarity in 4 steps
+            From confusing sources to clear answers in 4 steps
           </h2>
           <p className="mt-3 text-base sm:text-lg text-zinc-600 leading-relaxed">
-            A linear, transparent pipeline — every step is visible and auditable so judges and users always know exactly what the AI did and why.
+            A transparent verification process where every check is backed by direct quotes so you always know why a rule was flagged.
           </p>
         </div>
 

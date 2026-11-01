@@ -151,11 +151,11 @@ export default function PlatformDashboard({
   };
 
   const handleLoadScholarship = () => {
-    router.push("/app/scholarship");
+    router.push("/demo-scholarship");
   };
 
   const handleLoadVisa = () => {
-    router.push("/app/visa");
+    router.push("/demo-visa");
   };
 
   const handleResetToNewSession = () => {
@@ -403,9 +403,10 @@ export default function PlatformDashboard({
               providerUsed={analysis.providerUsed}
             />
 
-            {/* Executive Summary & High-Level Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="md:col-span-2 bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+            {/* Executive Summary & High-Level Metrics (Spacious 2-Card Layout) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+              {/* Left Card: Audit Summary (7 Columns for generous reading space) */}
+              <div className="lg:col-span-7 bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
@@ -416,10 +417,10 @@ export default function PlatformDashboard({
                       {analysis.sources.length} Ingested Sources
                     </span>
                   </div>
-                  <h2 className="text-lg sm:text-xl md:text-2xl font-black text-zinc-950">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-zinc-950 tracking-tight">
                     {analysis.topic}
                   </h2>
-                  <p className="text-sm sm:text-base text-zinc-700 mt-2 leading-relaxed">
+                  <p className="text-sm sm:text-base text-zinc-700 mt-2.5 leading-relaxed">
                     {analysis.executiveSummary}
                   </p>
 
@@ -427,23 +428,23 @@ export default function PlatformDashboard({
                     (analysis.userScope.situation ||
                       analysis.userScope.jurisdiction ||
                       analysis.userScope.targetCycle) && (
-                      <div className="mt-3 p-2.5 bg-indigo-50/50 border border-indigo-100 rounded-xl flex flex-wrap items-center gap-2 text-xs">
+                      <div className="mt-3.5 p-3 bg-indigo-50/50 border border-indigo-100 rounded-xl flex flex-wrap items-center gap-2 text-xs">
                         <span className="font-bold text-indigo-900 flex items-center gap-1">
                           <Target className="w-3.5 h-3.5 text-indigo-600" />
                           <span>Target Scope:</span>
                         </span>
                         {analysis.userScope.situation && (
-                          <span className="px-2 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
+                          <span className="px-2.5 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
                             {analysis.userScope.situation}
                           </span>
                         )}
                         {analysis.userScope.jurisdiction && (
-                          <span className="px-2 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
+                          <span className="px-2.5 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
                             {analysis.userScope.jurisdiction}
                           </span>
                         )}
                         {analysis.userScope.targetCycle && (
-                          <span className="px-2 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
+                          <span className="px-2.5 py-0.5 rounded-md bg-white text-indigo-950 border border-indigo-200/80 font-medium">
                             {analysis.userScope.targetCycle}
                           </span>
                         )}
@@ -451,7 +452,7 @@ export default function PlatformDashboard({
                     )}
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500">
+                <div className="mt-5 pt-3.5 border-t border-zinc-100 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500">
                   <div className="flex items-center gap-2">
                     <span className="px-2.5 py-1 rounded-md bg-zinc-100 font-medium text-zinc-700">
                       {analysis.detectedCategory}
@@ -464,68 +465,60 @@ export default function PlatformDashboard({
                 </div>
               </div>
 
-              {/* Information Completeness Card */}
-              <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+              {/* Right Card: Combined Verification Health & Audit Findings (5 Columns) */}
+              <div className="lg:col-span-5 bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
-                    Information Completeness
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-4">
-                    <span className="text-4xl sm:text-5xl font-black text-zinc-950">
-                      {analysis.overallCompletenessScore}%
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                      Information Completeness
                     </span>
-                    <span className="text-xs text-zinc-500 font-medium">
-                      criteria verified
+                    <span className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200/80 px-2 py-0.5 rounded-full">
+                      {analysis.highRiskCount} High-Risk Item(s)
                     </span>
                   </div>
-                  <div className="w-full bg-zinc-100 h-2.5 rounded-full mt-3 overflow-hidden">
+
+                  <div className="flex items-baseline justify-between mt-2 mb-2">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl sm:text-5xl font-black text-zinc-950">
+                        {analysis.overallCompletenessScore}%
+                      </span>
+                      <span className="text-xs text-zinc-500 font-medium">
+                        criteria verified
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="w-full bg-zinc-100 h-2.5 rounded-full overflow-hidden">
                     <div
                       className="bg-gradient-to-r from-indigo-500 via-violet-500 to-emerald-500 h-full rounded-full transition-all duration-700"
                       style={{ width: `${analysis.overallCompletenessScore}%` }}
                     />
                   </div>
-                </div>
-                <p className="text-xs text-amber-700 mt-4 font-medium flex items-center gap-1.5">
-                  <span>⚠️</span>
-                  <span>Key requirements missing from the sources reviewed.</span>
-                </p>
-              </div>
 
-              {/* Audit Findings Card */}
-              <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
-                    Audit Findings
-                  </span>
-                  <div className="flex flex-col gap-2 mt-3">
-                    <div className="flex items-center justify-between p-2.5 bg-rose-50/70 border border-rose-200 rounded-xl">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-                        <span className="text-xs font-bold text-rose-950">Missing Details</span>
-                      </div>
-                      <span className="text-base font-black text-rose-700">{darkSpotsCount}</span>
+                  {/* Combined Audit Findings Pills (3 in a Row) */}
+                  <div className="grid grid-cols-3 gap-2.5 mt-5 pt-4 border-t border-zinc-100">
+                    <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-xl text-center">
+                      <div className="text-xl font-black text-rose-700">{darkSpotsCount}</div>
+                      <div className="text-[11px] font-bold text-rose-950 mt-0.5">Missing Info</div>
                     </div>
 
-                    <div className="flex items-center justify-between p-2.5 bg-amber-50/70 border border-amber-200 rounded-xl">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                        <span className="text-xs font-bold text-amber-950">Contradictions</span>
-                      </div>
-                      <span className="text-base font-black text-amber-700">{conflictsCount}</span>
+                    <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-center">
+                      <div className="text-xl font-black text-amber-700">{conflictsCount}</div>
+                      <div className="text-[11px] font-bold text-amber-950 mt-0.5">Contradictions</div>
                     </div>
 
-                    <div className="flex items-center justify-between p-2.5 bg-zinc-100/70 border border-zinc-200 rounded-xl">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-zinc-500" />
-                        <span className="text-xs font-bold text-zinc-800">Outdated Info</span>
-                      </div>
-                      <span className="text-base font-black text-zinc-700">{staleCount}</span>
+                    <div className="p-3 bg-zinc-100/70 border border-zinc-200 rounded-xl text-center">
+                      <div className="text-xl font-black text-zinc-700">{staleCount}</div>
+                      <div className="text-[11px] font-bold text-zinc-800 mt-0.5">Outdated Info</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-2 text-xs font-bold text-rose-700 text-center">
-                  {analysis.highRiskCount} High-Risk Item(s) Need Verification
+                <div className="mt-4 pt-3 border-t border-zinc-100 text-xs font-semibold text-amber-800 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <span>⚠️</span>
+                    <span>Key requirements missing from sources reviewed.</span>
+                  </span>
                 </div>
               </div>
             </div>

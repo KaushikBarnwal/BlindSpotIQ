@@ -45,19 +45,19 @@ export function PlatformFooter() {
               </li>
               <li>
                 <Link
-                  href="/app/scholarship"
+                  href="/demo-scholarship"
                   className="text-zinc-600 hover:text-indigo-600 transition font-medium flex items-center gap-1 group"
                 >
-                  <span>Scholarship Audit</span>
+                  <span>Scholarship Audit Demo</span>
                   <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition" />
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/app/visa"
+                  href="/demo-visa"
                   className="text-zinc-600 hover:text-indigo-600 transition font-medium flex items-center gap-1 group"
                 >
-                  <span>Nomad Visa Audit</span>
+                  <span>Nomad Visa Audit Demo</span>
                   <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition" />
                 </Link>
               </li>
@@ -114,7 +114,7 @@ export function PlatformFooter() {
 
               {/* LinkedIn */}
               <a
-                href="https://www.linkedin.com/in/kaushik-barnwal"
+                href="https://www.linkedin.com/in/kaushikraj515/"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-50 hover:bg-blue-50/70 border border-zinc-200/90 hover:border-blue-200 text-xs sm:text-sm font-semibold text-zinc-800 hover:text-blue-700 transition group"

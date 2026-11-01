@@ -29,7 +29,7 @@ const STANDARD_AI = {
 
 const BLINDSPOTIQ = {
   label: "BlindspotIQ Analysis",
-  tag: "Gap Detection Engine",
+  tag: "Deep Verification",
   tagColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
   headerBg: "bg-white",
   content: (
@@ -39,7 +39,7 @@ const BLINDSPOTIQ = {
         <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm">
           <span className="font-bold text-emerald-900">Award Amount Confirmed: </span>
-          <span className="text-emerald-800">$10,000/year — verified across 2 primary sources.</span>
+          <span className="text-emerald-800">$10,000/year — verified across official sources.</span>
         </div>
       </div>
 
@@ -47,9 +47,9 @@ const BLINDSPOTIQ = {
       <div className="flex items-start gap-3 p-3.5 rounded-xl bg-rose-50 border border-rose-200/80">
         <XCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm">
-          <span className="font-bold text-rose-950">Missing Condition (Dark Spot): </span>
+          <span className="font-bold text-rose-950">Missing Requirement: </span>
           <span className="text-rose-800">
-            0 of 3 sources mention renewal GPA rules. Missing this could result in sudden loss of funding after Year 1.
+            None of the 3 websites mention renewal GPA requirements. Without this, students risk losing funding after year one.
           </span>
         </div>
       </div>
@@ -58,9 +58,9 @@ const BLINDSPOTIQ = {
       <div className="flex items-start gap-3 p-3.5 rounded-xl bg-amber-50 border border-amber-200/80">
         <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm">
-          <span className="font-bold text-amber-950">Conflicting Information: </span>
+          <span className="font-bold text-amber-950">Conflicting Rules: </span>
           <span className="text-amber-800">
-            Source A (Official, 95% trust) requires 2 letters. Source B (Blog) claims 1 letter is enough. Official portal overrides.
+            Official foundation requires 2 letters. Blog claims 1 letter is enough. Official portal takes priority.
           </span>
         </div>
       </div>
@@ -69,9 +69,9 @@ const BLINDSPOTIQ = {
       <div className="flex items-start gap-3 p-3.5 rounded-xl bg-zinc-100 border border-zinc-200/80">
         <CalendarX className="w-5 h-5 text-zinc-500 shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm">
-          <span className="font-bold text-zinc-900">Outdated Information Alert: </span>
+          <span className="font-bold text-zinc-900">Outdated Rule Warning: </span>
           <span className="text-zinc-700">
-            ScholarshipInsider.net references a 2024 cycle deadline. Current cycle is 2026–2027.
+            Student blog cites an expired October 2024 deadline. Official deadline is November 15, 2026.
           </span>
         </div>
       </div>
@@ -91,10 +91,10 @@ export function ComparisonPreview() {
             See the difference
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight">
-            Summarization vs Gap Detection
+            Basic AI Summary vs BlindspotIQ
           </h2>
           <p className="mt-3 text-base sm:text-lg text-zinc-600 max-w-2xl mx-auto">
-            The same 3 scholarship sources fed into a generic AI vs BlindspotIQ.
+            See what happens when the same 3 websites are fed into standard AI vs BlindspotIQ.
           </p>
         </div>
 

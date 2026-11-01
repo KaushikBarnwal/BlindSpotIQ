@@ -57,6 +57,11 @@ export function CoverageMatrix({
     setExpandedCards({});
   };
 
+  const isAllExpanded =
+    dimensions.length > 0 && dimensions.every((d) => Boolean(expandedCards[d.id]));
+  const isAllCollapsed =
+    dimensions.every((d) => !expandedCards[d.id]);
+
   const getCellData = (dimId: string, srcId: string): MatrixCell => {
     const found = cells.find(
       (c) => c.dimensionId === dimId && c.sourceId === srcId
@@ -227,17 +232,26 @@ export function CoverageMatrix({
         </div>
 
         {viewMode === "cards" && (
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex items-center bg-zinc-100 border border-zinc-200/90 rounded-lg p-0.5 text-xs">
             <button
+              type="button"
               onClick={handleExpandAll}
-              className="text-zinc-500 hover:text-zinc-950 text-[11px] font-semibold px-2 py-1 rounded hover:bg-zinc-100 transition cursor-pointer"
+              className={`px-3 py-1 rounded-md text-[11px] sm:text-xs font-bold transition cursor-pointer ${
+                isAllExpanded
+                  ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
+                  : "text-zinc-500 hover:text-zinc-950"
+              }`}
             >
               Expand All
             </button>
-            <span className="text-zinc-300">|</span>
             <button
+              type="button"
               onClick={handleCollapseAll}
-              className="text-zinc-500 hover:text-zinc-950 text-[11px] font-semibold px-2 py-1 rounded hover:bg-zinc-100 transition cursor-pointer"
+              className={`px-3 py-1 rounded-md text-[11px] sm:text-xs font-bold transition cursor-pointer ${
+                isAllCollapsed
+                  ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
+                  : "text-zinc-500 hover:text-zinc-950"
+              }`}
             >
               Collapse All
             </button>

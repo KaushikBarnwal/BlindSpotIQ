@@ -54,13 +54,13 @@ export function UseCases() {
         {/* Header */}
         <div className="max-w-2xl mb-12">
           <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2.5">
-            Real-World Scenarios
+            Real-World Examples
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight">
-            High-stakes decisions need zero blind spots
+            Important applications need zero blind spots
           </h2>
           <p className="mt-3 text-base sm:text-lg text-zinc-600 leading-relaxed">
-            One missing detail — a renewal clause, a changed income threshold, an outdated portal — can void months of work.
+            One missing detail — an unstated renewal rule, a changed income requirement, or an outdated circular — can delay or disqualify your application.
           </p>
         </div>
 
@@ -139,10 +139,22 @@ export function UseCases() {
 
             <div className="pt-4 border-t border-zinc-100">
               <Link
-                href="/app"
+                href={
+                  active === "scholarship"
+                    ? "/demo-scholarship"
+                    : active === "visa"
+                    ? "/demo-visa"
+                    : "/app"
+                }
                 className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
               >
-                <span>Run this scenario in the platform</span>
+                <span>
+                  {active === "scholarship"
+                    ? "Open Scholarship Demo Audit"
+                    : active === "visa"
+                    ? "Open Nomad Visa Demo Audit"
+                    : "Check your own grant in the workspace"}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

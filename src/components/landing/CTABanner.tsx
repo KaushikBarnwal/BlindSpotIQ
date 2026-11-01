@@ -9,29 +9,28 @@ export function CTABanner() {
     <section className="py-24 sm:py-32 bg-zinc-950">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
         <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-indigo-400 mb-3.5">
-          Start Analyzing
+          Free Verification
         </p>
         <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-5">
-          Verify before you submit.
+          Double-check before you apply.
         </h2>
         <p className="text-lg sm:text-xl text-zinc-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Test your high-stakes application against multiple sources in seconds.
-          Surface what is missing, what conflicts, and what you should verify next.
+          Cross-examine multiple official websites in seconds. Catch missing conditions, conflicting requirements, and outdated rules before you submit.
         </p>
         <Link
           href="/app"
           className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-white hover:bg-zinc-100 text-zinc-950 font-bold text-base shadow-sm hover:shadow-md transition-all"
         >
-          <span>Launch BlindspotIQ Platform</span>
+          <span>Open Research Workspace</span>
           <ArrowRight className="w-5 h-5" />
         </Link>
 
         {/* Metric tags */}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-400 font-medium">
           {[
-            "100% Traceable Citations",
-            "Schema-Driven Detection",
-            "Official Authority Resolution",
+            "100% Verifiable Source Quotes",
+            "Official Source Priority",
+            "Dual AI Cross-Checking",
             "Free Open Research",
           ].map((item) => (
             <span key={item} className="flex items-center gap-2">
