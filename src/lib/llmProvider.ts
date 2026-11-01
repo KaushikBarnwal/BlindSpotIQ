@@ -74,6 +74,11 @@ export async function callDualProviderLLM(
 
         if (!res.ok) {
           const errText = await res.text();
+          if (res.status === 429) {
+            console.warn(
+              "[BlindspotIQ] Groq LPU rate limit encountered (30 RPM quota). Seamlessly switching to fallback provider..."
+            );
+          }
           throw new Error(`Groq API returned status ${res.status}: ${errText}`);
         }
 
@@ -93,25 +98,39 @@ export async function callDualProviderLLM(
         console.log("[BlindspotIQ] Invoking Google Gemini 2.5 Flash engine...");
         const ai = new GoogleGenAI({ apiKey: geminiKey });
 
-        const response = await ai.models.generateContent({
-          model: "gemini-2.5-flash",
-          contents: prompt,
-          config: {
-            responseMimeType: "application/json",
-          },
-        });
+        try {
+          const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+            config: {
+              responseMimeType: "application/json",
+            },
+          });
 
-        const text = response.text?.trim();
-        if (text) {
-          return {
-            rawJsonText: text,
-            providerUsed: "gemini",
-            modelUsed: "gemini-2.5-flash",
-          };
+          const text = response.text?.trim();
+          if (text) {
+            return {
+              rawJsonText: text,
+              providerUsed: "gemini",
+              modelUsed: "gemini-2.5-flash",
+            };
+          }
+        } catch (geminiErr: any) {
+          const isRateLimit =
+            geminiErr?.status === 429 ||
+            String(geminiErr?.message || "").includes("429") ||
+            String(geminiErr?.message || "").includes("RESOURCE_EXHAUSTED");
+
+          if (isRateLimit) {
+            console.warn(
+              "[BlindspotIQ] Google Gemini 2.5 Flash rate limit encountered (15 RPM / 1M TPM). Seamlessly switching to Groq LPU (llama-3.3-70b-versatile)..."
+            );
+          }
+          throw geminiErr;
         }
       }
     } catch (err: any) {
-      console.warn(`[BlindspotIQ] Provider ${provider} failed, trying fallback:`, err?.message || err);
+      console.warn(`[BlindspotIQ] Provider ${provider} attempt failed:`, err?.message || err);
       lastError = err;
     }
   }

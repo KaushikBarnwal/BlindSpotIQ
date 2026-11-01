@@ -46,6 +46,52 @@ export function determineAuthorityTier(hostname: string, title: string): {
   };
 }
 
+/**
+ * SSRF Protection: Validates protocol and blocks loopback, private RFC-1918, and cloud metadata IPs.
+ */
+function isSafeUrl(urlObj: URL): { safe: boolean; reason?: string } {
+  const protocol = urlObj.protocol.toLowerCase();
+  if (protocol !== "http:" && protocol !== "https:") {
+    return { safe: false, reason: "Unsupported protocol. Only HTTP and HTTPS are permitted." };
+  }
+
+  const hostname = urlObj.hostname.toLowerCase();
+  const blockedHosts = [
+    "localhost",
+    "127.0.0.1",
+    "0.0.0.0",
+    "::1",
+    "169.254.169.254", // AWS/GCP cloud metadata
+    "metadata.google.internal",
+    "instance-data",
+  ];
+
+  if (blockedHosts.includes(hostname) || hostname.endsWith(".local") || hostname.endsWith(".internal")) {
+    return { safe: false, reason: "Access to private or local network addresses is prohibited." };
+  }
+
+  const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+  const match = hostname.match(ipv4Regex);
+  if (match) {
+    const oct1 = parseInt(match[1], 10);
+    const oct2 = parseInt(match[2], 10);
+    if (
+      oct1 === 10 ||
+      oct1 === 127 ||
+      (oct1 === 172 && oct2 >= 16 && oct2 <= 31) ||
+      (oct1 === 192 && oct2 === 168) ||
+      (oct1 === 169 && oct2 === 254) ||
+      oct1 === 0
+    ) {
+      return { safe: false, reason: "Access to private IP addresses is prohibited." };
+    }
+  }
+
+  return { safe: true };
+}
+
+const MAX_DOCUMENT_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB ceiling for serverless memory safety
+
 export async function extractSourceFromUrl(
   url: string,
   index: number
@@ -53,6 +99,24 @@ export async function extractSourceFromUrl(
   const urlObj = new URL(url);
   const hostname = urlObj.hostname.replace(/^www\./, "");
   const fallbackId = `src-${index + 1}-${hostname.replace(/[^a-zA-Z0-9]/g, "_")}`;
+
+  // 1. SSRF Safety Check
+  const safety = isSafeUrl(urlObj);
+  if (!safety.safe) {
+    const authority = determineAuthorityTier(hostname, hostname);
+    return {
+      id: fallbackId,
+      url,
+      title: `${hostname} (Blocked)`,
+      hostname,
+      isStale: false,
+      cleanTextSnippet: `Security Notice: URL was blocked for safety reasons (${safety.reason}).`,
+      wordCount: 10,
+      authorityTier: authority.tier,
+      authorityWeight: authority.weight,
+      authorityRationale: authority.rationale,
+    };
+  }
 
   try {
     const controller = new AbortController();
@@ -75,6 +139,17 @@ export async function extractSourceFromUrl(
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
+    // 2. File Size Enforcement (10 MB Ceiling)
+    const contentLengthHeader = response.headers.get("content-length");
+    if (contentLengthHeader) {
+      const contentLength = parseInt(contentLengthHeader, 10);
+      if (!isNaN(contentLength) && contentLength > MAX_DOCUMENT_SIZE_BYTES) {
+        throw new Error(
+          `Document exceeds maximum allowed size of 10 MB (size: ${(contentLength / (1024 * 1024)).toFixed(1)} MB)`
+        );
+      }
+    }
+
     const contentType = response.headers.get("content-type") || "";
     const isPdfContent = isPdfUrl || contentType.toLowerCase().includes("application/pdf");
 
@@ -85,6 +160,9 @@ export async function extractSourceFromUrl(
     if (isPdfContent) {
       try {
         const arrayBuf = await response.arrayBuffer();
+        if (arrayBuf.byteLength > MAX_DOCUMENT_SIZE_BYTES) {
+          throw new Error("PDF exceeds maximum allowed memory buffer limit of 10 MB.");
+        }
         const buf = Buffer.from(arrayBuf);
         const { PDFParse } = require("pdf-parse");
         const parser = new PDFParse({ data: buf });
