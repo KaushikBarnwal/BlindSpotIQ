@@ -50,3 +50,4 @@
   <circle cx="344" cy="168" r="60" stroke="#f59e0b" stroke-width="12" stroke-opacity="0.5"/>
   <circle cx="344" cy="168" r="38" fill="url(#amberGlow512)" filter="url(#glow512)"/>
 </svg>
+
