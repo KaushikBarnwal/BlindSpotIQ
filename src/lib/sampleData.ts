@@ -2,7 +2,7 @@ import { AnalysisResult } from "@/types";
 
 export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
   id: "scenario-scholarship-2026",
-  timestamp: new Date().toISOString(),
+  timestamp: "2026-11-01T00:00:00.000Z",
   topic: "Global STEM Excellence Undergraduate Scholarship",
   detectedCategory: "Higher Education & Scholarship Grant",
   executiveSummary:
@@ -452,7 +452,7 @@ export const SAMPLE_SCHOLARSHIP_SCENARIO: AnalysisResult = {
 
 export const SAMPLE_VISA_SCENARIO: AnalysisResult = {
   id: "scenario-visa-2026",
-  timestamp: new Date().toISOString(),
+  timestamp: "2026-11-01T00:00:00.000Z",
   topic: "Digital Nomad & Remote Worker Visa Requirements (Portugal)",
   detectedCategory: "Immigration & Legal Residency",
   executiveSummary:

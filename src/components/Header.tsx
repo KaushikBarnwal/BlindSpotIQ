@@ -2,18 +2,17 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   ShieldAlert,
   ArrowLeft,
   BookOpen,
   Compass,
   ExternalLink,
-  Sparkles,
-  Layers,
   History,
   Trash2,
   ChevronDown,
-  Check,
+  Mail,
 } from "lucide-react";
 import { RecentSession } from "@/types";
 
@@ -36,6 +35,7 @@ export function Header({
 }: HeaderProps) {
   const [showHistoryDropdown, setShowHistoryDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -47,6 +47,11 @@ export function Header({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const isScholarshipActive =
+    activeScenarioId === "scenario-scholarship-2026" || pathname === "/app/scholarship";
+  const isVisaActive =
+    activeScenarioId === "scenario-visa-2026" || pathname === "/app/visa";
 
   return (
     <header className="border-b border-zinc-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-40 transition-all">
@@ -64,8 +69,8 @@ export function Header({
 
           <div className="h-4 w-px bg-zinc-200 hidden sm:block" />
 
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-xs">
+          <Link href="/app" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition">
               <ShieldAlert className="w-4 h-4 text-white" />
             </div>
             <div>
@@ -73,13 +78,9 @@ export function Header({
                 <span className="font-black text-lg tracking-tight text-zinc-950">
                   Blindspot<span className="text-indigo-600">IQ</span>
                 </span>
-                <span className="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/80 rounded-full uppercase tracking-wider">
-                  <Sparkles className="w-3 h-3" />
-                  <span>Platform</span>
-                </span>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Center: Scenario Switcher & History Popover */}
@@ -91,7 +92,7 @@ export function Header({
             <button
               onClick={onLoadScholarshipSample}
               className={`px-3.5 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm ${
-                activeScenarioId === "scenario-scholarship-2026"
+                isScholarshipActive
                   ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
                   : "text-zinc-600 hover:text-zinc-950"
               }`}
@@ -103,7 +104,7 @@ export function Header({
             <button
               onClick={onLoadVisaSample}
               className={`px-3.5 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm ${
-                activeScenarioId === "scenario-visa-2026"
+                isVisaActive
                   ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
                   : "text-zinc-600 hover:text-zinc-950"
               }`}
@@ -164,13 +165,9 @@ export function Header({
                           onSelectRecentSession?.(session.id);
                           setShowHistoryDropdown(false);
                         }}
-                        className={`p-2.5 rounded-xl border transition cursor-pointer hover:bg-zinc-50 flex flex-col gap-1.5 ${
-                          activeScenarioId === session.id
-                            ? "border-indigo-300 bg-indigo-50/40"
-                            : "border-zinc-200/70"
-                        }`}
+                        className="p-2.5 rounded-xl border border-zinc-100 hover:border-zinc-300 hover:bg-zinc-50 transition cursor-pointer space-y-1"
                       >
-                        <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center justify-between gap-2">
                           <span className="font-bold text-xs text-zinc-900 line-clamp-1 flex-1">
                             {session.topic}
                           </span>
@@ -202,11 +199,19 @@ export function Header({
           </div>
         </div>
 
-        {/* Right: Live Status & External Actions */}
+        {/* Right: Contact & GitHub Actions */}
         <div className="flex items-center gap-2">
-          
           <a
-            href="https://github.com"
+            href="mailto:barnwalkaushik@gmail.com"
+            title="Email Kaushik Barnwal via Gmail"
+            className="hidden md:flex items-center gap-1.5 text-xs font-semibold text-zinc-600 hover:text-red-700 px-2.5 py-1.5 rounded-lg border border-zinc-200 hover:border-red-200 hover:bg-red-50/50 transition"
+          >
+            <Mail className="w-3.5 h-3.5 text-red-500" />
+            <span>Gmail</span>
+          </a>
+
+          <a
+            href="https://github.com/KaushikBarnwal"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1 text-xs font-semibold text-zinc-600 hover:text-zinc-950 px-2.5 py-1.5 rounded-lg border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 transition"

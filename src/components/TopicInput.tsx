@@ -322,7 +322,7 @@ export function TopicInput({
                 type="text"
                 value={scope.situation || ""}
                 onChange={(e) => handleScopeChange("situation", e.target.value)}
-                placeholder="e.g. 2nd-year CS undergraduate"
+                placeholder="e.g. Post-Graduation"
                 className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
               />
             </div>
@@ -336,7 +336,7 @@ export function TopicInput({
                 type="text"
                 value={scope.jurisdiction || ""}
                 onChange={(e) => handleScopeChange("jurisdiction", e.target.value)}
-                placeholder="e.g. California, USA or National"
+                placeholder="e.g. Maharashtra, India"
                 className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
               />
             </div>
@@ -350,7 +350,7 @@ export function TopicInput({
                 type="text"
                 value={scope.targetCycle || ""}
                 onChange={(e) => handleScopeChange("targetCycle", e.target.value)}
-                placeholder="e.g. 2026–2027 Cycle"
+                placeholder="e.g. 2026-2027 Cycle"
                 className="w-full bg-white border border-zinc-200 rounded-lg px-3.5 py-2 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
               />
             </div>
@@ -514,7 +514,7 @@ export function TopicInput({
                     type="text"
                     value={item.title}
                     onChange={(e) => handleTextChange(idx, "title", e.target.value)}
-                    placeholder={`Document Title (e.g. Official Gazette #${idx + 1})`}
+                    placeholder={`Document Title`}
                     className="w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-xs sm:text-sm font-bold text-zinc-900 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500"
                   />
 
@@ -522,7 +522,7 @@ export function TopicInput({
                     rows={4}
                     value={item.content}
                     onChange={(e) => handleTextChange(idx, "content", e.target.value)}
-                    placeholder="Paste notice, guidelines, or circular excerpt here..."
+                    placeholder="Paste notice, guidelines, or circular here..."
                     className="w-full bg-white border border-zinc-200 rounded-lg p-3 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 focus:outline-hidden focus:border-indigo-500 resize-none font-mono leading-relaxed"
                   />
                 </div>
