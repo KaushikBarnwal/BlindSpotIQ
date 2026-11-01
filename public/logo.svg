@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Obsidian Background Gradient -->
+    <linearGradient id="bgGrad512" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#09090b"/>
+      <stop offset="100%" stop-color="#06241c"/>
+    </linearGradient>
+
+    <!-- Emerald Aperture Gradient -->
+    <linearGradient id="emeraldArc512" x1="96" y1="96" x2="416" y2="416" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <!-- Teal Aperture Gradient -->
+    <linearGradient id="tealArc512" x1="416" y1="416" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2dd4bf"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+
+    <!-- Amber Spotlight Glow -->
+    <radialGradient id="amberGlow512" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="35%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </radialGradient>
+
+    <filter id="glow512" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base (28% radius) -->
+  <rect x="16" y="16" width="480" height="480" rx="128" fill="url(#bgGrad512)" stroke="#10b981" stroke-width="16" stroke-opacity="0.35"/>
+
+  <!-- Radar Reticle Crosshair Guides -->
+  <circle cx="256" cy="256" r="152" stroke="#10b981" stroke-width="12" stroke-opacity="0.25" stroke-dasharray="24 24"/>
+  <line x1="256" y1="72" x2="256" y2="440" stroke="#10b981" stroke-width="8" stroke-opacity="0.2"/>
+  <line x1="72" y1="256" x2="440" y2="256" stroke="#10b981" stroke-width="8" stroke-opacity="0.2"/>
+
+  <!-- Scanning Aperture / Investigative Lens Arcs -->
+  <path d="M 136 320 C 115 200, 204 120, 328 120" stroke="url(#emeraldArc512)" stroke-width="40" stroke-linecap="round"/>
+  <path d="M 376 192 C 397 312, 308 392, 184 392" stroke="url(#tealArc512)" stroke-width="40" stroke-linecap="round"/>
+
+  <!-- Central IQ Lens Ring -->
+  <circle cx="256" cy="256" r="68" stroke="#34d399" stroke-width="28" fill="#064e3b" fill-opacity="0.45"/>
+
+  <!-- The "Blindspot" Spotlight Beacon (Uncovered in the upper-right focal quadrant) -->
+  <circle cx="344" cy="168" r="60" stroke="#f59e0b" stroke-width="12" stroke-opacity="0.5"/>
+  <circle cx="344" cy="168" r="38" fill="url(#amberGlow512)" filter="url(#glow512)"/>
+</svg>

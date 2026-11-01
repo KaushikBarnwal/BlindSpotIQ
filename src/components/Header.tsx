@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  ShieldAlert,
   ArrowLeft,
   BookOpen,
   Compass,
@@ -14,6 +13,7 @@ import {
   ChevronDown,
   Mail,
 } from "lucide-react";
+import { BlindspotLogo } from "@/components/BlindspotLogo";
 import { RecentSession } from "@/types";
 
 interface HeaderProps {
@@ -74,16 +74,7 @@ export function Header({
           <div className="h-4 w-px bg-zinc-200 hidden sm:block" />
 
           <Link href="/app" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center shadow-xs group-hover:scale-105 transition">
-              <ShieldAlert className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-black text-lg tracking-tight text-zinc-950 font-heading">
-                  Blindspot<span className="text-emerald-600">IQ</span>
-                </span>
-              </div>
-            </div>
+            <BlindspotLogo size="md" showWordmark={true} />
           </Link>
         </div>
 

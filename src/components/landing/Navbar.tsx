@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShieldAlert, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { BlindspotLogo } from "@/components/BlindspotLogo";
 
 export function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -25,12 +26,7 @@ export function LandingNavbar() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center shadow-sm group-hover:scale-105 transition-all">
-            <ShieldAlert className="w-4 h-4 text-white" />
-          </div>
-          <span className="font-black text-lg tracking-tight text-zinc-950 font-heading">
-            Blindspot<span className="text-emerald-600">IQ</span>
-          </span>
+          <BlindspotLogo size="md" showWordmark={true} />
         </Link>
 
         {/* Desktop Nav */}

@@ -5,6 +5,13 @@ export const metadata: Metadata = {
   title: "BlindspotIQ — AI-Assisted Information Gap & Contradiction Platform",
   description:
     "Detect what's missing, outdated, or contradictory across multiple web sources for high-stakes decision making.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
@@ -15,6 +22,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/logo.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

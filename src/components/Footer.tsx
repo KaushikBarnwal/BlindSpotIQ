@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldAlert, Mail, ArrowUpRight } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
+import { BlindspotLogo } from "@/components/BlindspotLogo";
 
 export function PlatformFooter() {
   return (
@@ -11,14 +12,7 @@ export function PlatformFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-zinc-100">
           {/* Brand & Mission */}
           <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center shadow-xs">
-                <ShieldAlert className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-black text-lg tracking-tight text-zinc-950 font-heading">
-                Blindspot<span className="text-emerald-600">IQ</span>
-              </span>
-            </div>
+            <BlindspotLogo size="md" showWordmark={true} />
             <p className="text-xs sm:text-sm text-zinc-600 max-w-md leading-relaxed">
               AI-assisted cross-examination platform detecting hidden omissions, contradictory rules, and outdated information before high-stakes applications are submitted.
             </p>
