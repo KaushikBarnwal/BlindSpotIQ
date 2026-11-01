@@ -55,6 +55,24 @@ export function LandingFooter() {
                   <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-emerald-600" />
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/privacy"
+                  className="text-zinc-600 hover:text-emerald-700 transition font-medium flex items-center gap-1 group"
+                >
+                  <span>Privacy Policy</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-emerald-600" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="text-zinc-600 hover:text-emerald-700 transition font-medium flex items-center gap-1 group"
+                >
+                  <span>Terms of Service</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-emerald-600" />
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -119,8 +137,18 @@ export function LandingFooter() {
 
         {/* Bottom Bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
-          <div>
-            © 2026 <strong className="text-zinc-800 font-semibold">BlindspotIQ</strong>. Created by Kaushik Raj.
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span>
+              © 2026 <strong className="text-zinc-800 font-semibold">BlindspotIQ</strong>. Created by Kaushik Raj.
+            </span>
+            <span className="text-zinc-300">•</span>
+            <Link href="/privacy" className="hover:text-emerald-700 font-medium transition-colors">
+              Privacy
+            </Link>
+            <span className="text-zinc-300">•</span>
+            <Link href="/terms" className="hover:text-emerald-700 font-medium transition-colors">
+              Terms
+            </Link>
           </div>
           <div className="flex items-center gap-3 text-zinc-400">
             <span>Next.js 16</span>

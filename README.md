@@ -21,7 +21,7 @@ An evidence-first research and verification platform that cross-examines the sou
 </div>
 
 <p align="center">
-  <img src="./public/logo.svg" alt="BlindspotIQ forensic research workspace showing sources, coverage heatmap matrix, and authority-weighted contradiction resolutions" width="120" height="120" />
+  <!-- <img src="./public/logo.svg" alt="BlindspotIQ forensic research workspace showing sources, coverage heatmap matrix, and authority-weighted contradiction resolutions" width="120" height="120" /> -->
   <br />
   <sub>The real BlindspotIQ workspace running live multi-source audits on verified decision benchmarks.</sub>
 </p>
@@ -387,8 +387,9 @@ X-RateLimit-Remaining: 14
 
 ---
 
-## 15. Privacy
+## 15. Privacy & Legal Compliance
 
+- **Dedicated Privacy & Terms Routes:** Accessible at [`/privacy`](src/app/privacy/page.tsx) and [`/terms`](src/app/terms/page.tsx) across all platform footers.
 - **Zero Trackers, Zero Cookies:** No third-party tracking scripts, advertising pixels, or session tracking cookies.
 - **Client-Side Device Persistence:** Recent audit sessions are saved in the user's browser `localStorage` and can be cleared in one click.
 - **Minimal Data Retention:** Uploaded PDF buffers and crawled web pages are parsed in memory and discarded immediately after text extraction.
@@ -409,7 +410,7 @@ npx tsc --noEmit
 
 | Check | Result | Verification Notes |
 | :--- | :---: | :--- |
-| `npm run build` | **0 errors** | All 12 routes compile statically with Next.js Turbopack. |
+| `npm run build` | **0 errors** | All 14 routes compile statically with Next.js Turbopack. |
 | **SSRF Guardrail Test** | **100% blocked** | Verified blocking of `http://127.0.0.1:8080` and `http://169.254.169.254`. |
 | **10 MB File Limit Test** | **100% enforced** | Documents exceeding 10 MB are rejected before buffering. |
 | **IP Rate Limiter Test** | **100% enforced** | 15 RPM sliding window returns `HTTP 429` with `Retry-After`. |
