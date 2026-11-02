@@ -219,7 +219,7 @@ export default function PlatformDashboard({
         onClearRecentSessions={clearAllSessions}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 space-y-5 sm:space-y-6">
         {errorMessage && (
           <div className="bg-amber-50 border border-amber-200 text-amber-900 p-4 rounded-xl text-sm flex items-center justify-between shadow-xs">
             <span>{errorMessage}</span>
@@ -545,43 +545,45 @@ export default function PlatformDashboard({
 
             {/* Navigation Tabs Bar & Export Toolbar */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-zinc-200 pb-2">
-              <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0 no-print">
+              <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1.5 sm:pb-0 no-print -mx-3 px-3 sm:mx-0 sm:px-0">
                 <button
                   type="button"
                   onClick={() => handleTabChange("matrix")}
-                  className={`px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
+                  className={`px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
                     activeTab === "matrix"
                       ? "bg-zinc-950 text-white shadow-xs"
                       : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
                   }`}
                 >
-                  <Grid className="w-4 h-4 text-emerald-400" />
-                  <span>1. What&apos;s Missing &amp; Found</span>
+                  <Grid className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+                  <span className="hidden sm:inline">1. What&apos;s Missing &amp; Found</span>
+                  <span className="sm:hidden">1. Missing &amp; Found</span>
                   <span
-                    className={`px-1.5 py-0.5 rounded-md text-xs font-mono ${
+                    className={`px-1.5 py-0.5 rounded-md text-[11px] sm:text-xs font-mono ${
                       activeTab === "matrix"
                         ? "bg-zinc-800 text-zinc-200"
                         : "bg-zinc-100 text-zinc-600"
                     }`}
                   >
-                    {analysis.expectedDimensions.length} Topics
+                    {analysis.expectedDimensions.length}
                   </span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleTabChange("conflicts")}
-                  className={`px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
+                  className={`px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
                     activeTab === "conflicts"
                       ? "bg-zinc-950 text-white shadow-xs"
                       : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
                   }`}
                 >
-                  <ArrowRightLeft className="w-4 h-4 text-amber-400" />
-                  <span>2. Conflicting Claims</span>
+                  <ArrowRightLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 shrink-0" />
+                  <span className="hidden sm:inline">2. Conflicting Claims</span>
+                  <span className="sm:hidden">2. Conflicts</span>
                   {conflictsCount > 0 && (
                     <span
-                      className={`px-1.5 py-0.5 rounded-md text-xs font-bold font-mono ${
+                      className={`px-1.5 py-0.5 rounded-md text-[11px] sm:text-xs font-bold font-mono ${
                         activeTab === "conflicts"
                           ? "bg-amber-400 text-zinc-950"
                           : "bg-amber-100 text-amber-800"
@@ -595,16 +597,17 @@ export default function PlatformDashboard({
                 <button
                   type="button"
                   onClick={() => handleTabChange("checklist")}
-                  className={`px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
+                  className={`px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
                     activeTab === "checklist"
                       ? "bg-zinc-950 text-white shadow-xs"
                       : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
                   }`}
                 >
-                  <ListTodo className="w-4 h-4 text-teal-400" />
-                  <span>3. Next Steps Checklist</span>
+                  <ListTodo className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-400 shrink-0" />
+                  <span className="hidden sm:inline">3. Next Steps Checklist</span>
+                  <span className="sm:hidden">3. Checklist</span>
                   <span
-                    className={`px-1.5 py-0.5 rounded-md text-xs font-mono ${
+                    className={`px-1.5 py-0.5 rounded-md text-[11px] sm:text-xs font-mono ${
                       activeTab === "checklist"
                         ? "bg-zinc-800 text-zinc-200"
                         : "bg-zinc-100 text-zinc-600"
@@ -617,16 +620,17 @@ export default function PlatformDashboard({
                 <button
                   type="button"
                   onClick={() => handleTabChange("sources")}
-                  className={`px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
+                  className={`px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 ${
                     activeTab === "sources"
                       ? "bg-zinc-950 text-white shadow-xs"
                       : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
                   }`}
                 >
-                  <Layers className="w-4 h-4 text-zinc-400" />
-                  <span>4. Sources Used</span>
+                  <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400 shrink-0" />
+                  <span className="hidden sm:inline">4. Sources Used</span>
+                  <span className="sm:hidden">4. Sources</span>
                   <span
-                    className={`px-1.5 py-0.5 rounded-md text-xs font-mono ${
+                    className={`px-1.5 py-0.5 rounded-md text-[11px] sm:text-xs font-mono ${
                       activeTab === "sources"
                         ? "bg-zinc-800 text-zinc-200"
                         : "bg-zinc-100 text-zinc-600"
@@ -638,11 +642,11 @@ export default function PlatformDashboard({
               </div>
 
               {/* Audit Export Toolbar */}
-              <div className="flex items-center gap-2 self-start sm:self-center shrink-0 mb-1 sm:mb-0 no-print">
+              <div className="flex items-center gap-2 self-stretch sm:self-center shrink-0 mb-1 sm:mb-0 no-print">
                 <button
                   type="button"
                   onClick={handleDownloadMarkdown}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200/90 shadow-2xs text-xs sm:text-sm font-bold transition cursor-pointer"
+                  className="flex-1 sm:flex-initial justify-center flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200/90 shadow-2xs text-xs sm:text-sm font-bold transition cursor-pointer"
                   title="Download complete decision gap audit as a structured Markdown (.md) file"
                 >
                   <Download className="w-4 h-4 text-emerald-600" />
@@ -652,7 +656,7 @@ export default function PlatformDashboard({
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200/90 shadow-2xs text-xs sm:text-sm font-bold transition cursor-pointer"
+                  className="flex-1 sm:flex-initial justify-center flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-100 text-zinc-700 hover:text-zinc-950 border border-zinc-200/90 shadow-2xs text-xs sm:text-sm font-bold transition cursor-pointer"
                   title="Print full audit report or save as PDF"
                 >
                   <Printer className="w-4 h-4 text-zinc-500" />

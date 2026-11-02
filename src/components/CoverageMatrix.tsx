@@ -154,13 +154,13 @@ export function CoverageMatrix({
         </div>
 
         {/* View Switcher: Heatmap Matrix vs Responsive Dimension Cards */}
-        <div className="flex items-center bg-zinc-100 border border-zinc-200/80 rounded-xl p-0.5 self-stretch sm:self-auto shrink-0">
+        <div className="flex items-center bg-zinc-100 border border-zinc-200/80 rounded-xl p-0.5 w-full sm:w-auto shrink-0">
           <button
             onClick={() => setViewMode("cards")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
               viewMode === "cards"
                 ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/60"
-                : "text-zinc-500 hover:text-zinc-900"
+                : "text-zinc-500 hover:text-zinc-950"
             }`}
           >
             <Layers className="w-3.5 h-3.5 text-emerald-600" />
@@ -168,10 +168,10 @@ export function CoverageMatrix({
           </button>
           <button
             onClick={() => setViewMode("matrix")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
               viewMode === "matrix"
                 ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/60"
-                : "text-zinc-500 hover:text-zinc-900"
+                : "text-zinc-500 hover:text-zinc-950"
             }`}
           >
             <Grid className="w-3.5 h-3.5 text-teal-600" />

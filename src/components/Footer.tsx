@@ -159,7 +159,7 @@ export function PlatformFooter() {
               Terms
             </Link>
           </div>
-          <div className="flex items-center gap-3 text-zinc-400">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-1 text-zinc-400">
             <span>Next.js 16</span>
             <span>•</span>
             <span>Gemini 2.5 Flash</span>

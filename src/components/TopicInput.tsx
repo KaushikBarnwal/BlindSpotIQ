@@ -212,12 +212,12 @@ export function TopicInput({
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 self-start md:self-center shrink-0">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto self-start md:self-center shrink-0">
           {onNewSession && (
             <button
               type="button"
               onClick={onNewSession}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 text-xs sm:text-sm font-semibold border border-zinc-200 transition cursor-pointer"
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 text-xs sm:text-sm font-semibold border border-zinc-200 transition cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4 text-zinc-600" />
               <span>New Search</span>
@@ -227,10 +227,11 @@ export function TopicInput({
           <button
             type="button"
             onClick={() => setIsExpanded(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white text-xs sm:text-sm font-bold shadow-xs transition cursor-pointer"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white text-xs sm:text-sm font-bold shadow-xs transition cursor-pointer"
           >
             <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
-            <span>Modify Scope & Sources</span>
+            <span className="hidden sm:inline">Modify Scope &amp; Sources</span>
+            <span className="sm:hidden">Modify Scope</span>
             <ChevronDown className="w-4 h-4 ml-0.5" />
           </button>
         </div>
@@ -369,40 +370,41 @@ export function TopicInput({
             <button
               type="button"
               onClick={() => setInputMode("tavily")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer ${
+              className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-1.5 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-center ${
                 inputMode === "tavily"
                   ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
                   : "text-zinc-600 hover:text-zinc-900"
               }`}
             >
-              <Sparkles className="w-4 h-4 text-emerald-600" />
-              <span>Auto Web Search</span>
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 shrink-0" />
+              <span className="hidden sm:inline">Auto Web Search</span>
+              <span className="sm:hidden text-[11px]">Auto Search</span>
             </button>
 
             <button
               type="button"
               onClick={() => setInputMode("url")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer ${
+              className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-1.5 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-center ${
                 inputMode === "url"
                   ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
                   : "text-zinc-600 hover:text-zinc-900"
               }`}
             >
-              <Globe className="w-4 h-4 text-teal-600" />
-              <span>Paste Links</span>
+              <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-600 shrink-0" />
+              <span className="text-[11px] sm:text-sm">Paste Links</span>
             </button>
 
             <button
               type="button"
               onClick={() => setInputMode("text")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer ${
+              className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-1.5 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-center ${
                 inputMode === "text"
                   ? "bg-white text-zinc-950 shadow-xs border border-zinc-200/80"
                   : "text-zinc-600 hover:text-zinc-900"
               }`}
             >
-              <FileText className="w-4 h-4 text-emerald-600" />
-              <span>Paste Text</span>
+              <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 shrink-0" />
+              <span className="text-[11px] sm:text-sm">Paste Text</span>
             </button>
           </div>
         </div>
@@ -557,7 +559,7 @@ export function TopicInput({
         {/* Submit Action Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-zinc-100">
           {/* Subtle AI Engine selection */}
-          <div className="flex items-center gap-2 text-xs text-zinc-500">
+          <div className="flex items-center justify-between sm:justify-start gap-2 text-xs text-zinc-500">
             <span className="font-semibold text-zinc-600 flex items-center gap-1">
               <Cpu className="w-3.5 h-3.5 text-zinc-500" />
               <span>AI Engine:</span>
@@ -576,7 +578,7 @@ export function TopicInput({
           <button
             type="submit"
             disabled={isLoading || !topic.trim()}
-            className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold px-7 py-3 rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-sm disabled:opacity-50 transition cursor-pointer"
+            className="w-full sm:w-auto bg-zinc-950 hover:bg-zinc-800 text-white font-bold px-7 py-3 rounded-xl text-sm flex items-center justify-center gap-2.5 shadow-sm disabled:opacity-50 transition cursor-pointer"
           >
             {isLoading ? (
               <>

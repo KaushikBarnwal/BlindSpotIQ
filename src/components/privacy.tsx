@@ -26,26 +26,28 @@ export function PrivacyPolicy() {
       {/* Top Navigation */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-zinc-200/80">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link
               href="/"
-              className="flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-zinc-900 px-2.5 py-1.5 rounded-lg hover:bg-zinc-100 transition-colors"
+              className="flex items-center gap-1 text-xs font-semibold text-zinc-500 hover:text-zinc-900 p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg hover:bg-zinc-100 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Home</span>
+              <span className="hidden sm:inline">Back to Home</span>
+              <span className="sm:hidden">Home</span>
             </Link>
-            <div className="h-4 w-px bg-zinc-200" />
+            <div className="h-4 w-px bg-zinc-200 hidden sm:block" />
             <Link href="/" className="flex items-center gap-2">
               <BlindspotLogo size="sm" showWordmark={true} />
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/app"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs sm:text-sm font-semibold transition shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs sm:text-sm font-semibold transition shadow-xs"
             >
-              <span>Launch Workspace</span>
+              <span className="hidden sm:inline">Launch Workspace</span>
+              <span className="sm:hidden">Workspace</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
           </div>

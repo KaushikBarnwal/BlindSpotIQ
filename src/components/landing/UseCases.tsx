@@ -66,7 +66,7 @@ export function UseCases() {
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar tabs */}
-          <div className="flex lg:flex-col gap-2.5 lg:w-64 shrink-0">
+          <div className="flex lg:flex-col gap-2.5 lg:w-64 shrink-0 overflow-x-auto pb-2 lg:pb-0">
             {CASES.map(({ id, icon: TabIcon, label, color, bg, activeBorder }) => (
               <button
                 key={id}
