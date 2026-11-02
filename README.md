@@ -48,6 +48,7 @@ An evidence-first research and verification platform that cross-examines the sou
 16. [Testing and evaluation](#16-testing-and-evaluation)
 17. [Known limitations](#17-known-limitations)
 18. [Future scope](#18-future-scope)
+19. [License](#19-license)
 
 ---
 
@@ -433,6 +434,14 @@ npx tsc --noEmit
 - **Multilingual Gazette Translation:** Real-time cross-lingual gap analysis for non-English state circulars (Hindi, regional Indian languages, Portuguese, French, Spanish).
 - **Automated Webhook Monitoring:** Monitor official portals over time and alert applicants via email when guidelines or deadlines change silently mid-cycle.
 - **Browser Extension:** Inline audit badge highlighting unstated blind spots directly inside university and visa portal submission pages.
+
+---
+
+## 19. License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for complete details.
+
+Copyright (c) 2026 Kaushik Raj. Open-source contribution for Devengers 2026 Hackathon.
 
 ---
 
