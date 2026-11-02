@@ -73,10 +73,8 @@ export function Header({
 
           <div className="h-4 w-px bg-zinc-200 hidden sm:block" />
 
-          <Link href="/app" className="flex items-center gap-2 group">
-            {/* Compact emblem on mobile, full emblem + wordmark on sm+ */}
-            <BlindspotLogo size="sm" showWordmark={false} className="sm:hidden" />
-            <BlindspotLogo size="md" showWordmark={true} className="hidden sm:inline-flex" />
+          <Link href="/app" className="flex items-center gap-2 group shrink-0">
+            <BlindspotLogo size="sm" showWordmark={true} />
           </Link>
         </div>
 

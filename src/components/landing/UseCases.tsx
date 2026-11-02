@@ -9,6 +9,7 @@ const CASES = [
     id: "scholarship",
     icon: BookOpen,
     label: "Academic Scholarships",
+    shortLabel: "Scholarships",
     color: "text-emerald-700",
     bg: "bg-emerald-50",
     activeBorder: "border-emerald-300",
@@ -21,6 +22,7 @@ const CASES = [
     id: "visa",
     icon: Plane,
     label: "Immigration & Visas",
+    shortLabel: "Visas",
     color: "text-teal-700",
     bg: "bg-teal-50",
     activeBorder: "border-teal-300",
@@ -33,6 +35,7 @@ const CASES = [
     id: "grant",
     icon: Building2,
     label: "Public Grants & Policy",
+    shortLabel: "Grants & Policy",
     color: "text-amber-700",
     bg: "bg-amber-50",
     activeBorder: "border-amber-300",
@@ -65,13 +68,13 @@ export function UseCases() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar tabs */}
-          <div className="flex lg:flex-col gap-2.5 lg:w-64 shrink-0 overflow-x-auto pb-2 lg:pb-0">
-            {CASES.map(({ id, icon: TabIcon, label, color, bg, activeBorder }) => (
+          {/* Sidebar tabs: 3 clean columns on mobile, full sidebar on desktop */}
+          <div className="grid grid-cols-3 lg:flex lg:flex-col gap-2 sm:gap-2.5 lg:w-64 shrink-0">
+            {CASES.map(({ id, icon: TabIcon, label, shortLabel, color, bg, activeBorder }) => (
               <button
                 key={id}
                 onClick={() => setActive(id)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm font-bold text-left transition-all cursor-pointer ${
+                className={`flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1.5 sm:gap-3 p-2.5 sm:px-4 sm:py-3 rounded-xl border text-xs sm:text-sm font-bold text-center sm:text-left transition-all cursor-pointer ${
                   active === id
                     ? `bg-white shadow-sm ${activeBorder} ${color}`
                     : "bg-white border-zinc-200 text-zinc-600 hover:text-zinc-950 hover:border-zinc-300"
@@ -80,7 +83,8 @@ export function UseCases() {
                 <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${active === id ? bg : "bg-zinc-100"} shrink-0`}>
                   <TabIcon className={`w-4 h-4 ${active === id ? color : "text-zinc-500"}`} />
                 </div>
-                <span>{label}</span>
+                <span className="hidden sm:inline">{label}</span>
+                <span className="sm:hidden text-[11px] leading-tight font-semibold">{shortLabel}</span>
               </button>
             ))}
           </div>
