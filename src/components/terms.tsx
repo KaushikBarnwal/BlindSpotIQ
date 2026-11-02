@@ -207,8 +207,11 @@ export function TermsOfService() {
             </p>
             <div className="flex flex-wrap items-center gap-4 pt-1">
               <a
-                href="mailto:barnwalkaushik@gmail.com"
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=barnwalkaushik@gmail.com&su=Terms%20Inquiry%20regarding%20BlindspotIQ"
+                target="_blank"
+                rel="noreferrer"
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-mono text-xs font-semibold transition"
+                title="Send email via Gmail"
               >
                 <span>barnwalkaushik@gmail.com</span>
               </a>

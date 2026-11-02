@@ -6,6 +6,19 @@ import { Mail, ArrowUpRight } from "lucide-react";
 import { BlindspotLogo } from "@/components/BlindspotLogo";
 
 export function PlatformFooter() {
+  const [emailCopied, setEmailCopied] = React.useState(false);
+
+  const handleEmailClick = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard
+        .writeText("barnwalkaushik@gmail.com")
+        .then(() => {
+          setEmailCopied(true);
+          setTimeout(() => setEmailCopied(false), 2200);
+        })
+        .catch(() => {});
+    }
+  };
   return (
     <footer className="border-t border-zinc-200/80 bg-white mt-16 no-print">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -91,16 +104,26 @@ export function PlatformFooter() {
               Connect & Author
             </h4>
             <div className="flex flex-col gap-2.5">
-              {/* Gmail */}
+              {/* Gmail / Contact Link */}
               <a
-                href="mailto:barnwalkaushik@gmail.com"
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-50 hover:bg-red-50/70 border border-zinc-200/90 hover:border-red-200 text-xs sm:text-sm font-semibold text-zinc-800 hover:text-red-700 transition group"
-                title="Send email via Gmail"
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=barnwalkaushik@gmail.com&su=Inquiry%20regarding%20BlindspotIQ"
+                target="_blank"
+                rel="noreferrer"
+                onClick={handleEmailClick}
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-50 hover:bg-red-50/70 border border-zinc-200/90 hover:border-red-200 text-xs sm:text-sm font-semibold text-zinc-800 hover:text-red-700 transition group cursor-pointer"
+                title="Send email via Gmail (or click to copy address)"
               >
                 <div className="w-5 h-5 rounded-md bg-red-100 flex items-center justify-center text-red-600 group-hover:scale-105 transition shrink-0">
                   <Mail className="w-3.5 h-3.5" />
                 </div>
                 <span className="truncate">barnwalkaushik@gmail.com</span>
+                {emailCopied ? (
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-md ml-auto shrink-0">
+                    Copied!
+                  </span>
+                ) : (
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 ml-auto shrink-0 group-hover:text-red-600 transition" />
+                )}
               </a>
 
               {/* GitHub */}
